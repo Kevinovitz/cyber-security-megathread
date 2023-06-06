@@ -6,7 +6,7 @@ This megathread aims to be my one-stop tools for everything related to cyber sec
 
 So far this thread can be split up into three major components:
 
-1. **Tools and Programs**
+1. [**Tools and Programs**](tools.md)
    - Like Sublist3r or CyberChef
 2. [**Websites and other resources**](resources.md)
    - Like GTFObins or Exploit Notes
