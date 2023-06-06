@@ -8,7 +8,7 @@ So far this thread can be split up into three major components:
 
 1. **Tools and Programs**
    - Like Sublist3r or CyberChef
-2. **Websites and other resources**
+2. **Websites and other resources**(resources.md)
    - Like GTFObins or Exploit Notes
 4. [**Command syntax**](commands/generalcommands.md)
    - For use with the likes of Hydra or Mimikatz
