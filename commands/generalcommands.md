@@ -6,11 +6,11 @@ Instead of spending time on figuring out what arguments to use in a command each
 
 However, with many different commands and terminals this can become quite difficult and time consuming. 
 
-<h1></h1>
+</br>
 
 <h3><p align="center">\\\\====== Presenting the Command Syntax List ======////</p></h3>
 
-<h1></h1>
+</br>
 
 💲 ❕ ➡️
 
