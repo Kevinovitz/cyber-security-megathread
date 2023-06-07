@@ -30,6 +30,14 @@ So I created this collection of tools and programs that I find to be very useful
 
 </br>
 
+<h2>XSS - Cross Site Scripting</h2>
+
+***XSS Hunter***
+
+ℹ️ An easy-to-setup version of XSS Hunter. Sets up in five minutes and requires no maintenance! A popular open source tool for identifying cross-site scripting (XSS) bugs in websites.
+
+🔗 [https://xsshunter.com/](https://github.com/mandatoryprogrammer/xsshunter-express)
+
 <!--- 
 ***NAME***
 
