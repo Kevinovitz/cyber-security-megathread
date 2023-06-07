@@ -15,6 +15,7 @@ So I created this collection of websites that I find to be very interesting and 
 <h3>Subjects</h3>
 
 - [Domain Enumeration](#domain-enumeration)
+- [XSS - Cross Site Scripting](#xss---cross-site-scripting)
 
 </br>
 
@@ -33,6 +34,14 @@ So I created this collection of websites that I find to be very interesting and 
 ℹ️ Offers a searchable database of certificates that shows current and historical results for a given domain name.
 
 🔗 https://ui.ctsearch.entrust.com/ui/ctsearchui
+
+<h2>XSS - Cross Site Scripting</h2>
+
+***XSS Hunter (depreciated)***
+
+ℹ️ A popular open source web-based tool for identifying cross-site scripting (XSS) bugs in websites. Now depreciated, use the offline [version](tools.md#xss---cross-site-scripting) now.
+
+🔗 https://xsshunter.com/
 
 <!--- 
 ***NAME***
