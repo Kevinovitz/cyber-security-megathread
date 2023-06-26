@@ -36,7 +36,21 @@ So I created this collection of tools and programs that I find to be very useful
 
 ℹ️ An easy-to-setup version of XSS Hunter. Sets up in five minutes and requires no maintenance! A popular open source tool for identifying cross-site scripting (XSS) bugs in websites.
 
-🔗 [https://xsshunter.com/](https://github.com/mandatoryprogrammer/xsshunter-express)
+🔗 https://github.com/mandatoryprogrammer/xsshunter-express
+
+</br>
+
+<h2>SSH</h2>
+
+***sshuttle***
+
+ℹ️ Transparent proxy server that works as a poor man's VPN. Forwards over ssh. Doesn't require admin. Works with Linux and MacOS. Supports DNS tunneling.
+
+🔗 [Documentation](https://sshuttle.readthedocs.io/en/stable/overview.html)
+
+🔗 [Github](https://github.com/sshuttle/sshuttle)
+
+</br>
 
 <!--- 
 ***NAME***
