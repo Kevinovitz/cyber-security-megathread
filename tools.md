@@ -16,7 +16,22 @@ So I created this collection of tools and programs that I find to be very useful
 
 <h3>Subjects</h3>
 
+- [DNS](#dns)
 - [Domain Enumeration](#domain-enumeration)
+- [SSH](#ssh)
+- [XSS - Cross Site Scripting](xss---cross-site-scripting)
+
+</br>
+
+<h2>DNS</h2>
+
+***DNSChef***
+
+ℹ️ DNSChef - DNS proxy for Penetration Testers and Malware Analysts. Helped me solve an issue in the TryHackMe Red Team Capstone when using Bloodhound in combination with Proxychains.
+
+🔗 [Github](https://github.com/iphelix/dnschef)
+
+🔗 [Using DNSChef to solve the DNS issue in Bloodhound together with Proxychains](https://www.youtube.com/watch?v=4ydjpSSKQ8g)
 
 </br>
 
@@ -30,16 +45,6 @@ So I created this collection of tools and programs that I find to be very useful
 
 </br>
 
-<h2>XSS - Cross Site Scripting</h2>
-
-***XSS Hunter***
-
-ℹ️ An easy-to-setup version of XSS Hunter. Sets up in five minutes and requires no maintenance! A popular open source tool for identifying cross-site scripting (XSS) bugs in websites.
-
-🔗 https://github.com/mandatoryprogrammer/xsshunter-express
-
-</br>
-
 <h2>SSH</h2>
 
 ***sshuttle***
@@ -49,6 +54,16 @@ So I created this collection of tools and programs that I find to be very useful
 🔗 [Documentation](https://sshuttle.readthedocs.io/en/stable/overview.html)
 
 🔗 [Github](https://github.com/sshuttle/sshuttle)
+
+</br>
+
+<h2>XSS - Cross Site Scripting</h2>
+
+***XSS Hunter***
+
+ℹ️ An easy-to-setup version of XSS Hunter. Sets up in five minutes and requires no maintenance! A popular open source tool for identifying cross-site scripting (XSS) bugs in websites.
+
+🔗 https://github.com/mandatoryprogrammer/xsshunter-express
 
 </br>
 
