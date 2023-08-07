@@ -1,0 +1,139 @@
+:: Shells
+
+=========
+| Tools |
+=========
+
+: Netcat
+
+: Socat -> Like Netcat but can do more. However, its not always installed
+
+: Metasploit - multi/handler
+
+: Msfvenom
+
+: Payloads all the Things
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+: Pentest Monkey Reverse Shell Cheatsheet
+https://web.archive.org/web/20200901140719/http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
+
+: Linux pre-installed
+/usr/share/webshells
+
+: SecList repo for shells
+https://github.com/danielmiessler/SecLists
+
+=========
+| Types |
+=========
+
+: Reverse Shell
+-> The target is forced to execute code that connects back to your machine.
+-> Listening on our own machine, sending a connection from the target.
+
+: Bind Shell
+-> A shell attached to a shell is started on the target. We now connect to the machine to execute code.
+-> Listening on the target, connecting to it from our own machine.
+
+: Interactive
+-> Allows you to interact with a programm such as ssh.
+
+: Non-interactive
+-> Doesn't allow interaction with a program. Hence ssh won't work and the shell needs to stabalized
+
+
+:: Linux Privelege Escalation
+
+===============
+| Enumeration |
+===============
+
+hostname
+-> Get hostname of the machine
+
+uname -a
+-> Prints system information
+
+ps
+-> See the running processes.
+
+env
+-> Shows environmental variables
+
+sudo -l
+-> Shows all command the current account may use with sudo
+
+ls -la
+-> Can be used to find hidden files.
+
+id
+-> Look at user info
+
+history
+-> Look at the terminal history
+
+ifconfig
+-> Gives network information
+
+ip route
+-> Shows the network hops the machine can make
+
+Netstat
+-> Looks at existing communication
+-> -ano is often used
+
+-a	-> Shows all listening ports and established connections
+-at/au	-> List TCP or UDP protocols respectively
+-l	-> List ports in listening mode. lt/lu for TCP/UDP only
+-s	-> List network usage statisctics by protocol. st/su for TCP/UDP only
+-tp	-> List connections with the service name and PID information.
+-i	-> Shows interface statistics.
+-n	-> Do not resolve names
+-o	-> Display timers
+
+find
+-> Search the target for a specific file/folder.
+
+find . -name flag1.txt
+-> find the file named “flag1.txt” in the current directory
+find /home -name flag1.txt
+-> find the file names “flag1.txt” in the /home directory
+find / -type d -name config
+-> find the directory named config under “/”
+find / -type f -perm 0777
+-> find files with the 777 permissions (files readable, writable, and executable by all users)
+find / -perm a=x
+-> find executable files
+find /home -user frank
+-> find all files for user “frank” under “/home”
+find / -mtime 10
+-> find files that were modified in the last 10 days
+find / -atime 10
+-> find files that were accessed in the last 10 day
+find / -cmin -60
+-> find files changed within the last hour (60 minutes)
+find / -amin -60
+-> find files accesses within the last hour (60 minutes)
+find / -size 50M
+-> find files with a 50 MB size
+find / -perm -u=s -type f 2>/dev/null
+-> Find files with the SUID bit.
+
+
+:: Usefull files
+
+/proc/version
+-> This file is found on many Linux systems and give info about system processes.
+
+/etc/issue
+-> Information about the system
+
+/etc/passwd
+-> Contains user and password information.
+cat /etc/passwd | cut -d ":" -f 1
+-> Display only usernames
+cat /etc/passwd | grep home
+-> Show users in the home folder
+
+
