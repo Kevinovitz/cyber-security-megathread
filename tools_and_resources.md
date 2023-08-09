@@ -58,6 +58,8 @@ So I created this collection of websites that I find to be very interesting and 
 **The Credential Theft Shuffle** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/the-credential-theft-shuffle-54ec6cd32ea5
 **** |  | 
 
+<br>
+
 ## Tools Top Tips
 
 🔰 Name | ℹ️ Description | 🔗 Link
@@ -166,6 +168,7 @@ So I created this collection of websites that I find to be very interesting and 
 **Alternative ways to Pass the Hash (PtH)** | Alternative ways to pass the hash by using tools as: (evil) WINRM, RDP, smbclient, LDAP, Secretsdump, Pass the Ticket, Mount, SSH, and Resource Based Constrained Delegation (RBCD). | https://www.n00py.io/2020/12/alternative-ways-to-pass-the-hash-pth/
 **Introduction to Pass the Hash Attack** | This website goes into how pash the hash attacks work and which tools can be used. | https://medium.com/@upadhyay.varun/pass-the-hash-attack-b0f214b2884a
 **Offensive Lateral Movement** | Using various methods to move laterally through a network (psexec, impacket, metasploit, rmi, etc.). | https://eaneatfruit.github.io/2019/08/18/Offensive-Lateral-Movement/
+**⭐Pass-the-Hash Attacks** | This page looks at a lot of tools and techniques which can be used to perform a pass the hash attack. | https://juggernaut-sec.com/pass-the-hash-attacks/
 **⭐Pass the Hash Techniques** | On this page they look at a lot of tools and techniques which can be used to perform a pass the hash attack. | https://cesidt.medium.com/pass-the-hash-techniques-92e46f28af89
 **PSExec Pass the Hash** | Using Metasploit with Psexes to dump the NTLM hashes and access other systems without cracking the passwords | https://www.offsec.com/metasploit-unleashed/psexec-pass-hash/
 **⭐Windows Lateral Movement with smb, psexec and alternatives** | Using various methods to move laterally through a network (psexec, impacket, metasploit, rmi, etc.). | https://nv2lt.github.io/windows/smb-psexec-smbexec-winexe-how-to/
@@ -186,7 +189,6 @@ So I created this collection of websites that I find to be very interesting and 
 **lsassy** | Can be used to dump the LSASS process remotely | https://github.com/Hackndo/lsassy
 **Metasploit PSExec** | The Psexec module in Metasploit allows us to use a dumped has to connect to a different system | https://www.metasploit.com/download
 **Mimikatz** | An open source tool that has become an extremely effective attack tool against Windows clients, allowing bad actors to retrieve cleartext passwords, as well as password hashes from memory. | http://blog.gentilkiwi.com/mimikatz
-**⭐Pass-the-Hash Attacks** | This page looks at a lot of tools and techniques which can be used to perform a pass the hash attack. | https://juggernaut-sec.com/pass-the-hash-attacks/
 **Psexec** | PsExec is a light-weight telnet-replacement that lets you execute processes on other systems, complete with full interactivity for console applications, without having to manually install client software. | https://download.sysinternals.com/files/SysinternalsSuite.zip
 **xFreeRDP** | RDP client for linux | https://linux.die.net/man/1/xfreerdp
 **** |  | 
