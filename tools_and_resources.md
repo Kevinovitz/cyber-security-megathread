@@ -55,6 +55,7 @@ So I created this collection of websites that I find to be very interesting and 
 **MS Graph PowerShell cheatsheet** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/microsoft-graph-powershell-cheatsheet-d8a841bafa09
 **⭐MSFVenom Cheat Sheet** | Easy way to create Metasploit Payloads | https://web.archive.org/web/20220607215637/https://thedarksource.com/msfvenom-cheat-sheet-create-metasploit-payloads/
 **Set-Acl cheatsheet** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/set-acl-cheatsheet-6c79e0c2f32b
+**SQL injection cheat sheet** | This SQL injection cheat sheet contains examples of useful syntax that you can use to perform a variety of tasks that often arise when performing SQL injection attacks. | https://portswigger.net/web-security/sql-injection/cheat-sheet
 **The Credential Theft Shuffle** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/the-credential-theft-shuffle-54ec6cd32ea5
 **** |  | 
 
@@ -65,7 +66,6 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Arsenal** | Arsenal is just a quick inventory and launcher for hacking programs. You can search for a command, select one and it's prefilled directly in your terminal. | https://github.com/Orange-Cyberdefense/arsenal
-**** |  | 
 **** |  | 
 
 <br>
@@ -200,6 +200,23 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Penetration Test Report** | Penetration Test Report by Offensive Security. | https://www.offsec.com/reports/penetration-testing-sample-report-2013.pdf
+**** |  | 
+
+<br>
+
+## SQL Injection
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**SQL injection cheat sheet** | This SQL injection cheat sheet contains examples of useful syntax that you can use to perform a variety of tasks that often arise when performing SQL injection attacks. | https://portswigger.net/web-security/sql-injection/cheat-sheet
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
 **** |  | 
 
 <br>
