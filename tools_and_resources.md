@@ -1,14 +1,16 @@
-### ❗❗❗ Heavy work in progress
+> [!Note]
+> Heavy work in progress
 
 <p align="center"><img alt="" src="" width="300" /></p>
 
-*<p align="center">A curated list of usefull tools, programs, websites, and other resources. That it might help me and anyone else who finds this with their career in cyber security.</p>*
+*<p align="center"><div width="300">A curated list of usefull tools, programs, websites, and other resources. That it might help me and anyone else who finds this with their career in cyber security.</div></p>*
 
 Not all tools have to be downloaded or installed on your computer. I found some invaluable resources/websites the can help you in your endeavours. But, as with the commands, at a certain point it just becomes too much to remember.
 
 <p align="center"><img alt="Need a better meme here.." src="https://github.com/Kevinovitz/cyber-security-megathread/blob/main/images/Cyber_Meme_03.png" width="300" /></p>
 
 So I created this collection of websites that I find to be very interesting and might help others out in the process. I mean, I learned most of my stuff looking at what other people are doing/using.
+
 
 ----
 
