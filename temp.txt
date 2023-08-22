@@ -142,7 +142,19 @@ cat /etc/passwd | grep home
 | Privilege Escalation |
 ========================
 
-:: Linux
+----------
+:: Linux |
+----------
+
+: Capabilities
+
+getcap -r / 2>/dev/null
+-> This shows all binaries with their capabilities set and supressing any errors.
+
+: Cronjobs
+
+cat /etc/crontab
+-> View all existing cronjobs
 
 : Kernel Exploit
 
@@ -150,8 +162,79 @@ uname -a
 -> Find the current kernel version and look for an exploit. 
 -> Follow the instructions
 
+: PATH variable
+
+find / -writable 2>/dev/null | cut -d "/" -f 2 | sort -u
+-> Find writable folder
+echo $PATH
+-> View PATH variable
+export PATH=/<folder>:$PATH
+-> Add folder to PATH variable (in front of)
+
+: NFS 
+
+showmount -e <IP>
+-> Show shares of a remote system
+cat /etc/exports
+-> Show shares from the system itself
+
 : Sudo
 
 sudo -l
 -> Find out which programs may be run with sudo
 -> Use GTFOBins to look for ways to exploit these programs
+
+: Suid
+
+find / -type f -perm -4000 2>/dev/null
+find / -type f -perm -4000 -ls 2>/dev/null
+
+: Crack shadow/passwd files
+
+unshadow passwd.txt shadow.txt
+-> Output to console
+unshadow passwd.txt shadow.txt > passwords.txt
+-> Output to file
+
+john <hashes> --wordlist=/usr/share/wordlists/rockyou.txt 
+
+------------
+:: Windows |
+------------
+
+: Password harvesting
+
+-> Unattended Windows Installations
+
+    C:\Unattend.xml
+    C:\Windows\Panther\Unattend.xml
+    C:\Windows\Panther\Unattend\Unattend.xml
+    C:\Windows\system32\sysprep.inf
+    C:\Windows\system32\sysprep\sysprep.xml
+
+-> Powershell History
+
+-> via cmd.exe
+type %userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+-> via powershell.exe
+type $Env:userprofile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+
+
+-> Saved Windows Credentials
+
+-> List saved credentials
+cmdkey /list
+-> Use found credentials
+runas /savecred /user:admin cmd.exe
+
+-> IIS Configuration
+
+    C:\inetpub\wwwroot\web.config
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config
+-> Find database connection stringstype C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
+
+
+-> Retrieve Credentials from Software: PuTTY
+
+-> Stored proxy credentials
+reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
