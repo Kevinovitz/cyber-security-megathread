@@ -2,9 +2,22 @@
 
 <p align="center"><img alt="Metasploit Logo" src="https://miro.medium.com/v2/resize:fit:1400/1*waFDh88WH0YeIK3xMP6TjA.png" width=500 /></p>
 
-However, with many different commands and terminals this can become quite difficult and time consuming. 
+Metasploit or the Metasploit Framework is a tool that is used to develop and execute exploit code agains remote target machines. Since this tool is very large, a separate document for its commands seemed appropriate.
 
 </br>
+
+## Table of Contents
+
+- [Main commands to use MetaSploit](#main-commands-to-use-metasploit)
+- [Other usefull commands](#other-usefull-commands)
+- [Metasploit Modules](#metasploit-modules)
+- [MSFVenom Commands](#msfvenom-commands)
+- [Database/workspaces](#databaseworkspaces)
+
+> [!NOTE]
+> Some of these commands can only be used after a (meterpreter) shell has been made to another machine. These will be marked with a 💲. Others must be used outside of these shells.
+
+<br>
 
 ## Main commands to use MetaSploit
 
@@ -20,9 +33,6 @@ exploit                > Run the exploit
 <br>
 
 ## Other usefull commands
-
-> [!NOTE]
-> Some of these commands can only be used after a (meterpreter) shell has been made to another machine. These will be marked with a 💲. Others must be used outside of these shells.
 
 #### 💲 Information gathering
 
@@ -117,7 +127,7 @@ show exploits                      > show exploits
 show -h                            > show help
 ```
 
-## Metasploit Module
+## Metasploit Modules
 
 Some usefull modules that can be used in Metasploit.
 
