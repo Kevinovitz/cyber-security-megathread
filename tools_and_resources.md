@@ -65,7 +65,8 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-**Arsenal** | Arsenal is just a quick inventory and launcher for hacking programs. You can search for a command, select one and it's prefilled directly in your terminal. | https://github.com/Orange-Cyberdefense/arsenal
+**⭐Arsenal** | Arsenal is just a quick inventory and launcher for hacking programs. You can search for a command, select one and it's prefilled directly in your terminal. | https://github.com/Orange-Cyberdefense/arsenal
+**⭐[Metasploit Framework](commands/metasploit.md)** | The Metasploit framework is a product made by Rapid7 and is part of the Metasploit Project. It is a very powerfull tool that can be used to create and use exploit code on target machines. | https://www.metasploit.com/
 **** |  | 
 
 <br>
