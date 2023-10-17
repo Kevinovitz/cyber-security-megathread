@@ -12,5 +12,39 @@ However, with many different commands and terminals this can become quite diffic
 
 </br>
 
+### Subjects
+
+- [
+
+<br>
+
+## Separate command sheets
+
+Some tools are so vast, they have many commands. Too many to include in this document whilst keeping it nice and organized. That is why I created a separate document specifically for such programs. 
+
+🔰 Name |
+-- | 
+**⭐[Metasploit Framework](commands/metasploit.md)**
+****
+
+<!--- 
+
 💲 ❕ ➡️
 
+## TITLE
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+<br>
+
+--->
