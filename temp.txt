@@ -373,3 +373,55 @@ WES-NG: Windows Exploit Suggester - Next Generation
 
 Metasploit
 
+
+
+::SiLK
+
+: Basic commands
+
+silk_config -v
+-> Command to verify and view the installation details
+rwfileinfo FILENAME
+-> Overviewing the file info
+rwcut FILENAME
+-> Open and print all the records without any filter or parameter
+
+: Advanced commands
+
+rwcut FILENAME --num-recs=5
+-> View first 5 records
+rwcut FILENAME --tail-rec=5
+-> View last 5 records
+rwcut FILENAME --fields=protocol,sIP,sPort,dIP,dPort --num-recs=5
+-> Show only the specified columns
+Columns
+    Source IP: sIP
+    Destination IP: dIP
+    Source port: sPort
+    Destination port: dPort
+    Duration: duration
+    Start time: sTime
+    End time: eTime
+	
+rwfiltering FILENAME <Filter parameters> --pass=stdout | rwcut
+-> Filter the data based on the supplied parameters and passes the output to rwcut for viewing.
+-> --pass=stdout | must be used for using with rqcut 
+Filtering
+    Protocols: --proto
+        Possible values are 0-255.
+    Port filters:
+        Any port: --aport
+        Source port: --sport
+        Destination port: --dport
+        Possbile values are 0-65535.
+    IP filters: Any IP address: --any-address
+        Source address: --saddress 
+        Destination address: --daddress
+    Volume filters: Number of the packets --packets number of the bytes --bytes
+	
+rwstats FILENAME --fields=<field>
+-> Provide some statistics on traffic records based on certain fields
+rwstats FILENAME --fields=dPort --values=records,packets,bytes,sIP-Distinct,dIP-Distinct --count=10
+-> --count: Limits the number of records printed on the console
+-> --values=records,packets,bytes: Shows the measurement in flows, packets, and bytes
+-> --values=sIP-Distinct,dIP-Distinct: Shows the number of unique IP addresses that used the filtered field
