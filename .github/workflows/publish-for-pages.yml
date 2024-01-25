@@ -22,7 +22,7 @@ jobs:
           git config user.name "Kvtz"
           git config user.email "no-reply@github.com"
           git config --global pull.rebase false
-          git submodule add https://github.com/Kevinovitz/cyber-security-megathread/ docs
+          git submodule add https://github.com/Kevinovitz/cyber-security-megathread/`
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
