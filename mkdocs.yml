@@ -53,5 +53,4 @@ repo_url: https://github.com/Kevinovitz/cyber-security-megathread
 edit_uri: edit/master/
 plugins:
   - search
-  - git-revision-date-localized
   - social
