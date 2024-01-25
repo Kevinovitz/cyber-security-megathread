@@ -1,4 +1,4 @@
-name: publish repo to gh-pages branch for site
+name: publish for pages
 on:
   push:
     branches:
@@ -10,11 +10,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Configure Git Credentials
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      # Checks-out submodules
+      - uses: actions/checkout@v2
+      - name: Checkout submodules
+        shell: bash
         run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git config user.name "Kvtz"
+          git config user.email "no-reply@github.com"
+          git config --global pull.rebase false
+          git submodule add https://github.com/Kevinovitz/cyber-security-megathread/ docs
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
@@ -25,5 +33,8 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material 
+      - run: pip install mkdocs-material
+      - run: pip install mkdocs-git-revision-date-localized-plugin
+      - run: pip install mkdocs-git-committers-plugin
+      - run: pip install mkdocs-material[imaging]
       - run: mkdocs gh-deploy --force

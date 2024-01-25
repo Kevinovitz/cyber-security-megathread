@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: Cyber Security Megathread
 site_description: 'My personally curated repository dedicated to provide useful tools, methods, commands, websites, etc. regarding all things cyber. '
 site_url: https://kevinovitz.github.io/cyber-security-megathread
 
@@ -50,7 +50,7 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 repo_url: https://github.com/Kevinovitz/cyber-security-megathread
-edit_uri: edit/master/
+edit_uri: edit/main/
 plugins:
   - search
   - git-revision-date-localized
