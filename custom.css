@@ -1,0 +1,9 @@
+.md-header{
+    background-color: #1f7884;
+}
+
+@media screen and (min-width: 790px) {
+    .md-grid{
+        max-width: 100%;
+    }
+}

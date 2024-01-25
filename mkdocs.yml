@@ -14,6 +14,7 @@ theme:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: blue
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -21,6 +22,7 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: blue
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -30,7 +32,10 @@ theme:
     - navigation.tracking
     - navigation.top
     # - toc.integrate
-    # - navigation.path
+    - navigation.path
+
+extra_css:
+  - stylesheets/extra.css
   
 markdown_extensions:
   - tables
