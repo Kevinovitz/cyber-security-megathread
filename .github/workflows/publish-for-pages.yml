@@ -13,8 +13,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Configure Git Credentials
         run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git config user.name "Kvtz"
+          git config user.email "no-reply@github.com"
+          git config --global pull.rebase false
+          git submodule add https://github.com/Kevinovitz/cyber-security-megathread/ docs
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
