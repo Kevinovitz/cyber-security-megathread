@@ -27,6 +27,7 @@ So I created this collection of websites that I find to be very interesting and 
 - [Misc](#misc)
 - [Phishing](#phishing)
 - [SQL Injection](#sql-injection)
+- [Threat Modelling](#threat-modelling)
 - [Windows Defender Anti-Virus](#windows-defender-anti-virus)
 - [XSS - Cross Site Scripting](#xss---cross-site-scripting)
 
@@ -239,6 +240,27 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**** |  | 
+
+<br>
+
+## Threat Modelling
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**MITRE ATT&CK framework** | A comprehensive, globally accessible knowledge base of cyber adversary behaviour and tactics, developed by the MITRE Corporation | https://attack.mitre.org/
+**DREAD Framework** | A risk assessment model developed by Microsoft to evaluate and prioritise security threats and vulnerabilities. | https://learn.microsoft.com/en-us/windows-hardware/drivers/driversecurity/threat-modeling-for-drivers#the-dread-approach-to-threat-assessment
+**STRIDE Framework** | A threat modelling methodology developed by Microsoft, which helps identify and categorise potential security threats in software development and system design. | https://www.softwaresecured.com/stride-threat-modeling/
+**PASTA Framework** | A structured, risk-centric threat modelling framework designed to help organisations identify and evaluate security threats and vulnerabilities within their systems, applications, or infrastructure. | https://versprite.com/blog/what-is-pasta-threat-modeling/
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**ATT&CK Navigator** | An open-source, web-based tool that helps visualise and navigate the complex landscape of the MITRE ATT&CK Framework. | https://mitre-attack.github.io/attack-navigator/
 **** |  | 
 
 <br>
