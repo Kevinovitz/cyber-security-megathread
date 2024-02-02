@@ -227,6 +227,26 @@ So I created this collection of websites that I find to be very interesting and 
 
 <br>
 
+## Risk Management
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**NIST SP 800-30** | A risk assessment methodology developed by the National Institute of Standards and Technology (NIST). It involves identifying and evaluating risks, determining the likelihood and impact of each risk, and developing a risk response plan. | https://csrc.nist.gov/pubs/sp/800/30/r1/final
+**Facilitated Risk Analysis Process (FRAP)** | A risk assessment methodology that involves a group of stakeholders working together to identify and evaluate risks. It is designed to be a more collaborative and inclusive approach to risk analysis. | https://pivotpointconsulting.com/insights/blog/using-frap-for-risk-assessment/
+**Operationally Critical Threat, Asset, and Vulnerability Evaluation (OCTAVE)** | A risk assessment methodology that focuses on identifying and prioritising assets based on their criticality to the organisation’s mission and assessing the threats and vulnerabilities that could impact those assets. | https://www.iriusrisk.com/resources-blog/octave-threat-modeling-methodologies
+**Failure Modes and Effect Analysis (FMEA)** | A risk assessment methodology commonly used in engineering and manufacturing. It involves identifying potential failure modes for a system or process and then analysing the possible effects of those failures and the likelihood of their occurrence. | https://asq.org/quality-resources/fmea
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+<br>
+
 ## SQL Injection
 
 ### Usefull documentation
