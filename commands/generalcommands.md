@@ -12,9 +12,14 @@ However, with many different commands and terminals this can become quite diffic
 
 </br>
 
+Below you can find all available commands. Either select one from the ToC list or use Ctrl+F to look for it. Below the ToC there is a list of separate cheat sheets for some more complex commands.
+
+In the commands you will find variables enclosed by `<variable>`. This simply means it needs to be replaced by your own value (e.g., `<ip>` becomes `10.10.101.81`).
+
 ### Subjects
 
-- [
+- [Aircrack-ng](#aircrack-ng)
+- [Smbclient](#smbclient)
 
 <br>
 
@@ -26,6 +31,27 @@ Some tools are so vast, they have many commands. Too many to include in this doc
 -- | 
 **⭐[Metasploit Framework](commands/metasploit.md)**
 ****
+
+## Aircrack-ng
+
+Aircrack- ng is a complete suite of tools to assess WiFi network security. More info [here](https://www.aircrack-ng.org/)
+
+**_Crack wifi passwords from a network capture file (must include EAPOL handshake)._**
+
+```console
+aircrack-ng -w <wordlist> <capture_file>
+aircrack-ng -w /usr/share/wordlists/rockyou.txt capture.pcap
+```
+
+## Smbclient
+
+Smbclient is a client that can 'talk' to an SMB/CIFS server and is part of the Samba suite.
+
+**_'Exploit' misconfiguration of the anonymous login ability._**
+
+```console
+smbclient <ip> -U:Anonymous -p:<port>
+```
 
 <!--- 
 
