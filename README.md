@@ -9,7 +9,10 @@ So far this thread can be split up into three major components:
 1. [**Processes**](processes.md)
    - Like how to elevate your privileges on a Windows machine
 2. [**Command syntax**](commands/generalcommands.md)
-   - For use with the likes of Hydra or Mimikatz
+   - General commands for use with the likes of Hydra or Mimikatz
+   - Specific command sheets:
+   - [Metasploit](commands/metasploit.md)
+   - [Powershell](commands/powershell.md)
 3. [**Tools and other resources**](tools_and_resources.md)
    - Like Sublist3r, GTFObins, or Exploit Notes
 

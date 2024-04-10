@@ -30,6 +30,7 @@ Some tools are so vast, they have many commands. Too many to include in this doc
 🔰 Name |
 -- | 
 **⭐[Metasploit Framework](commands/metasploit.md)**
+**⭐[Powershell](commands/powershell.md)**
 ****
 
 ## Aircrack-ng
