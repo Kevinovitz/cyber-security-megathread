@@ -35,7 +35,7 @@ theme:
     - navigation.path
 
 extra_css:
-  - docs/custom.css
+  - custom.css
   
 markdown_extensions:
   - tables
