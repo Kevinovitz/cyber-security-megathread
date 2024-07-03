@@ -21,13 +21,16 @@ So I created this collection of websites that I find to be very interesting and 
 - [Active Directory](#active-directory)
 - [Command Injection](#command-injection)
 - [Digital Forensics](#digital-forensics)
-- [Domain Enumeration](#domain-enumeration)
+- [Encryption](#encryption)
+- [Enumeration (Domain)](#enumeration-domain)
+- [Enumeration (Host)](#enumeration-host)
 - [Hashes](#hashes)
 - [Lateral Movement - Pass the Hash](#lateral-movement---pass-the-hash)
 - [Misc](#misc)
 - [Phishing](#phishing)
 - [SQL Injection](#sql-injection)
 - [Threat Modelling](#threat-modelling)
+- [Tunneling / Pivoting](#tunneling--pivoting)
 - [Windows Defender Anti-Virus](#windows-defender-anti-virus)
 - [XSS - Cross Site Scripting](#xss---cross-site-scripting)
 
@@ -38,11 +41,14 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **⭐HackTricks** | Online and freely available book of knowledge about a multitude of topics within Cyber Security | https://book.hacktricks.xyz/
+**⭐Internall All The Things** | Active Directory and Internal Pentest Cheatsheets  | https://swisskyrepo.github.io/InternalAllTheThings/
 **⭐Payloads All The Things** | A list of useful payloads and bypasses for Web Application Security. | https://swisskyrepo.github.io/PayloadsAllTheThings/
 **⭐Red Teaming Toolkit** | This repository contains cutting-edge open-source security tools (OST) for a red teamer and threat hunter. | https://github.com/infosecn1nja/Red-Teaming-Toolkit
 **⭐SecLists** | SecLists is the security tester's companion. It's a collection of multiple types of lists used during security assessments, collected in one place. | https://github.com/danielmiessler/SecLists
 **Sticky notes for pentesting** | Search hacking techniques and tools for penetration testings, bug bounty, CTFs.  | https://exploit-notes.hdks.org/
 **Netero1010 Security Lab** | A collection of thoughts and research related to offensive security. | https://www.netero1010-securitylab.com
+**netbiosX Checklists** | Red Teaming & Pentesting checklists for various engagements  | https://github.com/netbiosX/Checklists
+**Total OSCP Guide** | Notepad about stuff related to IT-security, and specifically penetration testing. | https://sushant747.gitbooks.io/total-oscp-guide/content/
 **** |  | 
 
 <br>
@@ -134,7 +140,28 @@ So I created this collection of websites that I find to be very interesting and 
 
 <br>
 
-## Domain Enumeration
+## Encryption
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**RSA Encryption** | Blog explaining the theory, maths, and examples behind RSA encryption. | https://muirlandoracle.co.uk/2020/01/29/rsa-encryption/
+**Setting up your own HTTPS server** | How to create a self-signed SSL certificate for Apache to set up your own HTTPS server. Can also be used to exfiltrate date over HTTPS. | https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-18-04
+**Decrypt WPA2-PSK using Wireshark** | In this post we will see how to decrypt WPA2-PSK traffic using wireshark. | https://mrncciew.com/2014/08/16/decrypt-wpa2-psk-using-wireshark/
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**RsaCtfTool** | RSA attack tool (mainly for ctf) - retrieve private key from weak public key and/or uncipher data | https://github.com/RsaCtfTool/RsaCtfTool
+**Rsatool** | Rsatool can be used to calculate RSA and RSA-CRT parameters | https://github.com/ius/rsatool
+**** |  | 
+
+<br>
+
+## Enumeration (Domain)
 
 ### Usefull documentation
 
@@ -147,6 +174,23 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**** |  | 
+
+<br>
+
+## Enumeration (Host)
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**Enum4Linux** | enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows and Samba hosts. | https://github.com/CiscoCXSecurity/enum4linux
 **** |  | 
 
 <br>
@@ -206,6 +250,7 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Penetration Test Report** | Penetration Test Report by Offensive Security. | https://www.offsec.com/reports/penetration-testing-sample-report-2013.pdf
+**Exploiting simple network services in CTF’s** | For those of you that enjoy CTF’s here are a few tips on how you can go about testing non HTTP network services. | https://gregit.medium.com/exploiting-simple-network-services-in-ctfs-ec8735be5eef
 **** |  | 
 
 <br>
@@ -281,6 +326,23 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **ATT&CK Navigator** | An open-source, web-based tool that helps visualise and navigate the complex landscape of the MITRE ATT&CK Framework. | https://mitre-attack.github.io/attack-navigator/
+**** |  | 
+
+<br>
+
+## Tunneling / Pivoting
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**Neo-reGeorg** | Encapsulates other protocols and sends them back and forth via the HTTP protocol. Create an HTTP tunnel communication channel to pivot into the internal network and communicate with local network devices through HTTP protocol. | https://github.com/L-codes/Neo-reGeorg
 **** |  | 
 
 <br>
