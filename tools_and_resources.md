@@ -20,6 +20,7 @@ So I created this collection of websites that I find to be very interesting and 
 - [Tools Top Tips](#tools-top-tips)
 - [Active Directory](#active-directory)
 - [Command Injection](#command-injection)
+- [Cryptography](#cryptography)
 - [Digital Forensics](#digital-forensics)
 - [Encryption](#encryption)
 - [Enumeration (Domain)](#enumeration-domain)
@@ -67,6 +68,7 @@ So I created this collection of websites that I find to be very interesting and 
 **Mimikatz cheatsheet** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/mimikatz-cheatsheet-ad2b88059b4
 **MS Graph PowerShell cheatsheet** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/microsoft-graph-powershell-cheatsheet-d8a841bafa09
 **⭐MSFVenom Cheat Sheet** | Easy way to create Metasploit Payloads | https://web.archive.org/web/20220607215637/https://thedarksource.com/msfvenom-cheat-sheet-create-metasploit-payloads/
+**Password Storage Cheat Sheet** | This cheat sheet advises you on the proper methods for storing passwords for authentication. | https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 **Set-Acl cheatsheet** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/set-acl-cheatsheet-6c79e0c2f32b
 **SQL injection cheat sheet** | This SQL injection cheat sheet contains examples of useful syntax that you can use to perform a variety of tasks that often arise when performing SQL injection attacks. | https://portswigger.net/web-security/sql-injection/cheat-sheet
 **The Credential Theft Shuffle** | Cheatsheet with just commands and links to background information. | https://happycamper84.medium.com/the-credential-theft-shuffle-54ec6cd32ea5
@@ -121,6 +123,23 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**** |  | 
+
+<br>
+
+## Cryptography
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**quipqiup** | Uipqiup is a fast and automated cryptogram solver. | https://www.quipqiup.com/
 **** |  | 
 
 <br>
@@ -193,6 +212,7 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Enum4Linux** | enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows and Samba hosts. | https://github.com/CiscoCXSecurity/enum4linux
+**Threader3000** | Multi-threaded Python Port Scanner with Nmap Integration. | https://github.com/dievus/threader3000/tree/master
 **** |  | 
 
 <br>
@@ -251,8 +271,9 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-**Penetration Test Report** | Penetration Test Report by Offensive Security. | https://www.offsec.com/reports/penetration-testing-sample-report-2013.pdf
 **Exploiting simple network services in CTF’s** | For those of you that enjoy CTF’s here are a few tips on how you can go about testing non HTTP network services. | https://gregit.medium.com/exploiting-simple-network-services-in-ctfs-ec8735be5eef
+**List of file signatures** | This is a list of file signatures, data used to identify or verify the content of a file. | https://en.wikipedia.org/wiki/List_of_file_signatures
+**Penetration Test Report** | Penetration Test Report by Offensive Security. | https://www.offsec.com/reports/penetration-testing-sample-report-2013.pdf
 **** |  | 
 
 <br>
