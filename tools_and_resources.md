@@ -30,6 +30,7 @@ So I created this collection of websites that I find to be very interesting and 
 - [Misc](#misc)
 - [Phishing](#phishing)
 - [Red Teaming](#red-teaming)
+- [Reverse Engineering](#reverse-engineering)
 - [Risk Management](#risk-management)
 - [SQL Injection](#sql-injection)
 - [Threat Modelling](#threat-modelling)
@@ -308,6 +309,25 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**** |  | 
+
+<br>
+
+## Reverse Engineering
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+PE Format Explained | Learn more about PE. | https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+PEStudio | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
+ILSpy | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more) - cross-platform! | https://github.com/icsharpcode/ILSpy
 **** |  | 
 
 <br>
