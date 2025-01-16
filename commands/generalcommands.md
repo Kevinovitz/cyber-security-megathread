@@ -47,6 +47,28 @@ aircrack-ng -w <wordlist> <capture_file>
 aircrack-ng -w /usr/share/wordlists/rockyou.txt capture.pcap
 ```
 
+## Capa
+
+Capa is the FLARE team's free and open-source tool to identify capabilities in executable files.
+
+**_Analyse a bin file._**
+
+```console
+capa.exe .\cryptbot.bin
+```
+
+**_Log more detailed information._**
+
+```console
+capa -vv .\cryptbot.bin
+```
+
+**_Log more detailed information and direct the result to a .json file._**
+
+```console
+capa.bin -j -vv .\cryptbot.bin > cryptbot_vv.json
+```
+
 ## Enum4Linux
 
 enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows and Samba hosts.

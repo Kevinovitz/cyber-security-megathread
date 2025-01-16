@@ -326,8 +326,10 @@ PE Format Explained | Learn more about PE. | https://learn.microsoft.com/en-us/w
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-PEStudio | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
-ILSpy | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more) - cross-platform! | https://github.com/icsharpcode/ILSpy
+**PEStudio** | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
+**ILSpy** | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more) - cross-platform! | https://github.com/icsharpcode/ILSpy
+**Capa** | Capa is the FLARE team's free and open-source tool to identify capabilities in executable files. | https://mandiant.github.io/capa/
+**Capa Explorer Web** | Capa Explorer Web is a web-based tool to explore the capabilities identified by capa. | https://mandiant.github.io/capa/explorer/
 **** |  | 
 
 <br>
