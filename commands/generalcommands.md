@@ -100,6 +100,16 @@ curl --socks5 127.0.0.1:1080 http://172.20.0.120:80/flag
 
 More info [here](https://github.com/L-codes/Neo-reGeorg/blob/master/README-en.md).
 
+## oledump.py
+
+Oledump.py is a Python tool that analyzes OLE2 files, commonly called Structured Storage or Compound File Binary Format. OLE stands for Object Linking and Embedding, a proprietary technology developed by Microsoft. 
+
+**_Analyse a file and investigate the 4th datastream. Then decompress any VBA code._**
+
+```console
+oledump.py agenttesla.xlsm -s 4 --vbadecompress
+```
+
 **_Firefox_**
 
 Configure a manual proxy in the network setting and use the ip and port as listed in the Neo-reGeorge CLI output for the SOCKS host.

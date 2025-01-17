@@ -158,6 +158,7 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Arsenal’s Digital Forensics Tools** | Tools by Arsenal Recon used in digital forensics. | https://arsenalrecon.com/downloads/
+**Volatility** | Developed as an open source memory forensics tool written in Python. Volatility commands are executed to identify and extract specific artefacts from memory images, and the resulting output can be saved to text files for further examination. | https://github.com/volatilityfoundation/volatility3
 **** |  | 
 
 <br>
@@ -326,10 +327,12 @@ PE Format Explained | Learn more about PE. | https://learn.microsoft.com/en-us/w
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-**PEStudio** | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
-**ILSpy** | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more) - cross-platform! | https://github.com/icsharpcode/ILSpy
 **Capa** | Capa is the FLARE team's free and open-source tool to identify capabilities in executable files. | https://mandiant.github.io/capa/
 **Capa Explorer Web** | Capa Explorer Web is a web-based tool to explore the capabilities identified by capa. | https://mandiant.github.io/capa/explorer/
+**ILSpy** | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more) - cross-platform! | https://github.com/icsharpcode/ILSpy
+**InetSIM** | INetSim is a software suite for simulating common internet services in a lab environment, e.g. for analyzing the network behaviour of unknown malware samples.  | https://www.inetsim.org/
+**Oledump.py** | oledump.py is a program to analyze OLE files. These files contain streams of data. oledump allows you to analyze these streams. The best known is MS Office files. | https://blog.didierstevens.com/programs/oledump-py/
+**PEStudio** | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
 **** |  | 
 
 <br>
