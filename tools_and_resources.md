@@ -26,17 +26,20 @@ So I created this collection of websites that I find to be very interesting and 
 - [Enumeration (Domain)](#enumeration-domain)
 - [Enumeration (Host)](#enumeration-host)
 - [Hashes](#hashes)
-- [Lateral Movement - Pass the Hash](#lateral-movement---pass-the-hash)
+- [File Analysis](#file-analysis)
+- [Lateral Movement** | Pass the Hash](#lateral-movement---pass-the-hash)
 - [Misc](#misc)
+- [Network Analysis](#network-analysis)
 - [Phishing](#phishing)
 - [Red Teaming](#red-teaming)
 - [Reverse Engineering](#reverse-engineering)
 - [Risk Management](#risk-management)
 - [SQL Injection](#sql-injection)
+- [Static & Dynamic Analysis](#static--dynamic-analysis)
 - [Threat Modelling](#threat-modelling)
 - [Tunneling / Pivoting](#tunneling--pivoting)
 - [Windows Defender Anti-Virus](#windows-defender-anti-virus)
-- [XSS - Cross Site Scripting](#xss---cross-site-scripting)
+- [XSS** | Cross Site Scripting](#xss---cross-site-scripting)
 
 <br>
 
@@ -84,6 +87,7 @@ So I created this collection of websites that I find to be very interesting and 
 **⭐Arsenal** | Arsenal is just a quick inventory and launcher for hacking programs. You can search for a command, select one and it's prefilled directly in your terminal. | https://github.com/Orange-Cyberdefense/arsenal
 **⭐[Metasploit Framework](commands/metasploit.md)** | The Metasploit framework is a product made by Rapid7 and is part of the Metasploit Project. It is a very powerfull tool that can be used to create and use exploit code on target machines. | https://www.metasploit.com/
 **OWASP Juice Shop** | OWASP Juice Shop is probably the most modern and sophisticated insecure web application! It can be used in security trainings, awareness demos, CTFs and as a guinea pig for security tools! Juice Shop encompasses vulnerabilities from the entire OWASP Top Ten along with many other security flaws found in real-world applications! | https://owasp.org/www-project-juice-shop/
+**** |  | 
 
 <br>
 
@@ -158,6 +162,8 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Arsenal’s Digital Forensics Tools** | Tools by Arsenal Recon used in digital forensics. | https://arsenalrecon.com/downloads/
+**FTK Imager** - Disc image acquisition and analysis tools for forensic use. | https://www.exterro.com/digital-forensics-software/ftk-imager
+**Rekall** - Framework for memory forensics in incident response. | https://github.com/google/rekall
 **Volatility** | Developed as an open source memory forensics tool written in Python. Volatility commands are executed to identify and extract specific artefacts from memory images, and the resulting output can be saved to text files for further examination. | https://github.com/volatilityfoundation/volatility3
 **** |  | 
 
@@ -178,7 +184,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-**RsaCtfTool** | RSA attack tool (mainly for ctf) - retrieve private key from weak public key and/or uncipher data | https://github.com/RsaCtfTool/RsaCtfTool
+**RsaCtfTool** | RSA attack tool (mainly for ctf)** | retrieve private key from weak public key and/or uncipher data | https://github.com/RsaCtfTool/RsaCtfTool
 **Rsatool** | Rsatool can be used to calculate RSA and RSA-CRT parameters | https://github.com/ius/rsatool
 **** |  | 
 
@@ -219,6 +225,25 @@ So I created this collection of websites that I find to be very interesting and 
 
 <br>
 
+## File Analysis
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**FileInsight** | A program for looking through and editing binary files. | https://github.com/nmantani/FileInsight-plugins
+**Hex Fiend** | Hex editor that is light and quick. | https://hexfiend.com/
+**HxD** | Binary file viewing and editing with a hex editor. | https://mh-nexus.de/en/hxd/
+**** |  | 
+
+<br>
+
 ## Hashes
 
 🔰 Name | ℹ️ Description | 🔗 Link
@@ -233,7 +258,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 <br>
 
-## Lateral Movement - Pass the Hash
+## Lateral Movement** | Pass the Hash
 
 ### Usefull documentation
 
@@ -255,9 +280,9 @@ So I created this collection of websites that I find to be very interesting and 
 **CrackMapExec** | A swiss army knife for pentesting networks  | https://github.com/Porchetta-Industries/CrackMapExec
 **CQhashdump** | A small password hash dumping utility by CQure Academy. | http://4f2bcn3u2m2u2z7ghc17a5jm.wpengine.netdna-cdn.com/wp-content/uploads/2016/09/cqhashdumpv2.zip
 **Evil-WinRM** | The ultimate WinRM shell for hacking/pentesting. | https://github.com/Hackplayers/evil-winrm
-**Impacket-psexec** | Impacket - Collection of Python classes for working with network protocols. | https://github.com/fortra/impacket/tree/master/examples/psexec.py
-**Impacket-smbexec** | Impacket - Collection of Python classes for working with network protocols. | https://github.com/fortra/impacket/blob/master/examples/smbexec.py
-**Impacket-wmiexec** | Impacket - Collection of Python classes for working with network protocols. | https://github.com/fortra/impacket/tree/master/examples/wmiexec.py
+**Impacket-psexec** | Impacket** | Collection of Python classes for working with network protocols. | https://github.com/fortra/impacket/tree/master/examples/psexec.py
+**Impacket-smbexec** | Impacket** | Collection of Python classes for working with network protocols. | https://github.com/fortra/impacket/blob/master/examples/smbexec.py
+**Impacket-wmiexec** | Impacket** | Collection of Python classes for working with network protocols. | https://github.com/fortra/impacket/tree/master/examples/wmiexec.py
 **Invoke-PowerDump** | This script utilizes the same technique found in the Metasploit framework’s meterpreter hashdump command. Part of the PowerShell Empire post-exploitation framework. | https://github.com/EmpireProject/Empire/blob/master/data/module_source/credentials/Invoke-PowerDump.ps1
 **Invoke-TheHash** | PowerShell Pass The Hash Utils. | https://github.com/Kevin-Robertson/Invoke-TheHash
 **lsassy** | Can be used to dump the LSASS process remotely | https://github.com/Hackndo/lsassy
@@ -276,6 +301,25 @@ So I created this collection of websites that I find to be very interesting and 
 **Exploiting simple network services in CTF’s** | For those of you that enjoy CTF’s here are a few tips on how you can go about testing non HTTP network services. | https://gregit.medium.com/exploiting-simple-network-services-in-ctfs-ec8735be5eef
 **List of file signatures** | This is a list of file signatures, data used to identify or verify the content of a file. | https://en.wikipedia.org/wiki/List_of_file_signatures
 **Penetration Test Report** | Penetration Test Report by Offensive Security. | https://www.offsec.com/reports/penetration-testing-sample-report-2013.pdf
+**** |  | 
+
+<br>
+
+## Network Analysis
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**Wireshark** | Network protocol analyzer for traffic recording and examination. | https://www.wireshark.org/
+**Nmap** | A vulnerability detection and network mapping tool. | https://nmap.org/
+**Netcat** | Read and write data across network connections with this helpful tool. | https://nmap.org/ncat/
 **** |  | 
 
 <br>
@@ -320,19 +364,26 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-PE Format Explained | Learn more about PE. | https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
+**PE Format Explained** | Learn more about PE. | https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
 **** |  | 
 
 ### Related tools
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**Binary Ninja** | A tool for disassembling and decompiling binaries. | https://binary.ninja/
 **Capa** | Capa is the FLARE team's free and open-source tool to identify capabilities in executable files. | https://mandiant.github.io/capa/
 **Capa Explorer Web** | Capa Explorer Web is a web-based tool to explore the capabilities identified by capa. | https://mandiant.github.io/capa/explorer/
-**ILSpy** | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more) - cross-platform! | https://github.com/icsharpcode/ILSpy
-**InetSIM** | INetSim is a software suite for simulating common internet services in a lab environment, e.g. for analyzing the network behaviour of unknown malware samples.  | https://www.inetsim.org/
-**Oledump.py** | oledump.py is a program to analyze OLE files. These files contain streams of data. oledump allows you to analyze these streams. The best known is MS Office files. | https://blog.didierstevens.com/programs/oledump-py/
-**PEStudio** | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
+**CFF Explorer** | A PE editor designed to analyze and edit Portable Executable (PE) files. | https://ntcore.com/explorer-suite/
+**FlareVM** | A collection of software installations scripts for Windows systems that allows you to easily setup and maintain a reverse engineering environment on a VM. | https://github.com/mandiant/flare-vm/tree/main
+**Ghidra** | NSA-developed open-source reverse engineering suite. | https://ghidra-sre.org/
+**Hopper Disassembler** | A Debugger, disassembler, and decompiler. | https://www.hopperapp.com/
+**ILSpy** | .NET Decompiler with support for PDB generation, ReadyToRun, Metadata (&more)** | cross-platform! | https://github.com/icsharpcode/ILSpy
+**OllyDbg** | Debugger for reverse engineering at the assembly level. | https://www.ollydbg.de/
+**PEiD** | Packer, cryptor, and compiler detection tool. | https://github.com/wolfram77web/app-peid
+**Radare2** | A sophisticated open-source platform for reverse engineering. | https://rada.re/n/radare2.html
+**RetDec** | Open-source decompiler for machine code. | https://github.com/avast/retdec
+**x64dbg** | Open-source debugger for binaries in x64 and x32 formats. | https://x64dbg.com/
 **** |  | 
 
 <br>
@@ -370,6 +421,29 @@ PE Format Explained | Learn more about PE. | https://learn.microsoft.com/en-us/w
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**** |  | 
+
+<br>
+
+## Static & Dynamic Analysis
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**Dependency Walker** | A tool for displaying an executable’s DLL dependencies. | https://www.dependencywalker.com/
+**DIE (Detect It Easy)** | A packer, compiler, and cryptor detection tool. | https://github.com/horsicq/Detect-It-Easy
+**InetSIM** | INetSim is a software suite for simulating common internet services in a lab environment, e.g. for analyzing the network behaviour of unknown malware samples.  | https://www.inetsim.org/
+**Oledump.py** | oledump.py is a program to analyze OLE files. These files contain streams of data. oledump allows you to analyze these streams. The best known is MS Office files. | https://blog.didierstevens.com/programs/oledump-py/
+**PEStudio** | A software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation | https://www.winitor.com/download
+**PEview** | A portable executable (PE) file viewer for analysis. | http://wjradburn.com/software/
+**Process Hacker** | Sophisticated memory editor and process watcher. | https://processhacker.sourceforge.io/downloads.php
 **** |  | 
 
 <br>
@@ -428,7 +502,7 @@ PE Format Explained | Learn more about PE. | https://learn.microsoft.com/en-us/w
 
 <br>
 
-## XSS - Cross Site Scripting
+## XSS** | Cross Site Scripting
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
