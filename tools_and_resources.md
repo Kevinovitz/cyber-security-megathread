@@ -27,13 +27,15 @@ So I created this collection of websites that I find to be very interesting and 
 - [Enumeration (Host)](#enumeration-host)
 - [Hashes](#hashes)
 - [File Analysis](#file-analysis)
-- [Lateral Movement** | Pass the Hash](#lateral-movement---pass-the-hash)
+- [Lateral Movement | Pass the Hash](#lateral-movement--pass-the-hash)
 - [Misc](#misc)
 - [Network Analysis](#network-analysis)
+- [Obfuscation](#obfuscation)
 - [Phishing](#phishing)
 - [Red Teaming](#red-teaming)
 - [Reverse Engineering](#reverse-engineering)
 - [Risk Management](#risk-management)
+- [Shells (reverse / web / ...)](#shells-reverse--web)
 - [SQL Injection](#sql-injection)
 - [Static & Dynamic Analysis](#static--dynamic-analysis)
 - [Threat Modelling](#threat-modelling)
@@ -104,12 +106,16 @@ So I created this collection of websites that I find to be very interesting and 
 **Active Directory Methodology** | All things AD. From a basic overview to complex command. | https://book.hacktricks.xyz/windows-hardening/active-directory-methodology
 **DCSync** | DCSync is an attack that allows an adversary to simulate the behavior of a domain controller (DC) and retrieve password data via domain replication. | https://book.hacktricks.xyz/windows-hardening/active-directory-methodology/dcsync
 **DCSync Detection** | Blog post about ways to detect DCSync attacks. | https://www.netero1010-securitylab.com/detection/dcsync-detection
+**SharpHound CE Flags, Explained** | SharpHound has several optional flags that let you control scan scope, performance, output, and other behaviors. | https://support.bloodhoundenterprise.io/hc/en-us/articles/17481375424795-All-SharpHound-Community-Edition-Flags-Explained
+**SharpHound Flags, Explained (Legacy)** | SharpHound Community Edition has several optional flags that let you control scan scope, performance, output, and other behaviors. | https://bloodhound.readthedocs.io/en/latest/data-collection/sharphound-all-flags.html
 **** |  | 
 
 ### Related tools
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**BloodHound** | BloodHound uses graph theory to reveal the hidden and often unintended relationships within an Active Directory or Azure environment. Attackers can use BloodHound to quickly identify highly complex attack paths that would otherwise be impossible to find. | https://github.com/SpecterOps/BloodHound
+**SharpHound** | C# Data Collector for BloodHound | https://github.com/SpecterOps/SharpHound
 **** |  | 
 
 <br>
@@ -220,6 +226,7 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Enum4Linux** | enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows and Samba hosts. | https://github.com/CiscoCXSecurity/enum4linux
+**Seatbelt** | Seatbelt is a C# project that performs a number of security oriented host-survey "safety checks" relevant from both offensive and defensive security perspectives. | https://github.com/GhostPack/Seatbelt
 **Threader3000** | Multi-threaded Python Port Scanner with Nmap Integration. | https://github.com/dievus/threader3000/tree/master
 **** |  | 
 
@@ -246,19 +253,23 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Hashes
 
-🔰 Name | ℹ️ Description | 🔗 Link
--- | -- | --
-**CQhashdump** | A small password hash dumping utility by CQure Academy. | https://cqureacademy.wpenginepowered.com/wp-content/uploads/2016/09/cqhashdumpv2.zip
-
-### Related tools
+### Usefull documentation
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**CQhashdump** | A small password hash dumping utility by CQure Academy. | https://cqureacademy.wpenginepowered.com/wp-content/uploads/2016/09/cqhashdumpv2.zip
+**Hashes.com** | Hashes.com is a hash lookup service. This allows you to input a hash and search for its corresponding plaintext in our database of already-cracked hashes. | https://hashes.com/en/decrypt/hash
+**** |  | 
+
 <br>
 
-## Lateral Movement** | Pass the Hash
+## Lateral Movement | Pass the Hash
 
 ### Usefull documentation
 
@@ -296,11 +307,20 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Misc
 
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Exploiting simple network services in CTF’s** | For those of you that enjoy CTF’s here are a few tips on how you can go about testing non HTTP network services. | https://gregit.medium.com/exploiting-simple-network-services-in-ctfs-ec8735be5eef
 **List of file signatures** | This is a list of file signatures, data used to identify or verify the content of a file. | https://en.wikipedia.org/wiki/List_of_file_signatures
 **Penetration Test Report** | Penetration Test Report by Offensive Security. | https://www.offsec.com/reports/penetration-testing-sample-report-2013.pdf
+**PowerLessShell** | PowerLessShell rely on MSBuild.exe to remotely execute PowerShell scripts and commands without spawning powershell.exe. | https://github.com/Mr-Un1k0d3r/PowerLessShell
 **** |  | 
 
 <br>
@@ -320,6 +340,25 @@ So I created this collection of websites that I find to be very interesting and 
 **Wireshark** | Network protocol analyzer for traffic recording and examination. | https://www.wireshark.org/
 **Nmap** | A vulnerability detection and network mapping tool. | https://nmap.org/
 **Netcat** | Read and write data across network connections with this helpful tool. | https://nmap.org/ncat/
+**** |  | 
+
+<br>
+
+## Obfuscation
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**JavaScript Obfuscator** | Javascript Obfuscator is a free tool that can be used for obfuscating JavaScript code. | https://codebeautify.org/javascript-obfuscator
+**JavaScript Obfuscator Tool** | A free and efficient obfuscator for JavaScript to make your code harder to copy and prevent people from stealing your work. | https://obfuscator.io/
+**Obfuscator.io Deobfuscator** | A tool to undo obfuscation performed by obfuscator.io | https://obf-io.deobfuscate.io/
 **** |  | 
 
 <br>
@@ -404,6 +443,24 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**** |  | 
+
+<br>
+
+## Shells (reverse / web / ...)
+
+### Usefull documentation
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**** |  | 
+
+### Related tools
+
+🔰 Name | ℹ️ Description | 🔗 Link
+-- | -- | --
+**b374k webshell** | This PHP Shell is a useful tool for system or web administrator to do remote management without using cpanel, connecting using ssh, ftp etc. All actions take place within a web browser | https://github.com/b374k/b374k
+**p0wny-shell** | p0wny@shell:~# is a very basic, single-file, PHP shell. It can be used to quickly execute commands on a server when pentesting a PHP application. | https://github.com/flozz/p0wny-shell
 **** |  | 
 
 <br>
