@@ -37,10 +37,10 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 Some tools are so vast, they have many commands. Too many to include in this document whilst keeping it nice and organized. That is why I created a separate document specifically for such programs. 
 
 🔰 Name |
--- | 
-**⭐[Metasploit Framework](commands/metasploit.md)**
-**⭐[Powershell](commands/powershell.md)**
-****
+-- |
+**⭐[Metasploit Framework](commands/metasploit.md)** |
+**⭐[Powershell](commands/powershell.md)** |
+**** |
 
 ## Aircrack-ng
 
