@@ -39,6 +39,7 @@ extra_css:
   
 markdown_extensions:
   - tables
+  - md_in_html
   - attr_list
   - admonition
   - def_list

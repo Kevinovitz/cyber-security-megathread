@@ -91,7 +91,7 @@ Gobuster is a software tool for brute forcing directories on web servers. It com
 gobuster dir -u http://TARGET_IP:80 -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt -x bak,txt,html -t 20
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
