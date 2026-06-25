@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 # General Command Syntax
 
 Instead of spending time on figuring out what arguments to use in a command each time you use it, you can look at your terminal history for what you previously used. 
@@ -18,8 +19,13 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 
 ### Subjects
 
+- [Separate command sheets](#separate-command-sheets)
 - [Aircrack-ng](#aircrack-ng)
+- [Capa](#capa)
+- [Enum4Linux](#enum4linux)
+- [Gobuster](#gobuster)
 - [Neo-ReGeorg](#neo-regeorg)
+- [oledump.py](#oledumppy)
 - [RsaCTFtool](#rsactftool)
 - [Rsatool](#rsatool)
 - [Smbclient](#smbclient)
@@ -75,6 +81,32 @@ enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows 
 
 More info [here](https://github.com/CiscoCXSecurity/enum4linux).
 
+## Gobuster
+
+Gobuster is a software tool for brute forcing directories on web servers. It comes preinstalled with Kali Linux, a Linux distribution designed for digital forensics and penetration testing.
+
+**_Enumerate common files in directories_**
+
+```console
+gobuster dir -u http://TARGET_IP:80 -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt -x bak,txt,html -t 20
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `dir` | | Mode — use directory/file enumeration |
+| `-u` | `http://TARGET_IP:80` | Target URL including port |
+| `-w` | `common.txt` | Wordlist to use for brute-forcing paths |
+| `-x` | `bak,txt,html` | File extensions to append to each wordlist entry |
+| `-t` | `20` | Number of concurrent threads |
+
+</details>
+<br>
+
+More info [here](https://github.com/OJ/gobuster).
+
 ## Neo-ReGeorg
 
 Neo-reGeorg is an HTTP tunneling and pivot tool that can create a tunnel over the HTTP(S) protocol. It encapsulates other protocols and sends them back and forth via the HTTP protocol. Create an HTTP tunnel communication channel to pivot into the internal network and communicate with local network devices through HTTP protocol. It is used for proxying HTTP traffic when encountering servers that do not allow internet access during traffic proxying.
@@ -114,16 +146,6 @@ oledump.py agenttesla.xlsm -s 4 --vbadecompress
 
 Configure a manual proxy in the network setting and use the ip and port as listed in the Neo-reGeorge CLI output for the SOCKS host.
 
-## Smbclient
-
-Smbclient is a client that can 'talk' to an SMB/CIFS server and is part of the Samba suite.
-
-**_'Exploit' misconfiguration of the anonymous login ability._**
-
-```console
-smbclient <ip> -U:Anonymous -p:<port>
-```
-
 ## RsaCTFtool
 
 RSA attack tool (mainly for ctf) - retrieve private key from weak public key and/or uncipher data 
@@ -150,6 +172,16 @@ python rsatool.py -f PEM -o key.pem -n 13826123222358393307 -d 97937061202663563
 python rsatool.py -f DER -o key.der -p 4184799299 -q 3303891593
 ```
 
+## Smbclient
+
+Smbclient is a client that can 'talk' to an SMB/CIFS server and is part of the Samba suite.
+
+**_'Exploit' misconfiguration of the anonymous login ability._**
+
+```console
+smbclient <ip> -U:Anonymous -p:<port>
+```
+
 <!--- 
 
 💲 ❕ ➡️
@@ -169,5 +201,36 @@ python rsatool.py -f DER -o key.der -p 4184799299 -q 3303891593
 **** |  | 
 
 <br>
+
+--->
+
+
+<!---
+
+## TITLE
+
+
+
+**_Command_**
+
+```console
+
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `` | `` | `` |
+| `` | `` | `` |
+| `` | `` | `` |
+| `` | `` | `` |
+| `` | `` | `` |
+
+</details>
+<br>
+
+More info [here](tools_and_resources.md).
 
 --->

@@ -25,8 +25,8 @@ So I created this collection of websites that I find to be very interesting and 
 - [Encryption](#encryption)
 - [Enumeration (Domain)](#enumeration-domain)
 - [Enumeration (Host)](#enumeration-host)
-- [Hashes](#hashes)
 - [File Analysis](#file-analysis)
+- [Hashes](#hashes)
 - [Lateral Movement | Pass the Hash](#lateral-movement--pass-the-hash)
 - [Misc](#misc)
 - [Network Analysis](#network-analysis)
@@ -35,13 +35,13 @@ So I created this collection of websites that I find to be very interesting and 
 - [Red Teaming](#red-teaming)
 - [Reverse Engineering](#reverse-engineering)
 - [Risk Management](#risk-management)
-- [Shells (reverse / web / ...)](#shells-reverse--web)
+- [Shells (reverse / web / ...)](#shells-reverse--web--)
 - [SQL Injection](#sql-injection)
-- [Static & Dynamic Analysis](#static--dynamic-analysis)
+- [Static \& Dynamic Analysis](#static--dynamic-analysis)
 - [Threat Modelling](#threat-modelling)
 - [Tunneling / Pivoting](#tunneling--pivoting)
 - [Windows Defender Anti-Virus](#windows-defender-anti-virus)
-- [XSS** | Cross Site Scripting](#xss---cross-site-scripting)
+- [XSS\*\* | Cross Site Scripting](#xss--cross-site-scripting)
 
 <br>
 
@@ -89,6 +89,7 @@ So I created this collection of websites that I find to be very interesting and 
 **⭐Arsenal** | Arsenal is just a quick inventory and launcher for hacking programs. You can search for a command, select one and it's prefilled directly in your terminal. | https://github.com/Orange-Cyberdefense/arsenal
 **⭐[Metasploit Framework](commands/metasploit.md)** | The Metasploit framework is a product made by Rapid7 and is part of the Metasploit Project. It is a very powerfull tool that can be used to create and use exploit code on target machines. | https://www.metasploit.com/
 **OWASP Juice Shop** | OWASP Juice Shop is probably the most modern and sophisticated insecure web application! It can be used in security trainings, awareness demos, CTFs and as a guinea pig for security tools! Juice Shop encompasses vulnerabilities from the entire OWASP Top Ten along with many other security flaws found in real-world applications! | https://owasp.org/www-project-juice-shop/
+**Codebeautify** | Website containing many helpfull tools, such as: hash generators, converters, code formatters, etc. | https://codebeautify.org
 **** |  | 
 
 <br>
@@ -190,8 +191,8 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
-**RsaCtfTool** | RSA attack tool (mainly for ctf)** | retrieve private key from weak public key and/or uncipher data | https://github.com/RsaCtfTool/RsaCtfTool
-**Rsatool** | Rsatool can be used to calculate RSA and RSA-CRT parameters | https://github.com/ius/rsatool
+**[RsaCtfTool](commands/generalcommands.md#rsactftool)** | RSA attack tool (mainly for ctf)** | retrieve private key from weak public key and/or uncipher data | https://github.com/RsaCtfTool/RsaCtfTool
+**[Rsatool](commands/generalcommands.md#rsatool)** | Rsatool can be used to calculate RSA and RSA-CRT parameters | https://github.com/ius/rsatool
 **** |  | 
 
 <br>
@@ -226,6 +227,7 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Enum4Linux** | enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows and Samba hosts. | https://github.com/CiscoCXSecurity/enum4linux
+**[Gobuster](commands/generalcommands.md#gobuster)** | Gobuster is a software tool for brute forcing directories on web servers. It comes preinstalled with Kali Linux, a Linux distribution designed for digital forensics and penetration testing. | https://github.com/OJ/gobuster
 **Seatbelt** | Seatbelt is a C# project that performs a number of security oriented host-survey "safety checks" relevant from both offensive and defensive security perspectives. | https://github.com/GhostPack/Seatbelt
 **Threader3000** | Multi-threaded Python Port Scanner with Nmap Integration. | https://github.com/dievus/threader3000/tree/master
 **** |  | 
