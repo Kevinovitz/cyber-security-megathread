@@ -169,8 +169,18 @@ So I created this collection of websites that I find to be very interesting and 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Arsenal’s Digital Forensics Tools** | Tools by Arsenal Recon used in digital forensics. | https://arsenalrecon.com/downloads/
-**FTK Imager** - Disc image acquisition and analysis tools for forensic use. | https://www.exterro.com/digital-forensics-software/ftk-imager
-**Rekall** - Framework for memory forensics in incident response. | https://github.com/google/rekall
+**FTK Imager** | Disc image acquisition and analysis tools for forensic use. | https://www.exterro.com/digital-forensics-software/ftk-imager
+**JLECmd** | Command-line tool for parsing Windows Jump List files. | https://ericzimmerman.github.io
+**JumpList Explorer** | GUI tool for viewing Windows Jump List artifacts, showing recent/frequent file and app access. | https://ericzimmerman.github.io
+**LECmd** | Command-line tool for parsing Windows LNK (shortcut) files. | https://ericzimmerman.github.io
+**MFTECmd** | Command-line tool for parsing the NTFS Master File Table ($MFT), $J, and other NTFS metadata files. | https://ericzimmerman.github.io
+**PECmd** | Command-line tool for parsing Windows Prefetch files, showing evidence of program execution. | https://ericzimmerman.github.io
+**Registry Explorer** | GUI tool for viewing, searching, and parsing Windows Registry hives, with multi-hive and plugin support. | https://ericzimmerman.github.io
+**RegRipper** | Tool that extracts and reports on forensically relevant keys/values from Windows Registry hives. | https://github.com/keydet89/RegRipper3.0
+**Rekall** | Framework for memory forensics in incident response. | https://github.com/google/rekall
+**ShellBags Explorer** | GUI tool for parsing ShellBags, which record folder-access history stored in the registry. | https://ericzimmerman.github.io
+**Shim Database Explorer** | GUI tool for parsing the Windows Application Compatibility (Shim) database, useful for execution evidence. | https://ericzimmerman.github.io
+**Timeline Explorer** | GUI tool for viewing and analyzing CSV/Excel output from forensic tools, with filtering, sorting, and grouping. | https://ericzimmerman.github.io
 **Volatility** | Developed as an open source memory forensics tool written in Python. Volatility commands are executed to identify and extract specific artefacts from memory images, and the resulting output can be saved to text files for further examination. | https://github.com/volatilityfoundation/volatility3
 **** |  | 
 

@@ -24,6 +24,7 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Capa](#capa)
 - [Enum4Linux](#enum4linux)
 - [Gobuster](#gobuster)
+- [MFTECmd](#mftecmd)
 - [Neo-ReGeorg](#neo-regeorg)
 - [oledump.py](#oledumppy)
 - [RsaCTFtool](#rsactftool)
@@ -106,6 +107,30 @@ gobuster dir -u http://TARGET_IP:80 -w /usr/share/wordlists/SecLists/Discovery/W
 <br>
 
 More info [here](https://github.com/OJ/gobuster).
+
+## MFTECmd
+
+Command-line tool for parsing the NTFS Master File Table ($MFT), $J, and other NTFS metadata files.
+
+**_Extract the records from the Files and save it in the same folder_**
+
+```console
+MFTECmd.exe -f ..\Evidence\$MFT --csv ..\Evidence --csvf ..\Evidence\MFT_record.csv
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-f` | `..\Evidence\$MFT` | `MFT file location` |
+| `--csv` | `..\Evidence` | `Output directory` |
+| `--csvf` | `..\Evidence\MFT_record.csv` | `Output file name` |
+
+</details>
+<br>
+
+More info [here](https://ericzimmerman.github.io).
 
 ## Neo-ReGeorg
 
