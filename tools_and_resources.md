@@ -162,6 +162,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**GCK File Signature Table** | This table of file signatures (also known as "magic numbers") is a continuing work in progres. | https://www.garykessler.net/library/file_sigs.html
 **** |  | 
 
 ### Related tools
