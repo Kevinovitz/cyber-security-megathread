@@ -357,9 +357,22 @@ capa -vv .\cryptbot.bin
 capa.bin -j -vv .\cryptbot.bin > cryptbot_vv.json
 ```
 
-## Curl
+
+## cURL
 
 curl transfers data from or to a server using various protocols (HTTP, HTTPS, FTP, etc.). Useful for testing network connections, downloading files, and interacting with web APIs.
+
+**_Basic GET request_**
+
+```console
+curl <ip/hostname>
+```
+
+**_Basic POST request for a login form._**
+
+```console
+curl -X POST -d "username=user&password=user&submit=Login" http://10.80.184.173/post.php
+```
 
 **_Download a file._**
 
@@ -403,11 +416,15 @@ curl -L <url>
 
 | Argument | Value | Description |
 |----------|-------|-------------|
+| `-i` | - | To view exactly what the server returns (including headers and potential redirects). |
 | `-O` | - | Save to a file with the remote filename |
 | `-o` | `<file>` | Save to a specified local filename |
 | `-X` | `POST/GET/PUT` | Specify the HTTP method |
 | `-d` | `<data>` | Send data in a POST request |
 | `-H` | `<header>` | Add a custom HTTP header |
+| `-A` | `<user-agent>` | Specify a custom user-agent. |
+| `-c` | `<filename>` | Writes any cookies received from the server into a file. |
+| `-b` | `<filename>` | Send the saved cookies in the next request. |
 | `-L` | - | Follow redirects |
 | `-s` | - | Silent mode (no progress bar) |
 | `--socks5` | `<host:port>` | Route traffic through a SOCKS5 proxy |
