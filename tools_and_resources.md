@@ -100,7 +100,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Active Directory
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -111,7 +111,7 @@ So I created this collection of websites that I find to be very interesting and 
 **SharpHound Flags, Explained (Legacy)** | SharpHound Community Edition has several optional flags that let you control scan scope, performance, output, and other behaviors. | https://bloodhound.readthedocs.io/en/latest/data-collection/sharphound-all-flags.html
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -123,7 +123,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Command Injection
  
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -131,7 +131,7 @@ So I created this collection of websites that I find to be very interesting and 
 **Command Injection Payload List** | This Github repository contains several payloads for use in command injection attacks on Unix or Windows systems. | https://github.com/payloadbox/command-injection-payload-list
 **Entrust CTSearch** | Offers a searchable database of certificates that shows current and historical results for a given domain name. | https://ui.ctsearch.entrust.com/ui/ctsearchui
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -141,13 +141,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Cryptography
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -158,14 +158,14 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Digital Forensics
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **GCK File Signature Table** | This table of file signatures (also known as "magic numbers") is a continuing work in progres. | https://www.garykessler.net/library/file_sigs.html
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -189,7 +189,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Encryption
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -198,7 +198,7 @@ So I created this collection of websites that I find to be very interesting and 
 **Decrypt WPA2-PSK using Wireshark** | In this post we will see how to decrypt WPA2-PSK traffic using wireshark. | https://mrncciew.com/2014/08/16/decrypt-wpa2-psk-using-wireshark/
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -210,14 +210,14 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Enumeration (Domain)
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **Certificate Search** | Offers a searchable database of certificates that shows current and historical results for a given domain name. | https://crt.sh/
 **Entrust CTSearch** | Offers a searchable database of certificates that shows current and historical results for a given domain name. | https://ui.ctsearch.entrust.com/ui/ctsearchui
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -227,13 +227,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Enumeration (Host)
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -247,13 +247,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## File Analysis
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -266,13 +266,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Hashes
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -284,7 +284,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Lateral Movement | Pass the Hash
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -297,7 +297,7 @@ So I created this collection of websites that I find to be very interesting and 
 **⭐Windows Lateral Movement with smb, psexec and alternatives** | Using various methods to move laterally through a network (psexec, impacket, metasploit, rmi, etc.). | https://nv2lt.github.io/windows/smb-psexec-smbexec-winexe-how-to/
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -320,13 +320,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Misc
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -340,13 +340,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Network Analysis
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -359,13 +359,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Obfuscation
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -378,13 +378,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Phishing
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -395,14 +395,14 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Red Teaming
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **LOLBAS Repository** | Living Off The Land Binaries, Scripts and Libraries | https://lolbas-project.github.io
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -412,14 +412,14 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Reverse Engineering
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **PE Format Explained** | Learn more about PE. | https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -442,7 +442,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Risk Management
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -452,7 +452,7 @@ So I created this collection of websites that I find to be very interesting and 
 **Failure Modes and Effect Analysis (FMEA)** | A risk assessment methodology commonly used in engineering and manufacturing. It involves identifying potential failure modes for a system or process and then analysing the possible effects of those failures and the likelihood of their occurrence. | https://asq.org/quality-resources/fmea
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -462,13 +462,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Shells (reverse / web / ...)
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -480,14 +480,14 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## SQL Injection
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **SQL injection cheat sheet** | This SQL injection cheat sheet contains examples of useful syntax that you can use to perform a variety of tasks that often arise when performing SQL injection attacks. | https://portswigger.net/web-security/sql-injection/cheat-sheet
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -497,13 +497,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Static & Dynamic Analysis
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -520,7 +520,7 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Threat Modelling
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -530,7 +530,7 @@ So I created this collection of websites that I find to be very interesting and 
 **PASTA Framework** | A structured, risk-centric threat modelling framework designed to help organisations identify and evaluate security threats and vulnerabilities within their systems, applications, or infrastructure. | https://versprite.com/blog/what-is-pasta-threat-modeling/
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -541,13 +541,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Tunneling / Pivoting
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -558,13 +558,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## Windows Defender Anti-Virus
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **⭐Manage MS Defender with PowerShell on Windows 10** | You can manage settings and control virtually any aspect of the Microsoft Defender Antivirus using PowerShell commands. | https://www.windowscentral.com/how-manage-microsoft-defender-antivirus-powershell-windows-10
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
@@ -586,13 +586,13 @@ So I created this collection of websites that I find to be very interesting and 
 
 ## TITLE
 
-### Usefull documentation
+<h3>Usefull documentation</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
 **** |  | 
 
-### Related tools
+<h3>Related tools</h3>
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --

@@ -154,7 +154,7 @@ wmic process call create $(Resolve-Path file.exe:streamname)
 Verb-Noun | Measure-Object				-> View all metrics
 ```
 
-🔰 Measure-Object argument | ℹ️ Function
+Measure-Object argument | Function
 -- | --
 **`-Word`** | Count the number of words
 **`-Line`** | Count the number of lines
@@ -167,12 +167,17 @@ Verb-Noun | Select-Object -Property
 Get-ChildItem | Select-Object -Property Mode, Name      > Get the Mode and name from Get-ChildItem
 ```
 
-🔰 Select-Object argument | ℹ️ Function
+Select-Object argument | Function
 -- | --
 **`-First <x>`** | Select the first x from the result
 **`-Last <x>`** | Select the last x from the result
 **`-Unique`** | Select only unique values
 **`-Skip <x>`** | Skip the first x from the result
+
+```powershell
+somecommand | Select-Object *
+```
+List all properties of an item, including ones not shown by default. Useful for discovering what fields are available before filtering with `-Property`.
 
 #### Set-Location
 *Navigate to a specific directory.*
@@ -187,7 +192,25 @@ Set-Location -Path c:\users\administrator\Documents
 
 ```powershell
 Select-String -Path 'C:\users\administrator\desktop' -Pattern '\.pdf'
+Get-ChildItem -Recurse | Select-String -Pattern '<string>'      > Recursively search file contents for a string
 ```
+
+#### findstr
+*Search a file for a pattern (native Windows command, not a PowerShell cmdlet).*
+
+```powershell
+findstr /s /i "<string>" C:\Users\Administrator\Desktop\*.*      > Recursively (/s) and case-insensitively (/i) search files for a string
+```
+
+#### Searching for a String — Which Tool to Use
+
+Tool | Pros | Cons
+-- | -- | --
+**`Select-String`** | Native PowerShell cmdlet; supports regex; returns rich objects (filename, line number, matched text) that can be piped further | Slower than `findstr` on very large file sets; regex syntax differs slightly from `findstr`
+**`Where-Object`** | Best for filtering structured object properties (e.g. process names, service states) rather than raw text | Not intended for searching inside file contents; requires the data to already be an object collection
+**`findstr`** | Very fast, available on any Windows box without PowerShell; simple substring/regex search | Limited regex support; returns plain text lines, not objects — harder to process further
+
+<br>
 
 #### Sort-Object
 *Sort the output of a cmdlet.*

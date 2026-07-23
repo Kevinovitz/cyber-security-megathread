@@ -17,9 +17,28 @@ When dealing with a certain challenge, you have to come up with a plan to come u
 - [Cheatsheets](#cheatsheets)
 - [Tools Top Tips](#tools-top-tips)
 - [Data Exfiltration](#data-exfiltration)
+  - [TCP Socket](#tcp-socket)
+  - [SSH](#ssh)
+  - [HTTP(S)](#https)
+  - [ICMP](#icmp)
+  - [DNS](#dns)
 - [Digital Forensics](#digital-forensics)
+  - [Examining Cron Jobs](#examining-cron-jobs)
+  - [Process Analysis](#process-analysis)
+  - [Service \& Journal Analysis](#service--journal-analysis)
+  - [Browser Forensics](#browser-forensics)
+  - [Securing the Environment](#securing-the-environment)
+  - [Kernel Log Analysis](#kernel-log-analysis)
+  - [Audit Log Analysis](#audit-log-analysis)
+  - [System Profiling](#system-profiling)
+  - [Windows User Account Forensics](#windows-user-account-forensics)
+  - [Windows Program Execution Artifacts](#windows-program-execution-artifacts)
+  - [Windows Incident Surface](#windows-incident-surface)
+  - [File Carving](#file-carving)
 - [Misc](#misc)
 - [Persistence](#persistence)
+  - [Linux](#linux)
+  - [Windows](#windows)
 
 ## Knowledge Bases
 
@@ -478,6 +497,280 @@ Display the IP routing table. Modern replacement for `route`.
 ss -tlun
 ```
 Show active TCP/UDP listening sockets with process names. Modern replacement for `netstat -tlun`.
+
+### Windows User Account Forensics
+
+Windows records user account activity through Security event logs and stores account data in the SAM and NTDS databases.
+
+#### Event Log Artifacts
+
+Account-related events are found in **Windows Logs → Security** (Event Viewer).
+
+| Event ID | Description |
+|----------|-------------|
+| 4720 | User account created |
+| 4722 | User account enabled |
+| 4738 | User account modified |
+| 4740 | User account locked (repeated failed login attempts) |
+| 4726 | User account deleted |
+
+#### SAM Database
+
+The **Security Account Manager (SAM)** stores local and system account information including account creation, alteration, and deletion activity.
+
+```
+%SystemRoot%\system32\config\SAM
+```
+
+#### NTDS.dit Analysis
+
+The **NT Directory Services (NTDS) database** (`NTDS.dit`) stores domain user accounts, groups, and directory data in a networked domain environment.
+
+Export the NTDS.dit file and SYSTEM hive:
+
+```cmd
+ntdsutil.exe "activate instance ntds" "ifm" "create full C:\Exports" quit quit
+```
+
+Extract the boot key using DSInternals:
+
+```powershell
+$bootKey = Get-BootKey -SystemHivePath 'C:\Exports\registry\SYSTEM'
+```
+
+Fetch all account details:
+
+```powershell
+Get-ADDBAccount -All -DBPath 'C:\Exports\Active Directory\NTDS.dit' -BootKey $bootKey
+```
+
+#### NTLM Authentication in Network Traffic
+
+NTLM uses a 3-stage handshake: **Negotiation → Challenge → Authentication** (DCERPC protocol). Open a pcap containing captured authentication traffic in Wireshark.
+
+To decrypt when the NT password is known: **Edit → Preferences → Protocols → NTLMSSP** → enter the password.
+
+Also inspect **DsGetDomainControllerInfo** responses (DRSUAPI protocol) for domain controller details.
+
+#### Group Policy Object (GPO) Artifacts
+
+| Artifact | Location |
+|----------|----------|
+| Custom user settings | `HKEY_CURRENT_USER`; user profile directories |
+| Login scripts | SYSVOL folder; User Configuration settings in GPO; user profile execution logs |
+| User rights assignments | `%SystemRoot%\security\database\secedit.sdb` |
+| Security policy changes | `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies` |
+| System services config | `HKEY_LOCAL_MACHINE\SYSTEM` |
+| Network config changes | `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList`; `%SystemRoot%\System32\drivers\etc` |
+
+### Windows Program Execution Artifacts
+
+Windows retains several artifacts that reveal program and file execution history, useful for establishing what an attacker accessed or ran on a compromised host.
+
+#### LNK Files - **[LECmd](commands/generalcommands.md#lecmd)**
+
+LNK (shortcut) files are automatically created when a user opens a file, revealing recently accessed items even if the original file has since been deleted.
+
+```console
+.\LECmd.exe -d C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Recent --csvf Parsed-LNK.csv --csv C:\Users\Administrator\Desktop
+```
+Parse all LNK files in the Recent folder and export the results to a CSV.
+
+#### Prefetch - **[PECmd](commands/generalcommands.md#pecmd)**
+
+Prefetch files record program execution details such as run count, last run times, and loaded files/DLLs, making them valuable for establishing program execution history.
+
+```console
+.\PECmd.exe -d "C:\Windows\Prefetch" --csv "C:\Users\Administrator\Desktop\Forensics Tools" --csvf prefetch-parsed.csv
+```
+Parse all prefetch files and export the results to a CSV.
+
+#### Amcache - **[AmcacheParser](commands/generalcommands.md#amcacheparser)**
+
+The Amcache.hve registry hive records metadata about executed and installed applications, including file paths, hashes, and first-run timestamps.
+
+```console
+.\AmcacheParser.exe -f "C:\Windows\appcompat\Programs\Amcache.hve" --csv C:\Users\Administrator\Desktop --csvf Amcache_Parsed.csv
+```
+Parse the Amcache.hve file and export the results to a CSV.
+
+### Windows Incident Surface
+
+Live analysis of a Windows host establishes a baseline of the system's identity, users, network exposure, persistence points, services, and running processes before deeper investigation.
+
+#### System Profile
+
+Identify the system hostname, IP addresses, and MAC addresses of all interfaces.
+
+```powershell
+Get-CimInstance win32_networkadapterconfiguration -Filter IPEnabled=TRUE | ft DNSHostname, IPAddress, MACAddress
+```
+
+Get the computer name, OS version, build number, install date, last boot time, and architecture information.
+
+```powershell
+Get-CimInstance -ClassName Win32_OperatingSystem | fl CSName, Version, BuildNumber, InstallDate, LastBootUpTime, OSArchitecture
+```
+
+Get the current date and the timezone of the system.
+
+```powershell
+Get-Date ; Get-TimeZone
+```
+
+Create an HTML report for system policies.
+
+```powershell
+Get-GPResultantSetOfPolicy -ReportType HTML -Path (Join-Path -Path (Get-Location).Path -ChildPath "RSOPReport.html")
+```
+
+#### Users and Sessions
+
+See the available local users in the system.
+
+```powershell
+Get-LocalUser | tee l-users.txt
+```
+
+See last logon date.
+
+```powershell
+Get-LocalUser | ft Name, LastLogon
+```
+
+More information about users.
+
+```powershell
+Get-CimInstance -Class Win32_UserAccount -Filter "LocalAccount=True" | Format-Table  Name, PasswordRequired, PasswordExpires, PasswordChangeable | Tee-Object "user-details.txt"
+```
+
+Explore the local group memberships.
+
+```powershell
+Get-LocalGroup | ForEach-Object { $members = Get-LocalGroupMember -Group $_.Name; if ($members) { Write-Output "`nGroup: $($_.Name)"; $members | ForEach-Object { Write-Output "`tMember: $($_.Name)" } } } | tee gp-members.txt
+```
+
+View active sessions.
+
+```powershell
+.\PsLoggedon64.exe | tee sessions.txt
+```
+
+#### Network Scope
+
+Active ports and connections for TCP.
+
+```powershell
+Get-NetTCPConnection | select Local*, Remote*, State, OwningProcess,` @{n="ProcName";e={(Get-Process -Id $_.OwningProcess).ProcessName}},` @{n="ProcPath";e={(Get-Process -Id $_.OwningProcess).Path}} | sort State | ft -Auto | tee tcp-conn.txt
+```
+
+List the network shares.
+
+```powershell
+Get-CimInstance -Class Win32_Share | tee net-shares.txt
+```
+
+Identify the status of the available firewall profiles.
+
+```powershell
+Get-NetFirewallProfile | ft Name, Enabled, DefaultInboundAction, DefaultOutboundAction | tee fw-profiles.txt
+```
+
+List all the active firewall rules to see if we can find something juicy there.
+
+```powershell
+.\fw-summary.ps1 | tee fw-rules.txt
+```
+
+`fw-summary.ps1`:
+
+```powershell
+Get-NetFirewallRule | Where-Object { $_.Enabled -eq "True" } | Sort-Object -Property DisplayName |
+ft -Property DisplayName,
+@{Name='Protocol';Expression={($PSItem | Get-NetFirewallPortFilter).Protocol}},
+@{Name='LocalPort';Expression={($PSItem | Get-NetFirewallPortFilter).LocalPort}},
+@{Name='RemotePort';Expression={($PSItem | Get-NetFirewallPortFilter).RemotePort}},
+@{Name='RemoteAddress';Expression={($PSItem | Get-NetFirewallAddressFilter).RemoteAddress}}, Direction, Action,
+@{Name='Program';Expression={($PSItem | Get-NetFirewallApplicationFilter).Program}}
+```
+
+#### Startup and Registry
+
+List down all the scheduled task entries along with their hash value.
+
+```powershell
+.\autorunsc64.exe -a b * -h | tee boot.txt
+```
+
+List the programs and commands executed in the startup sequence.
+
+```powershell
+Get-CimInstance Win32_StartupCommand | Select-Object Name, command, Location, User | fl | tee autorun-cmds.txt
+```
+
+#### Services and Scheduled Items
+
+List down the running services of the machine.
+
+```powershell
+"Running Services:"; Get-CimInstance -ClassName Win32_Service | Where-Object { $_.State -eq "Running" } | Select-Object Name, DisplayName, State, StartMode, PathName, ProcessId | ft -AutoSize | tee services-active.txt
+```
+
+List down the non-running/idle services of the machine.
+
+```powershell
+"Non-Running Services:"; Get-CimInstance -ClassName Win32_Service | Where-Object { $_.State -ne "Running" } | Select-Object @{Name='Name'; Expression={if ($_.Name.Length -gt 22) { "$($_.Name.Substring(0,19))..." } else { $_.Name }}}, @{Name='DisplayName'; Expression={if ($_.DisplayName.Length -gt 45) { "$($_.DisplayName.Substring(0,42))..." } else { $_.DisplayName }}}, State, StartMode, PathName, ProcessId | Format-Table -AutoSize | Tee-Object services-idle.txt      
+```
+
+List all the available scheduled tasks.
+
+```powershell
+$tasks = Get-CimInstance -Namespace "Root/Microsoft/Windows/TaskScheduler" -ClassName MSFT_ScheduledTask; if ($tasks.Count -eq 0) { Write-Host "No scheduled tasks found."; exit } else { Write-Host "$($tasks.Count) scheduled tasks found." }; $results = @(); foreach ($task in $tasks) { foreach ($action in $task.Actions) { if ($action.PSObject.TypeNames[0] -eq 'Microsoft.Management.Infrastructure.CimInstance#Root/Microsoft/Windows/TaskScheduler/MSFT_TaskExecAction') { $results += [PSCustomObject]@{ TaskPath = $task.TaskPath.Substring(0, [Math]::Min(50, $task.TaskPath.Length)); TaskName = $task.TaskName.Substring(0, [Math]::Min(50, $task.TaskName.Length)); State = $task.State; Author = $task.Principal.UserId; Execute = $action.Execute } } } }; if ($results.Count -eq 0) { Write-Host "No tasks with 'MSFT_TaskExecAction' actions found." } else { $results | Format-Table -AutoSize | tee scheduled-tasks.txt }
+```
+
+#### Processes and Directories
+
+List down the current running processes.
+
+```powershell
+Get-WmiObject -Class Win32_Process | ForEach-Object {$owner = $_.GetOwner(); [PSCustomObject]@{Name=$_.Name; PID=$_.ProcessId; P_PID=$_.ParentProcessId; User="$($owner.User)"; CommandLine=if ($_.CommandLine.Length -le 60) { $_.CommandLine } else { $_.CommandLine.Substring(0, 60) + "..." }; Path=$_.Path}} | ft -AutoSize | tee process-summary.txt
+```
+
+List down the Temp folders for all the user profiles.
+
+```powershell
+Get-ChildItem -Path "C:\Users" -Force | Where-Object { $_.PSIsContainer } | ForEach-Object { Get-ChildItem -Path "$($_.FullName)\AppData\Local\Temp" -Recurse -Force -ErrorAction SilentlyContinue | Select-Object @{Name='User';Expression={$_.FullName.Split('\')[2]}}, FullName, Name, Extension } | ft -AutoSize | tee temp-folders.txt
+```
+
+Review a specific path.
+
+```powershell
+Get-ChildItem -Path "C:\Users\Administrator\AppData\SpcTmp\" -Recurse -Force | ft FullName, Name, Extension
+```
+
+Check the disk volumes of a system.
+
+```powershell
+Get-CimInstance -ClassName Win32_Volume | ft -AutoSize DriveLetter, Label, FileSystem, Capacity, FreeSpace | tee disc-volumes.txt
+```
+
+### File Carving
+
+File carving recovers files from a disk image based on file headers, footers, and internal structures, rather than relying on filesystem metadata. Useful for recovering deleted files.
+
+**[foremost](commands/generalcommands.md#foremost)**
+
+```bash
+foremost -t pdf,jpg,png -i Challenge3_deleted_disk.img -o Challenge3_files -c /etc/custom_foremost.conf
+```
+Carve PDF, JPG, and PNG files out of a disk image using a custom configuration file.
+
+**[scalpel](commands/generalcommands.md#scalpel)**
+
+```bash
+scalpel Challenge3_deleted_disk.img -o ScalpelOutput -c /etc/scalpel/scalpel.conf
+```
+Carve files out of a disk image using scalpel's configuration file to define which types to recover.
 
 ## Misc
 

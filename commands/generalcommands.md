@@ -21,6 +21,7 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 
 - [Separate command sheets](#separate-command-sheets)
 - [Aircrack-ng](#aircrack-ng)
+- [AmcacheParser](#amcacheparser)
 - [Apt](#apt)
 - [Arp](#arp)
 - [Auditctl](#auditctl)
@@ -28,13 +29,14 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Ausearch](#ausearch)
 - [Binwalk](#binwalk)
 - [Capa](#capa)
-- [Curl](#curl)
+- [cURL](#curl)
 - [Df](#df)
 - [Dig](#dig)
 - [Dmesg](#dmesg)
 - [Dpkg](#dpkg)
 - [Dumpzilla.py](#dumpzillapy)
 - [Enum4Linux](#enum4linux)
+- [Foremost](#foremost)
 - [Free](#free)
 - [Gobuster](#gobuster)
 - [Hostname](#hostname)
@@ -44,17 +46,19 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Ip](#ip)
 - [Iptables](#iptables)
 - [Journalctl](#journalctl)
+- [LECmd](#lecmd)
 - [Lsblk](#lsblk)
 - [Lscpu](#lscpu)
 - [Lsof](#lsof)
 - [MFTECmd](#mftecmd)
+- [Neo-ReGeorg](#neo-regeorg)
 - [Netcat](#netcat)
 - [Netstat](#netstat)
-- [Neo-ReGeorg](#neo-regeorg)
 - [Nmap](#nmap)
 - [Nslookup](#nslookup)
 - [oledump.py](#oledumppy)
 - [Osquery](#osquery)
+- [PECmd](#pecmd)
 - [Ping](#ping)
 - [Ps](#ps)
 - [Pspy64](#pspy64)
@@ -62,6 +66,7 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Route](#route)
 - [RsaCTFtool](#rsactftool)
 - [Rsatool](#rsatool)
+- [Scalpel](#scalpel)
 - [Smbclient](#smbclient)
 - [Ss](#ss)
 - [Systemctl](#systemctl)
@@ -94,6 +99,30 @@ Aircrack- ng is a complete suite of tools to assess WiFi network security. More 
 aircrack-ng -w <wordlist> <capture_file>
 aircrack-ng -w /usr/share/wordlists/rockyou.txt capture.pcap
 ```
+
+## AmcacheParser
+
+AmcacheParser (part of Eric Zimmerman's tools) parses the `Amcache.hve` registry hive, which records metadata about executed and installed applications on Windows systems, including file paths, hashes, and first-execution timestamps.
+
+**_Parse the Amcache.hve file and export the results to a CSV._**
+
+```powershell
+.\AmcacheParser.exe -f "C:\Windows\appcompat\Programs\Amcache.hve" --csv C:\Users\Administrator\Desktop --csvf Amcache_Parsed.csv
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-f` | `<path>` | Path to the Amcache.hve file |
+| `--csv` | `<directory>` | Output directory for the CSV file |
+| `--csvf` | `<filename>` | Output CSV file name |
+
+</details>
+<br>
+
+More info [here](https://ericzimmerman.github.io).
 
 ## Apt
 
@@ -664,6 +693,32 @@ enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows 
 
 More info [here](https://github.com/CiscoCXSecurity/enum4linux).
 
+## Foremost
+
+foremost recovers files from a disk image based on their headers, footers, and internal data structures (file carving), without relying on filesystem metadata. Commonly used to recover deleted files.
+
+**_Carve specific file types out of a disk image using a custom configuration file._**
+
+```console
+foremost -t pdf,jpg,png -i Challenge3_deleted_disk.img -o Challenge3_files -c /etc/custom_foremost.conf
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-t` | `pdf,jpg,png` | File types to search for and recover |
+| `-i` | `<image>` | Input file/disk image to carve |
+| `-o` | `<directory>` | Output directory for recovered files |
+| `-c` | `<config>` | Path to a custom configuration file |
+| `-a` | - | Write all headers, perform no error detection (may result in corrupted files) |
+
+</details>
+<br>
+
+More info [here](http://foremost.sourceforge.net/).
+
 ## Free
 
 free displays the total amount of physical and swap memory in the system, including what is used, free, and available.
@@ -1029,6 +1084,31 @@ journalctl -b
 
 </details>
 <br>
+
+## LECmd
+
+LECmd (part of Eric Zimmerman's tools) parses Windows LNK (shortcut) files, which are automatically created when a user opens a file. LNK files reveal recently accessed items, including for files that have since been deleted.
+
+**_Parse all LNK files in a directory and export the results to a CSV._**
+
+```powershell
+.\LECmd.exe -d C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Recent --csvf Parsed-LNK.csv --csv C:\Users\Administrator\Desktop
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-d` | `<directory>` | Directory containing LNK files to parse |
+| `-f` | `<file>` | Parse a single LNK file instead of a directory |
+| `--csv` | `<directory>` | Output directory for the CSV file |
+| `--csvf` | `<filename>` | Output CSV file name |
+
+</details>
+<br>
+
+More info [here](https://ericzimmerman.github.io).
 
 ## Lsblk
 
@@ -1532,6 +1612,31 @@ sudo osqueryd
 
 More info [here](https://osquery.io/).
 
+## PECmd
+
+PECmd (part of Eric Zimmerman's tools) parses Windows Prefetch files, which record program execution details such as run count, last run times, and loaded files/DLLs — useful for establishing program execution history on a host.
+
+**_Parse all prefetch files in a directory and export the results to a CSV._**
+
+```powershell
+.\PECmd.exe -d "C:\Windows\Prefetch" --csv "C:\Users\Administrator\Desktop\Forensics Tools" --csvf prefetch-parsed.csv
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-d` | `<directory>` | Directory containing prefetch files to parse |
+| `-f` | `<file>` | Parse a single prefetch file |
+| `--csv` | `<directory>` | Output directory for the CSV file |
+| `--csvf` | `<filename>` | Output CSV file name |
+
+</details>
+<br>
+
+More info [here](https://ericzimmerman.github.io).
+
 ## Ping
 
 ping tests connectivity to other network devices by sending ICMP echo request packets. Useful for checking whether a host is reachable and measuring latency.
@@ -1766,6 +1871,29 @@ python rsatool.py -f PEM -o key.pem -n 13826123222358393307 -d 97937061202663563
 ```console
 python rsatool.py -f DER -o key.der -p 4184799299 -q 3303891593
 ```
+
+## Scalpel
+
+scalpel is a fast file carving tool that recovers files from a disk image based on file headers and footers defined in a configuration file. It is a fork of the original foremost project, focused on speed and low memory usage.
+
+**_Carve files out of a disk image using a configuration file to define which types to recover._**
+
+```console
+scalpel Challenge3_deleted_disk.img -o ScalpelOutput -c /etc/scalpel/scalpel.conf
+```
+
+<details>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-o` | `<directory>` | Output directory for recovered files |
+| `-c` | `<config>` | Path to the scalpel configuration file defining which file types to carve |
+
+</details>
+<br>
+
+More info [here](https://github.com/sleuthkit/scalpel).
 
 ## Smbclient
 
