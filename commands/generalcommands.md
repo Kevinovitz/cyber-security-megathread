@@ -110,7 +110,7 @@ AmcacheParser (part of Eric Zimmerman's tools) parses the `Amcache.hve` registry
 .\AmcacheParser.exe -f "C:\Windows\appcompat\Programs\Amcache.hve" --csv C:\Users\Administrator\Desktop --csvf Amcache_Parsed.csv
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -152,7 +152,7 @@ sudo apt update
 apt search <package-name>
 ```
 
-<details>
+<details markdown>
 <summary>Subcommands</summary>
 
 | Subcommand | Description |
@@ -189,7 +189,7 @@ arp -n
 sudo arp -d <ip-address>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -230,7 +230,7 @@ sudo auditctl -l
 sudo auditctl -D
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -275,7 +275,7 @@ sudo aureport --auth
 sudo aureport --executable
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -322,7 +322,7 @@ sudo ausearch --start "01/01/2024 00:00:00" --end "01/02/2024 00:00:00"
 sudo ausearch -k users | aureport -f --summary
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -348,16 +348,12 @@ sudo ausearch -k users | aureport -f --summary
 binwalk -e Challenge2_slack_space.img
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
 |----------|-------|-------------|
 | `-e` | - | `Automatically extract known file types` |
-| `` | `` | `` |
-| `` | `` | `` |
-| `` | `` | `` |
-| `` | `` | `` |
 
 </details>
 <br>
@@ -440,7 +436,7 @@ curl --socks5 127.0.0.1:1080 <url>
 curl -L <url>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -484,7 +480,7 @@ df -h /home
 df -i
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -530,7 +526,7 @@ dig tryhackme.com TXT
 dig -t AXFR <domain> @<dns-server>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -580,7 +576,7 @@ cat /var/log/kern.log
 tail -f /var/log/kern.log
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -630,7 +626,7 @@ dpkg -S <file-path>
 dpkg -S /usr/bin/python3
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -669,7 +665,7 @@ sudo python3 dumpzilla.py /home/<user>/.mozilla/firefox/<profile>/ --Cookies --P
 
 The Firefox profile path is typically `~/.mozilla/firefox/<profile>/`. Profile name can be found in `~/.mozilla/firefox/profiles.ini`.
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -703,7 +699,7 @@ foremost recovers files from a disk image based on their headers, footers, and i
 foremost -t pdf,jpg,png -i Challenge3_deleted_disk.img -o Challenge3_files -c /etc/custom_foremost.conf
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -742,7 +738,7 @@ free -h -s <seconds>
 free -h -s 2
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -771,7 +767,7 @@ gobuster dir -u http://TARGET_IP:80 -w /usr/share/wordlists/SecLists/Discovery/W
 
 | Argument | Value | Description |
 |----------|-------|-------------|
-| `dir` | | Mode — use directory/file enumeration |
+| `dir` | -| Mode — use directory/file enumeration |
 | `-u` | `http://TARGET_IP:80` | Target URL including port |
 | `-w` | `common.txt` | Wordlist to use for brute-forcing paths |
 | `-x` | `bak,txt,html` | File extensions to append to each wordlist entry |
@@ -804,7 +800,7 @@ hostname -I
 hostname -f
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -833,7 +829,7 @@ hostnamectl
 sudo hostnamectl set-hostname <new-hostname>
 ```
 
-<details>
+<details markdown>
 <summary>Subcommands</summary>
 
 | Subcommand | Description |
@@ -869,7 +865,7 @@ sudo ifconfig <interface> up
 sudo ifconfig <interface> down
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -912,7 +908,7 @@ sudo iftop -P
 sudo iftop -t -s <seconds> > output.txt
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -965,7 +961,7 @@ sudo ip link set <interface> up
 sudo ip link set <interface> down
 ```
 
-<details>
+<details markdown>
 <summary>Subcommands</summary>
 
 | Subcommand | Description |
@@ -1015,7 +1011,7 @@ sudo iptables-save > /etc/iptables/rules.v4
 sudo iptables-restore < /etc/iptables/rules.v4
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1069,7 +1065,7 @@ journalctl --since "08:00" --until "12:00"
 journalctl -b
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1095,7 +1091,15 @@ LECmd (part of Eric Zimmerman's tools) parses Windows LNK (shortcut) files, whic
 .\LECmd.exe -d C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Recent --csvf Parsed-LNK.csv --csv C:\Users\Administrator\Desktop
 ```
 
-<details>
+**_Parse a single LNK file._**
+
+```powershell
+LECmd.exe -f <path to file>
+```
+
+LNK files are typically found under `%userprofile%\AppData\Roaming\Microsoft\Windows\Recent` and `%userprofile%\recent`.
+
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1132,7 +1136,7 @@ lsblk -f
 lsblk -o NAME,SIZE,TYPE,MOUNTPOINT,FSTYPE,UUID
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1162,7 +1166,7 @@ lscpu
 lscpu -J
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1210,7 +1214,7 @@ lsof -i :4444
 lsof -u <username>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1235,7 +1239,7 @@ Command-line tool for parsing the NTFS Master File Table ($MFT), $J, and other N
 MFTECmd.exe -f ..\Evidence\$MFT --csv ..\Evidence --csvf ..\Evidence\MFT_record.csv
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1309,7 +1313,7 @@ nc <ip> <port> < file_to_send.txt
 nc -nlvp <port> -e /bin/bash
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1353,7 +1357,7 @@ sudo netstat -tlunp
 netstat -r
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1418,7 +1422,7 @@ sudo nmap -A <ip>
 nmap -Pn <ip>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1467,7 +1471,7 @@ nslookup -type=MX <domain>
 nslookup -type=TXT <domain>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1622,7 +1626,7 @@ PECmd (part of Eric Zimmerman's tools) parses Windows Prefetch files, which reco
 .\PECmd.exe -d "C:\Windows\Prefetch" --csv "C:\Users\Administrator\Desktop\Forensics Tools" --csvf prefetch-parsed.csv
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1662,7 +1666,7 @@ ping <ip> -c 1 -p <hex-payload>
 ping 10.10.10.10 -c 1 -p 74686d3a7472796861636b6d650a
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1705,7 +1709,7 @@ ps -u <username>
 ps aux --sort=-%cpu
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1743,7 +1747,7 @@ pspy is an unprivileged Linux process snooping tool. It monitors process executi
 ./pspy64 -f
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1787,7 +1791,7 @@ pstree <username>
 pstree -s <PID>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1830,7 +1834,7 @@ sudo route add -net <network> gw <gateway>
 sudo route del -net <network>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1882,7 +1886,7 @@ scalpel is a fast file carving tool that recovers files from a disk image based 
 scalpel Challenge3_deleted_disk.img -o ScalpelOutput -c /etc/scalpel/scalpel.conf
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1933,7 +1937,7 @@ sudo ss -tlunp
 ss -tn dst :<port>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -1992,7 +1996,7 @@ sudo systemctl enable <service-name>
 sudo systemctl disable <service-name>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments / subcommands</summary>
 
 | Subcommand / Argument | Value | Description |
@@ -2051,7 +2055,7 @@ sudo tcpdump -i eth0 port 80
 sudo tcpdump -i eth0 -c <count>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -2098,7 +2102,7 @@ top -d <seconds>
 top -d 5
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -2137,7 +2141,7 @@ sudo traceroute -I <host>
 traceroute -m <max-hops> <host>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -2175,7 +2179,7 @@ uptime -p
 uptime -s
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -2221,7 +2225,7 @@ wget -c <url>
 wget -m <url>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -2253,7 +2257,7 @@ whois tryhackme.com
 whois <ip>
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
@@ -2299,7 +2303,7 @@ whois <ip>
 
 ```
 
-<details>
+<details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |

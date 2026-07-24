@@ -502,6 +502,18 @@ Show active TCP/UDP listening sockets with process names. Modern replacement for
 
 Windows records user account activity through Security event logs and stores account data in the SAM and NTDS databases.
 
+#### Registry Hive Locations
+
+| Hive | Root Key | File Path |
+|------|----------|-----------|
+| SAM | `HKEY_LOCAL_MACHINE\SAM` | `%SystemRoot%\System32\config\SAM` |
+| SYSTEM | `HKEY_LOCAL_MACHINE\SYSTEM` | `%SystemRoot%\System32\config\SYSTEM` |
+| SECURITY | `HKEY_LOCAL_MACHINE\SECURITY` | `%SystemRoot%\System32\config\SECURITY` |
+| SOFTWARE | `HKEY_LOCAL_MACHINE\SOFTWARE` | `%SystemRoot%\System32\config\SOFTWARE` |
+| DEFAULT | `HKEY_USERS\.DEFAULT` | `%SystemRoot%\System32\config\DEFAULT` |
+| NTUSER.DAT | `HKEY_CURRENT_USER` | `%UserProfile%\NTUSER.DAT` |
+| UsrClass.dat | `HKEY_CURRENT_USER\Software\Classes` | `%UserProfile%\AppData\Local\Microsoft\Windows\UsrClass.dat` |
+
 #### Event Log Artifacts
 
 Account-related events are found in **Windows Logs → Security** (Event Viewer).
@@ -563,6 +575,35 @@ Also inspect **DsGetDomainControllerInfo** responses (DRSUAPI protocol) for doma
 | System services config | `HKEY_LOCAL_MACHINE\SYSTEM` |
 | Network config changes | `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList`; `%SystemRoot%\System32\drivers\etc` |
 
+#### Registry Forensics - User Activity
+
+| Artifact | Description | Registry Path |
+|----------|--------------|----------------|
+| TypedPaths | Identifies the directories searched or accessed through the file explorer's address bar. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths` |
+| WordWheelQuery | Keeps track of all the terms searched in Explorer. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery` |
+| RecentDocs | Keeps track of documents recently accessed on the system. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs` |
+| ComDlg32 - LastVisitedPidlMRU | Keeps track of the last file accessed or where the previous file was saved. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU` |
+| ComDlg32 - OpenSavePidlMRU | Keeps track of the last file accessed or where the previous file was saved. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU` |
+| UserAssist | Registers when a tool/program is run. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist` |
+| RunMRU | Stores information about the most recently executed programs via the Run dialogue window. | `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU` |
+
+#### ShellBags
+
+ShellBags record how a user browsed folders, stored primarily in `UserClass.dat`.
+
+```
+HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell
+```
+
+Information stored in ShellBags:
+
+- **Folder View Settings** - how a user viewed a particular folder (e.g., list, icons, details).
+- **Folder Paths** - paths of accessed directories, including those on external devices or network shares.
+- **Timestamps** - when a folder was first created, last accessed, and possibly modified.
+- **User Preferences** - icon position, window size, and sort order within a folder.
+- **Deleted Folders** - ShellBags can retain information about folders that have since been deleted.
+- **Network and External Drive Access** - a history of folders accessed on external drives and network locations.
+
 ### Windows Program Execution Artifacts
 
 Windows retains several artifacts that reveal program and file execution history, useful for establishing what an attacker accessed or ran on a compromised host.
@@ -571,10 +612,33 @@ Windows retains several artifacts that reveal program and file execution history
 
 LNK (shortcut) files are automatically created when a user opens a file, revealing recently accessed items even if the original file has since been deleted.
 
+Locations:
+
+```
+%userprofile%\AppData\Roaming\Microsoft\Windows\Recent
+%userprofile%\recent
+```
+
 ```console
 .\LECmd.exe -d C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Recent --csvf Parsed-LNK.csv --csv C:\Users\Administrator\Desktop
 ```
 Parse all LNK files in the Recent folder and export the results to a CSV.
+
+```console
+LECmd.exe -f <path to file>
+```
+Analyse a single LNK file.
+
+#### Jumplists
+
+Jumplists track recently or frequently accessed files/programs per application, and can be analysed with **JLECmd** or **JumpList Explorer**.
+
+Locations:
+
+```
+%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations
+%APPDATA%\Microsoft\Windows\Recent\CustomDestinations
+```
 
 #### Prefetch - **[PECmd](commands/generalcommands.md#pecmd)**
 
