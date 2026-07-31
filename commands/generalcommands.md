@@ -58,6 +58,7 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Nslookup](#nslookup)
 - [oledump.py](#oledumppy)
 - [Osquery](#osquery)
+- [Packet Monitor (pktmon)](#packet-monitor-pktmon)
 - [PECmd](#pecmd)
 - [Ping](#ping)
 - [Ps](#ps)
@@ -1375,6 +1376,41 @@ netstat -r
 
 > **Note:** `ss` is the modern equivalent and preferred on current Linux distributions.
 
+**_Windows usage._**
+
+```console
+netstat -a
+```
+Display all currently active TCP connections and TCP/UDP ports.
+
+```console
+netstat -b
+```
+Display the executable responsible for the connection (i.e. `payload.exe`).
+
+```console
+netstat -o
+```
+Display all TCP connections and include the process ID.
+
+```console
+netstat -p
+```
+Display connections by protocol. Options include TCP, UDP, ICMP, and the IPv6 iterations.
+
+<details markdown>
+<summary>Windows Arguments</summary>
+
+| Argument | Description |
+|----------|-------------|
+| `-a` | Display all currently active TCP connections and TCP/UDP ports |
+| `-b` | Display the executable responsible for each connection |
+| `-o` | Display all TCP connections and include the process ID |
+| `-p` | Display connections filtered by protocol (TCP, UDP, ICMP, or their IPv6 equivalents) |
+
+</details>
+<br>
+
 ## Nmap
 
 nmap scans networks to discover hosts and services. Useful for identifying devices on a network, open ports, running services, and OS versions.
@@ -1615,6 +1651,63 @@ sudo osqueryd
 ```
 
 More info [here](https://osquery.io/).
+
+## Packet Monitor (pktmon)
+
+pktmon is a built-in Windows network diagnostic and packet capture tool. Useful for capturing traffic on hosts where installing third-party tools (e.g. Wireshark) isn't possible or desirable.
+
+**_Start a capture._**
+
+```console
+pktmon start
+```
+
+**_Stop a capture._**
+
+```console
+pktmon stop
+```
+
+**_Reset the count of packets that PacketMonitor has captured._**
+
+```console
+pktmon reset
+```
+
+**_View the amount of packets PacketMonitor has captured across the interfaces._**
+
+```console
+pktmon counters
+```
+
+**_Convert a PacketMonitor capture file to a text file._**
+
+```console
+pktmon etl2txt
+```
+
+**_Convert a PacketMonitor capture file to a pcap (for opening in Wireshark)._**
+
+```console
+pktmon etl2pcap
+```
+
+<details markdown>
+<summary>Subcommands</summary>
+
+| Subcommand | Description |
+|------------|-------------|
+| `start` | Start a PacketMonitor capture |
+| `stop` | Stop a PacketMonitor capture |
+| `reset` | Reset the count of packets that PacketMonitor has captured |
+| `counters` | View the amount of packets PacketMonitor has captured across the interfaces |
+| `etl2txt` | Convert a PacketMonitor capture file to a text file |
+| `etl2pcap` | Convert a PacketMonitor capture file to a pcap |
+
+</details>
+<br>
+
+More info [here](https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon).
 
 ## PECmd
 

@@ -35,6 +35,15 @@ When dealing with a certain challenge, you have to come up with a plan to come u
   - [Windows Program Execution Artifacts](#windows-program-execution-artifacts)
   - [Windows Incident Surface](#windows-incident-surface)
   - [File Carving](#file-carving)
+  - [Registry Analysis Tools](#registry-analysis-tools)
+  - [Useful Registry Locations](#useful-registry-locations)
+  - [Scheduled Tasks \& Services Analysis](#scheduled-tasks--services-analysis)
+  - [Outlook Forensics](#outlook-forensics)
+  - [Microsoft Teams Forensics](#microsoft-teams-forensics)
+  - [OneDrive Forensics](#onedrive-forensics)
+  - [System Resource Usage Monitor (SRUM)](#system-resource-usage-monitor-srum)
+  - [Windows Firewall Logs](#windows-firewall-logs)
+  - [Network Connection Analysis](#network-connection-analysis)
 - [Misc](#misc)
 - [Persistence](#persistence)
   - [Linux](#linux)
@@ -329,6 +338,89 @@ sudo python3 dumpzilla.py /home/<user>/.mozilla/firefox/<profile>/ --Cookies --P
 Extract cookies and saved passwords from the Firefox profile.
 
 🔗 https://github.com/Busindre/dumpzilla
+
+#### Windows - Mozilla Firefox
+
+Profiles located in:
+
+```
+AppData\Roaming\Mozilla\Firefox\Profiles
+```
+
+Enumerate each user directory to check for Firefox artefacts:
+
+```powershell
+ls C:\Users\ | foreach {ls "C:\Users\$_\AppData\Roaming\Mozilla\Firefox\Profiles" 2>$null}
+```
+
+Artefacts worth checking:
+
+| File / Directory | Artefact Contents | File Type |
+|---|---|---|
+| `places.sqlite` | Browsing history and bookmark metadata | SQLite |
+| `logins.json` / `key4.db` | Credentials saved through the browser | JSON / SQLite |
+| `cookies.sqlite` | Cookies from sites accessed | SQLite |
+| `extensions.json` / `extensions` directory | Artefacts related to Firefox extensions | JSON / Folder |
+| `favicons.sqlite` | Favicon metadata indicating sites accessed | SQLite |
+| `sessionstore-backups` | Session and tab metadata | Folder (jsonlz4 files) |
+| `formhistory.sqlite` | Input data submitted by the user in web forms | SQLite |
+
+#### Windows - Google Chrome
+
+Profiles located in:
+
+```
+AppData\Local\Google\Chrome\User Data
+```
+
+Enumerate each user directory to check for Chrome artefacts:
+
+```powershell
+ls C:\Users\ | foreach {ls "C:\Users\$_\AppData\Local\Google\Chrome\User Data\Default" 2>$null | findstr Directory}
+```
+
+| File / Directory | Artefact Contents | File Type |
+|---|---|---|
+| `History` | Browsing history and download metadata | SQLite |
+| `Login Data` | Credentials saved through the browser | SQLite |
+| `Extensions` | Artefacts related to Chrome extensions | Folder (JavaScript and meta files) |
+| `Cache` | Cached files stored to optimise site loading | Folder |
+| `Sessions` | Session and tab metadata | Folder |
+| `Bookmarks` | Bookmark metadata | JSON |
+| `Web Data` | Input data submitted by the user in web forms | SQLite |
+
+#### Windows - Microsoft Edge
+
+Profiles located in:
+
+```
+AppData\Local\Microsoft\Edge\User Data\Default
+```
+
+Enumerate each user directory to check for Edge artefacts:
+
+```powershell
+ls C:\Users\ | foreach {ls "C:\Users\$_\AppData\Local\Microsoft\Edge\User Data\Default" 2>$null | findstr Directory}
+```
+
+Edge is Chromium-based, so its artefacts follow the same structure as Chrome. Analyse Chromium-based artefacts with **ChromeCacheView** or **hindsight_gui.exe** (see [tools_and_resources.md](tools_and_resources.md#digital-forensics)).
+
+SQLite browser queries for Edge:
+
+```sql
+SELECT timestamp,url,title,visit_duration,visit_count,typed_count FROM 'timeline' WHERE type = 'url' LIMIT 0,30
+```
+URLs visited by the user, including all the substantial data related to it.
+
+```sql
+SELECT timestamp,url,title,value FROM timeline WHERE type = 'download' LIMIT 0,30
+```
+List of download attempts made.
+
+```sql
+SELECT type,origin,key,value FROM 'storage' LIMIT 0,30
+```
+Render the significant information in the storage table.
 
 ### Securing the Environment
 
@@ -835,6 +927,418 @@ Carve PDF, JPG, and PNG files out of a disk image using a custom configuration f
 scalpel Challenge3_deleted_disk.img -o ScalpelOutput -c /etc/scalpel/scalpel.conf
 ```
 Carve files out of a disk image using scalpel's configuration file to define which types to recover.
+
+### Registry Analysis Tools
+
+Several dedicated tools exist to expedite registry analysis during an investigation, each suited to different tasks.
+
+**Registry Explorer** (GUI) allows browsing, searching, and comparing offline registry hives, with a large library of community plugins that decode known keys into human-readable values. It can also repair a "dirty" hive (one with pending, uncommitted changes) by replaying the associated transaction logs before analysis.
+
+**RECmd** (command-line) runs batch definition files against one or more hives to extract specific keys/values in bulk — useful for scripted or repeatable triage across many hosts.
+
+**RegRipper** (command-line/GUI) runs a library of plugins against a hive to extract and report on forensically relevant keys and values, similar in purpose to RECmd but with its own plugin ecosystem.
+
+> **Note:** RegRipper (and RECmd) cannot process a dirty hive. If a hive contains uncommitted transaction log data, it must first be repaired using **Registry Explorer** before running RegRipper or RECmd against it.
+
+### Useful Registry Locations
+
+#### System Info & Accounts
+
+| Artifact | Registry Path |
+|----------|----------------|
+| OS Version | `SOFTWARE\Microsoft\Windows NT\CurrentVersion` |
+| Current Control Set | `HKLM\SYSTEM\CurrentControlSet`, `SYSTEM\Select\Current`, `SYSTEM\Select\LastKnownGood` |
+| Computer Name | `SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName` |
+| Time Zone Information | `SYSTEM\CurrentControlSet\Control\TimeZoneInformation` |
+| Network Interfaces & Past Networks | `SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces` |
+| SAM Hive & User Information | `SAM\Domains\Account\Users` |
+
+#### Autostart Programs (Autoruns)
+
+- `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Run`
+- `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\RunOnce`
+- `SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce`
+- `SOFTWARE\Microsoft\Windows\CurrentVersion\policies\Explorer\Run`
+- `SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
+
+#### File/Folder Usage or Knowledge
+
+| Artifact | Registry Path |
+|----------|----------------|
+| Recent Files | `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs` |
+| Office Recent Files | `NTUSER.DAT\Software\Microsoft\Office\<VERSION>\UserMRU\LiveID_####\FileMRU` |
+| ShellBags | `USRCLASS.DAT\Local Settings\Software\Microsoft\Windows\Shell\Bags`, `USRCLASS.DAT\...\Shell\BagMRU`, `NTUSER.DAT\Software\Microsoft\Windows\Shell\BagMRU`, `NTUSER.DAT\...\Shell\Bags` |
+| Open/Save & LastVisited Dialog MRUs | `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU`, `...\ComDlg32\LastVisitedPidlMRU` |
+| Windows Explorer Address/Search Bars | `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths`, `...\Explorer\WordWheelQuery` |
+
+> Some of these overlap with the [Windows User Account Forensics](#windows-user-account-forensics) section above.
+
+#### External/USB Device Forensics
+
+| Artifact | Registry Path |
+|----------|----------------|
+| Device Identification | `SYSTEM\CurrentControlSet\Enum\USBSTOR`, `SYSTEM\CurrentControlSet\Enum\USB` |
+| First/Last Connection Times | `SYSTEM\CurrentControlSet\Enum\USBSTOR\<Ven_Prod_Version>\<USBSerial#>\Properties\{83da6326-97a6-4088-9453-a19231573b29}\####` — value `0064` = first connection, `0066` = last connection, `0067` = last removal |
+| USB Device Volume Name | `SOFTWARE\Microsoft\Windows Portable Devices\Devices` |
+
+#### Evidence of Execution
+
+| Artifact | Registry Path |
+|----------|----------------|
+| UserAssist | `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{GUID}\Count` |
+| ShimCache | `SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache` |
+| AmCache | `Amcache.hve\Root\File\{Volume GUID}\` |
+| BAM/DAM | `SYSTEM\CurrentControlSet\Services\bam\UserSettings\{SID}`, `SYSTEM\CurrentControlSet\Services\dam\UserSettings\{SID}` |
+
+🔗 Source: [TryHackMe Windows Forensics 1 cheatsheet](https://tryhackme.com/room/windowsforensics1)
+
+### Scheduled Tasks & Services Analysis
+
+Scheduled tasks and services are common persistence mechanisms; comparing them against known-good baselines helps identify outliers.
+
+#### Relevant Event IDs
+
+**Scheduled Tasks:**
+
+| Event ID | Description |
+|----------|-------------|
+| 4698 | A scheduled task was created |
+| 4702 | A scheduled task was updated |
+
+**Services:**
+
+| Event ID | Description |
+|----------|-------------|
+| 7045 | A new service was installed (System channel) |
+| 4697 | A service was installed in the system (Security channel) |
+
+Read the event logs via PowerShell:
+
+```powershell
+Get-WinEvent -FilterHashTable @{LogName='System';ID='7045'} | fl
+```
+
+#### Enumerating Scheduled Tasks
+
+```powershell
+Get-ScheduledTask | Where-Object {$_.State -ne "Disabled"}
+```
+List all enabled scheduled tasks.
+
+```powershell
+Get-ScheduledTask | Where-Object {$_.Date -ne $null -and $_.State -ne "Disabled"} | Sort-Object Date | select Date,TaskName,Author,State,TaskPath | ft
+```
+List all enabled scheduled tasks that have a creation date, sorted by date.
+
+```console
+schtasks.exe /query /fo CSV | findstr /V Disabled
+```
+Native command alternative to list all non-disabled scheduled tasks.
+
+A single script to list all scheduled tasks sorted by their creation date, together with all the significant information:
+
+```powershell
+# List all enabled scheduled tasks with creation date and command to be executed, sorted by date and printing all additional information
+$tasks = Get-ScheduledTask | Where-Object {$_.Date -ne $null -and $_.State -ne "Disabled" -and $_.Actions.Execute -ne $null} | Sort-Object Date
+
+foreach ($task in $tasks) {
+    $taskName = $task.TaskName
+    $taskDate = $task.Date
+    $taskPath = $task.TaskPath
+    $taskAuthor = $task.Author
+    $taskCommand = $task.Actions.Execute
+    $taskArgs = $task.Actions.Arguments
+    $taskRunAs = $task.Principal.UserId
+
+    # Output service information
+    Write-Host "Task Name: $taskName"
+    Write-Host "Task Author: $taskAuthor"
+    Write-Host "Creation Date: $taskDate"
+    Write-Host "Task Path: $taskPath"
+    Write-Host "Command: $taskCommand $taskArgs"
+    Write-Host "Run As: $taskRunAs"
+    Write-Host ""
+}
+```
+
+#### Enumerating Services
+
+```powershell
+Get-Service | Where-Object {$_.Status -eq "Running" -and $_.StartType -eq "Automatic"}
+```
+List all running services set to start automatically.
+
+Add the binary these services execute:
+
+```powershell
+$services = Get-Service | Where-Object {$_.Status -eq "Running" -and $_.StartType -eq "Automatic"}
+
+foreach ($service in $services) {
+    $serviceName = $service.Name
+    $serviceDisplayName = $service.DisplayName
+    $serviceStatus = $service.Status
+    $serviceWMI = (Get-WmiObject Win32_Service | Where-Object { $_.Name -eq $serviceName })
+    $servicePath = $serviceWMI.PathName
+    $serviceUser = $serviceWMI.StartName
+
+    Write-Host "Service Name: $serviceName"
+    Write-Host "Display Name: $serviceDisplayName"
+    Write-Host "Service Status: $serviceStatus"
+    Write-Host "Executable Path: $servicePath"
+    Write-Host "User Context: $serviceUser"
+    Write-Host ""
+}
+```
+
+Retrieve the Service registry key's Last Write Time using [Get-RegWriteTime.ps1](https://github.com/WiredPulse/PowerShell/blob/master/Registry/Get-RegWriteTime.ps1):
+
+```powershell
+powershell.exe -ep bypass
+Import-Module C:\Tools\Get-RegWriteTime.ps1; 
+$services = Get-Service | Where-Object {$_.Status -eq "Running" -and $_.StartType -eq "Automatic"}
+
+foreach ($service in $services) {
+    $serviceName = $service.Name
+    $serviceWMI = (Get-WmiObject Win32_Service | Where-Object { $_.Name -eq $serviceName })
+    $serviceDisplayName = $service.DisplayName
+    $serviceStatus = $service.Status
+    $servicePath = $serviceWMI.PathName
+    $serviceUser = $serviceWMI.StartName
+    $serviceLastWriteTime = Get-Item HKLM:\SYSTEM\CurrentControlSet\Services\$serviceName | Get-RegWriteTime | Select LastWriteTime
+
+    Write-Host "Service Name: $serviceName"
+    Write-Host "Display Name: $serviceDisplayName"
+    Write-Host "Service Status: $serviceStatus"
+    Write-Host "Executable Path: $servicePath"
+    Write-Host "User Context: $serviceUser"
+    Write-Host "Last Write Time: $serviceLastWriteTime"
+    Write-Host ""
+}
+```
+
+Reviewing stopped services that are still set to run automatically on boot is also essential for spotting outliers (e.g. a service disabled by an attacker to avoid detection):
+
+```powershell
+Import-Module C:\Tools\Get-RegWriteTime.ps1;
+$services = Get-Service | Where-Object {$_.Status -eq "Stopped" -and $_.StartType -eq "Automatic"}
+
+foreach ($service in $services) {
+    $serviceName = $service.Name
+    $serviceWMI = (Get-WmiObject Win32_Service | Where-Object { $_.Name -eq $serviceName })
+    $serviceDisplayName = $service.DisplayName
+    $serviceStatus = $service.Status
+    $servicePath = $serviceWMI.PathName
+    $serviceUser = $serviceWMI.StartName
+    $serviceLastWriteTime = Get-Item HKLM:\SYSTEM\CurrentControlSet\Services\$serviceName | Get-RegWriteTime | Select LastWriteTime
+
+    Write-Host "Service Name: $serviceName"
+    Write-Host "Display Name: $serviceDisplayName"
+    Write-Host "Service Status: $serviceStatus"
+    Write-Host "Executable Path: $servicePath"
+    Write-Host "User Context: $serviceUser"
+    Write-Host "Last Write Time: $serviceLastWriteTime"
+    Write-Host ""
+}
+```
+
+Services are also recorded in the registry:
+
+```
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+```
+
+### Outlook Forensics
+
+Profiles located in:
+
+```
+AppData\Local\Microsoft\Outlook
+```
+
+Enumerate each user directory to check for Outlook artefacts:
+
+```powershell
+ls C:\Users\ | foreach {ls "C:\Users\$_\AppData\Local\Microsoft\Outlook\" 2>$null | findstr Directory}
+```
+
+Use **XstReader** to open the `.ost`/`.pst` file (see [tools_and_resources.md](tools_and_resources.md#digital-forensics)).
+
+### Microsoft Teams Forensics
+
+Metadata folder:
+
+```
+AppData\Roaming\Microsoft\Teams
+```
+
+Enumerate each user directory to check for Teams artefacts:
+
+```powershell
+ls C:\Users\ | foreach {ls "C:\Users\$_\AppData\Roaming\Microsoft\Teams" 2>$null | findstr Directory}
+```
+
+Use **Forensics.im** (Autopsy plugin) to parse the Teams metadata, or the standalone **ms_teams_parser** binary (see [tools_and_resources.md](tools_and_resources.md#digital-forensics)):
+
+```console
+C:\Tools\ms_teams_parser.exe -f C:\Users\mike.myers\AppData\Roaming\Microsoft\Teams\IndexedDB\https_teams.microsoft.com_0.indexeddb.leveldb\ -o output.json
+```
+
+View all conversation threads and file attachment details from the resulting JSON file:
+
+```powershell
+$teams_metadata = cat .\output.json | ConvertFrom-Json
+$users = @{}
+$messages = @{}
+
+# Initialise user hashtable for correlation
+foreach ($data in $teams_metadata) {
+   if ($data.record_type -eq "contact") {
+     $users.add($data.mri, $data.userPrincipalName)
+   }
+}
+
+# Combine all conversations/messages with the same ID
+foreach ($data in $teams_metadata) {
+  if ($data.record_type -eq "message") {
+    if ($messages.keys -notcontains $data.conversationId) {
+      $messages[$data.conversationId] = [System.Collections.ArrayList]@()
+    }
+    $messages[$data.conversationId].add($data) > $null
+  }
+}
+
+# Print the parsed output focused on the significant values
+foreach ($conversationID in $messages.keys) {
+  Write-Host "Conversation ID: $conversationID`n"
+  $conversation = $messages[$conversationID] | Sort createdTime
+  foreach ($message in $conversation) {
+    $createdTime = $message.createdTime
+    $fromme = $message.isFromMe
+    $content = $message.content
+    $sender = $users[$message.creator]
+    $direction = if ($message.isFromMe) { 'Outbound' } else { 'Inbound' }
+    $attachments = if ($message.properties.files) { 'True' } else {'False'}
+
+    Write-Host "Created Time: $createdTime"
+    Write-Host "Sent by: $sender"
+    Write-Host "Direction: $direction"
+    Write-Host "Message content: $content"
+    Write-Host "Has attachment: $attachments"
+    
+    # Parse file attachment details
+    if ($attachments -eq "True") {
+      foreach ($attachment in $message.properties.files) {
+        $filename = $attachment.fileName
+        $location = $attachment.fileInfo.fileUrl
+        $type = $attachment.fileType
+        
+        Write-Host "Attachment name: $filename"
+        Write-Host "Attachment location: $location"
+        Write-Host "Attachment type: $type"
+      }
+    }
+    Write-Host "`n"
+  }
+
+  Write-host "----------------`n"
+}
+```
+
+### OneDrive Forensics
+
+Artifact folder:
+
+```
+AppData\Local\Microsoft\OneDrive\logs
+```
+
+Interesting files:
+
+- `SyncEngine.odl`
+- `SyncDiagnostics.log`
+
+Open these files with **OneDriveExplorer** — https://github.com/Beercow/OneDriveExplorer
+
+### System Resource Usage Monitor (SRUM)
+
+SRUM tracks application, network, and resource usage history, stored in:
+
+```
+C:\Windows\System32\sru\SRUDB.dat
+```
+
+Extract it using KAPE:
+
+```console
+.\kape.exe --tsource C:\Windows\System32\sru --tdest C:\Users\CMNatic\Desktop\SRUM --tflush --mdest C:\Users\CMNatic\Desktop\MODULE --mflush --module SRUMDump --target SRUM
+```
+
+Analyse it with **srum-dump** (https://github.com/MarkBaggett/srum-dump).
+
+### Windows Firewall Logs
+
+Log file location:
+
+```
+C:\Windows\System32\LogFiles\Firewall\pfirewall.log
+```
+
+Or read via PowerShell:
+
+```powershell
+gc C:\Windows\System32\LogFiles\Firewall\pfirewall.log | more
+```
+
+### Network Connection Analysis
+
+Show TCP connections and associated processes:
+
+```powershell
+Get-NetTCPConnection | select LocalAddress,localport,remoteaddress,remoteport,state,@{name="process";Expression={(get-process -id $_.OwningProcess).ProcessName}}, @{Name="cmdline";Expression={(Get-WmiObject Win32_Process -filter "ProcessId = $($_.OwningProcess)").commandline}} | sort Remoteaddress -Descending | ft -wrap -autosize
+```
+
+Show UDP connections:
+
+```powershell
+Get-NetUDPEndpoint | select local*,creationtime, remote* | ft -autosize
+```
+
+Sort and get unique remote IPs:
+
+```powershell
+(Get-NetTCPConnection).remoteaddress | Sort-Object -Unique
+```
+
+Investigate a specific IP address:
+
+```powershell
+Get-NetTCPConnection -remoteaddress 51.15.43.212 | select state, creationtime, localport,remoteport | ft -autosize
+```
+
+Retrieve the DNS cache:
+
+```powershell
+Get-DnsClientCache | ? Entry -NotMatch "workst|servst|memes|kerb|ws|ocsp" | out-string -width 1000
+```
+
+View the hosts file:
+
+```powershell
+gc -tail 4 "C:\Windows\System32\Drivers\etc\hosts"
+```
+
+Query active RDP sessions:
+
+```powershell
+qwinsta
+```
+
+Query SMB shares:
+
+```powershell
+Get-SmbConnection
+Get-SmbShare
+```
 
 ## Misc
 

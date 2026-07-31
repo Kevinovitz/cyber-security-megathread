@@ -78,6 +78,7 @@ Get-Command *-Noun      > List command with the specified noun
 Get-Content -Path file.txt
 (Get-Content -Path file.txt)[index]                     > Get string on provided index
 Get-Content -Path file.txt | Measure-Object -Word       > Get the number of words in the file
+gc C:\Windows\System32\LogFiles\Firewall\pfirewall.log | more    > Read the Windows Firewall log (gc is an alias for Get-Content)
 ```
 
 #### Get-FileHash
@@ -132,6 +133,35 @@ Get-Command | Get-Member -MemberType Method     > View the members of Get-Comman
 
 ```powershell
 Get-NetTCPConnection -State Listen      > List all listening connections
+
+Get-NetTCPConnection | select LocalAddress,localport,remoteaddress,remoteport,state,@{name="process";Expression={(get-process -id $_.OwningProcess).ProcessName}}, @{Name="cmdline";Expression={(Get-WmiObject Win32_Process -filter "ProcessId = $($_.OwningProcess)").commandline}} | sort Remoteaddress -Descending | ft -wrap -autosize
+> Show TCP connections and the process/command line associated with each
+
+(Get-NetTCPConnection).remoteaddress | Sort-Object -Unique      > Sort and get unique remote IPs
+
+Get-NetTCPConnection -remoteaddress <ip>  | select state, creationtime, localport,remoteport | ft -autosize      > Investigate connections to/from a specific IP address
+```
+
+#### Get-NetUDPEndpoint
+*View all UDP connections to the machine.*
+
+```powershell
+Get-NetUDPEndpoint | select local*,creationtime, remote* | ft -autosize
+```
+
+#### Get-DnsClientCache
+*View the local DNS resolver cache.*
+
+```powershell
+Get-DnsClientCache | ? Entry -NotMatch "workst|servst|memes|kerb|ws|ocsp" | out-string -width 1000
+```
+
+#### Get-SmbConnection / Get-SmbShare
+*View active SMB connections or configured SMB shares.*
+
+```powershell
+Get-SmbConnection
+Get-SmbShare
 ```
 
 #### Get-ScheduledTask
@@ -139,6 +169,25 @@ Get-NetTCPConnection -State Listen      > List all listening connections
 
 ```powershell
 Get-ScheduledTask -Taskname '<task name>'       > View task with specified name
+
+Get-ScheduledTask | Where-Object {$_.State -ne "Disabled"}       > List all enabled scheduled tasks
+
+Get-ScheduledTask | Where-Object {$_.Date -ne $null -and $_.State -ne "Disabled"} | Sort-Object Date | select Date,TaskName,Author,State,TaskPath | ft
+> List all enabled scheduled tasks with a creation date, sorted by date
+```
+
+#### Get-Service
+*View services and their status/start type on the machine.*
+
+```powershell
+Get-Service | Where-Object {$_.Status -eq "Running" -and $_.StartType -eq "Automatic"}       > List all running services set to start automatically
+```
+
+#### Get-WinEvent
+*Query Windows Event Logs.*
+
+```powershell
+Get-WinEvent -FilterHashTable @{LogName='System';ID='7045'} | fl       > Retrieve events matching a specific log and Event ID
 ```
 
 #### Launch the hidden executable hiding within ADS
