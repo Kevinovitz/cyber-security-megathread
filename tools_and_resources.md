@@ -169,8 +169,10 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**AppCompatCacheParser** | Command-line tool for parsing the ShimCache (AppCompatCache), showing evidence of file/program execution. | https://ericzimmerman.github.io
 **Arsenal’s Digital Forensics Tools** | Tools by Arsenal Recon used in digital forensics. | https://arsenalrecon.com/downloads/
 **ChromeCacheView** | GUI tool for viewing the contents of the cache folder of Chrome/Chromium-based browsers. | https://www.nirsoft.net/utils/chrome_cache_view.html
+**EvtxECmd** | Command-line tool for parsing Windows Event Log (.evtx) files, with Event ID filtering and community event maps. | https://ericzimmerman.github.io
 **EZViewer** | Lightweight GUI viewer for quickly inspecting text/CSV/JSON output produced by Eric Zimmerman's tools. | https://ericzimmerman.github.io
 **Forensics.im** | Open-source Autopsy module (forensicsim) that parses the Microsoft Teams IndexedDB LevelDB database to extract messages, contacts, and calendar entries. | https://forensics.im/
 **FTK Imager** | Disc image acquisition and analysis tools for forensic use. | https://www.exterro.com/digital-forensics-software/ftk-imager

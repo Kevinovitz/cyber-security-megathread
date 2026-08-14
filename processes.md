@@ -617,6 +617,15 @@ Account-related events are found in **Windows Logs → Security** (Event Viewer)
 | 4738 | User account modified |
 | 4740 | User account locked (repeated failed login attempts) |
 | 4726 | User account deleted |
+| 4624 | An account successfully logged on |
+| 4625 | An account failed to log on |
+
+Parse the Security event log with **EvtxECmd** (Eric Zimmerman's tools), filtering to specific Event IDs:
+
+```console
+.\EvtxECmd\EvtxECmd.exe -f "C:\Windows\System32\winevt\Logs\Security.evtx" --csv . --csvf "output.csv" --inc 4624,4625
+```
+Extract only successful (4624) and failed (4625) logon events from the Security log into a CSV.
 
 #### SAM Database
 
@@ -749,6 +758,15 @@ The Amcache.hve registry hive records metadata about executed and installed appl
 .\AmcacheParser.exe -f "C:\Windows\appcompat\Programs\Amcache.hve" --csv C:\Users\Administrator\Desktop --csvf Amcache_Parsed.csv
 ```
 Parse the Amcache.hve file and export the results to a CSV.
+
+#### ShimCache - **[AppCompatCacheParser](commands/generalcommands.md#appcompatcacheparser)**
+
+The ShimCache (AppCompatCache) records file metadata (path, size, last modified time) for executables that have been run or simply browsed to, stored in `SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache`.
+
+```console
+.\AppCompatCacheParser\AppCompatCacheParser.exe --csv . --csvf appcompatcache_parsed.csv
+```
+Parse the ShimCache from the local SYSTEM hive and export the results to a CSV.
 
 ### Windows Incident Surface
 
@@ -1240,6 +1258,115 @@ foreach ($conversationID in $messages.keys) {
     Write-Host "`n"
   }
 
+  Write-host "----------------`n"
+}
+```
+
+List only messages containing attachments:
+
+```powershell
+$teams_metadata = cat .\output.json | ConvertFrom-Json
+$users = @{}
+$messages = @{}
+# Initialise user hashtable for correlation
+foreach ($data in $teams_metadata) {
+   if ($data.record_type -eq "contact") {
+     $users.add($data.mri, $data.userPrincipalName)
+   }
+}
+# Combine all conversations/messages with the same ID
+foreach ($data in $teams_metadata) {
+  if ($data.record_type -eq "message") {
+    if ($messages.keys -notcontains $data.conversationId) {
+      $messages[$data.conversationId] = [System.Collections.ArrayList]@()
+    }
+    $messages[$data.conversationId].add($data) > $null
+  }
+}
+# Print only conversations that contain attachment messages
+foreach ($conversationID in $messages.keys) {
+  $conversation = $messages[$conversationID] |
+      Where-Object { $_.properties.files } |
+      Sort createdTime
+
+  if (-not $conversation) { continue }   # no attachments in this convo
+
+  Write-Host "Conversation ID: $conversationID`n"
+  foreach ($message in $conversation) {
+    $createdTime = $message.createdTime
+    $fromme = $message.isFromMe
+    $content = $message.content
+    $sender = $users[$message.creator]
+    $direction = if ($message.isFromMe) { 'Outbound' } else { 'Inbound' }
+    $attachments = 'True'
+    Write-Host "Created Time: $createdTime"
+    Write-Host "Sent by: $sender"
+    Write-Host "Direction: $direction"
+    Write-Host "Message content: $content"
+    Write-Host "Has attachment: $attachments"
+    # Parse file attachment details
+    foreach ($attachment in $message.properties.files) {
+      $filename = $attachment.fileName
+      $location = $attachment.fileInfo.fileUrl
+      $type = $attachment.fileType
+      Write-Host "Attachment name: $filename"
+      Write-Host "Attachment location: $location"
+      Write-Host "Attachment type: $type"
+    }
+    Write-Host "`n"
+  }
+  Write-host "----------------`n"
+}
+```
+
+List only messages containing URLs:
+
+```powershell
+$teams_metadata = cat .\output.json | ConvertFrom-Json
+$users = @{}
+$messages = @{}
+# Initialise user hashtable for correlation
+foreach ($data in $teams_metadata) {
+   if ($data.record_type -eq "contact") {
+     $users.add($data.mri, $data.userPrincipalName)
+   }
+}
+# Combine all conversations/messages with the same ID
+foreach ($data in $teams_metadata) {
+  if ($data.record_type -eq "message") {
+    if ($messages.keys -notcontains $data.conversationId) {
+      $messages[$data.conversationId] = [System.Collections.ArrayList]@()
+    }
+    $messages[$data.conversationId].add($data) > $null
+  }
+}
+# Print only messages whose content contains a URL
+foreach ($conversationID in $messages.keys) {
+  $conversation = $messages[$conversationID] |
+      Where-Object { $_.content -match 'https?://' } |
+      Sort createdTime
+
+  if (-not $conversation) { continue }   # no URLs in this convo
+
+  Write-Host "Conversation ID: $conversationID`n"
+  foreach ($message in $conversation) {
+    $createdTime = $message.createdTime
+    $fromme = $message.isFromMe
+    $content = $message.content
+    $sender = $users[$message.creator]
+    $direction = if ($message.isFromMe) { 'Outbound' } else { 'Inbound' }
+
+    # extract the URL(s) for easy reading
+    $urls = [regex]::Matches($content, 'https?://[^\s"''<>]+') |
+            ForEach-Object { $_.Value }
+
+    Write-Host "Created Time: $createdTime"
+    Write-Host "Sent by: $sender"
+    Write-Host "Direction: $direction"
+    Write-Host "Message content: $content"
+    Write-Host "URLs found: $($urls -join ', ')"
+    Write-Host "`n"
+  }
   Write-host "----------------`n"
 }
 ```
