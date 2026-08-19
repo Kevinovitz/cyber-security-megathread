@@ -60,6 +60,10 @@ Get-ChildItem -File -Hidden -ErrorAction SilentlyContinue
 Get-ChildItem -Path C:\ -File -Recurse -Include *<term>* -ErrorAction SilentlyContinue
 
 > Remove '-File' to also look for directories
+
+gci C:\ *.pub -file -ea silent -recurse
+
+> Same idea using aliases (gci = Get-ChildItem, ea = ErrorAction) — search the whole C: drive for files with a specific extension
 ```
 
 #### Get-Command
@@ -79,6 +83,13 @@ Get-Content -Path file.txt
 (Get-Content -Path file.txt)[index]                     > Get string on provided index
 Get-Content -Path file.txt | Measure-Object -Word       > Get the number of words in the file
 gc C:\Windows\System32\LogFiles\Firewall\pfirewall.log | more    > Read the Windows Firewall log (gc is an alias for Get-Content)
+```
+
+#### Get-Disk
+*View the disks attached to the machine, including their partition style.*
+
+```powershell
+Get-Disk       > Shows the partition style (MBR/GPT) of each disk
 ```
 
 #### Get-FileHash

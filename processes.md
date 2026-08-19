@@ -34,6 +34,10 @@ When dealing with a certain challenge, you have to come up with a plan to come u
   - [Windows User Account Forensics](#windows-user-account-forensics)
   - [Windows Program Execution Artifacts](#windows-program-execution-artifacts)
   - [Windows Incident Surface](#windows-incident-surface)
+  - [MBR and GPT Analysis](#mbr-and-gpt-analysis)
+  - [EXT4 Filesystem Analysis](#ext4-filesystem-analysis)
+  - [FAT32 Filesystem Analysis](#fat32-filesystem-analysis)
+  - [NTFS Filesystem Analysis](#ntfs-filesystem-analysis)
   - [File Carving](#file-carving)
   - [Registry Analysis Tools](#registry-analysis-tools)
   - [Useful Registry Locations](#useful-registry-locations)
@@ -44,6 +48,14 @@ When dealing with a certain challenge, you have to come up with a plan to come u
   - [System Resource Usage Monitor (SRUM)](#system-resource-usage-monitor-srum)
   - [Windows Firewall Logs](#windows-firewall-logs)
   - [Network Connection Analysis](#network-connection-analysis)
+  - [Alternate Windows Log Sources](#alternate-windows-log-sources)
+  - [macOS Artefact Types](#macos-artefact-types)
+  - [macOS System Information](#macos-system-information)
+  - [macOS Network Information](#macos-network-information)
+  - [macOS Account Activity](#macos-account-activity)
+  - [macOS Evidence of Execution](#macos-evidence-of-execution)
+  - [macOS File System Activity](#macos-file-system-activity)
+  - [macOS Connected Devices](#macos-connected-devices)
 - [Misc](#misc)
 - [Persistence](#persistence)
   - [Linux](#linux)
@@ -928,9 +940,176 @@ Check the disk volumes of a system.
 Get-CimInstance -ClassName Win32_Volume | ft -AutoSize DriveLetter, Label, FileSystem, Capacity, FreeSpace | tee disc-volumes.txt
 ```
 
+### MBR and GPT Analysis
+
+MBR and GPT are partitioning schemes stored in the first sector(s) of a disk, mapping out where partitions start/end. Both are prime targets for bootkits, ransomware (e.g. Petya, Bad Rabbit), and wiper malware (e.g. Shamoon) since they execute before the OS.
+
+**MBR (512 bytes, sector 0):**
+
+| Bytes | Component |
+|-------|-----------|
+| 0-445 | Bootloader code (finds the bootable partition) |
+| 446-509 | Partition table — 4 entries × 16 bytes |
+| 510-511 | MBR signature `55 AA` |
+
+Each 16-byte partition entry:
+
+| Offset | Length | Field |
+|--------|--------|-------|
+| 0 | 1 | Boot indicator (`80` = bootable, `00` = not bootable) |
+| 1-3 | 3 | Starting CHS address (legacy, rarely used) |
+| 4 | 1 | Partition type (e.g. `07` = NTFS, `EE` = GPT protective) |
+| 5-7 | 3 | Ending CHS address |
+| 8-11 | 4 | Starting LBA (little-endian) |
+| 12-15 | 4 | Number of sectors |
+
+To locate a partition on disk: reverse the little-endian Starting LBA bytes, convert to decimal, then multiply by the sector size (typically 512 bytes).
+
+**GPT:**
+
+- Sector 0: Protective MBR — single partition entry with type `EE`, signaling BIOS-based tools not to touch the disk.
+- Sector 1: Primary GPT header — signature `EFI PART` (`45 46 49 20 50 41 52 54`), plus CRC32, Current/Backup/First/Last usable LBA, Disk GUID, and the Partition Entry Array LBA.
+- Sector 2+: Partition Entry Array — up to 128 entries of 128 bytes each.
+- End of disk: Backup Partition Entry Array + Backup GPT Header (GPT's redundancy advantage over MBR).
+
+Check a disk's partitioning scheme:
+
+```powershell
+Get-Disk
+```
+
+Check whether a Windows system booted via BIOS (Legacy/MBR) or UEFI (GPT): open `msinfo32` and check the **BIOS Mode** field.
+
+Tools: **HxD** for manual byte-level MBR/GPT analysis; **FTK Imager** to verify partition/file recoverability after a fix.
+
+### EXT4 Filesystem Analysis
+
+Key structures: the **superblock** (filesystem-wide metadata, e.g. block size derived from `2^(10 + s_log_block_size)` at superblock offset `0x18`), **inodes** (`ext4_inode` — one per file/directory, holding mode, owner, timestamps, and block/extent pointers), block groups, and bitmaps (track free/used blocks and inodes).
+
+Inspect the superblock manually, or more readably:
+
+```console
+sudo dd if=/dev/loop0 bs=1024 count=1 skip=1 | hexdump -C
+sudo dumpe2fs /dev/loop0
+```
+
+Inspect file and inode metadata:
+
+```console
+stat test_file2.txt
+sudo debugfs /dev/loop0
+debugfs: stat <11>
+```
+
+EXT4 timestamps: **atime** (access), **mtime** (content modified), **ctime** (metadata changed), **dtime** (deletion), **crtime**/birth (creation, EXT4 only). A mismatch — e.g. ctime/crtime much newer than atime/mtime — is a sign of timestomping.
+
+Detect timestomping regardless of what `ls` displays, using a ctime filter:
+
+```console
+sudo find /mnt/ext4_time -newerct "2025-01-01" ! -newerct "2025-01-06" -ls
+```
+
+Recover a deleted file by a known content pattern (manual carving):
+
+```console
+sudo strings -t d /dev/loop0 | grep -i "AAAAAAAA"
+echo $((<offset> / <block_size>))
+sudo dd if=/dev/loop0 bs=<block_size> skip=<block_number> count=1 of=/tmp/recovered_file
+```
+
+Tools: **[debugfs](commands/generalcommands.md#debugfs)** and **extundelete** (CLI); **Autopsy** (GUI, built on The Sleuth Kit) for metadata, deleted-file recovery, and timelines.
+
+### FAT32 Filesystem Analysis
+
+Structure, in disk order: Reserved Area (boot sector, FSInfo sector, backup boot sector) → FAT Area (FAT1 + backup FAT2) → Data Area (root directory + data region).
+
+Key boot sector fields (all little-endian): bytes per sector (offset `0x0B`, usually 512), sectors per cluster (`0x0D`), reserved sectors (`0x0E`), number of FATs (`0x10`), sectors per FAT (`0x24`), root directory starting cluster (`0x2C`). The boot sector ends with the signature `55 AA`.
+
+Root directory entries are 32 bytes each — Short File Name (SFN) entries, optionally preceded by chained Long File Name (LFN) entries:
+
+- Byte `0x00` = `E5` → the entry is **deleted**.
+- Byte `0x0B` (attributes): `0x01` = read-only, `0x02` = **hidden**, `0x04` = system, `0x10` = directory, `0x20` = archive.
+- Bytes `0x1A`/`0x14` = low/high word of the first cluster; `0x1C` = file size.
+
+FAT32 has no journaling and no permission system, making it a favorite for USB-based attacks (MITRE T1006 Direct Volume Access, T1564.001 Hidden Files and Directories, T1070.004/.006/.009 Indicator Removal). Inspect the attribute byte for hidden files/directories, and cross-check the Created/Modified/Accessed dates in the SFN entry for timestomping anomalies (e.g. an Accessed date with no prior Creation date).
+
+Tools: manual analysis with **HxD**; automated structure/timeline/deleted-file analysis with **Autopsy** — its Timeline view (linear scale) is effective for spotting timestomping outliers across many files at once. Deleted files can also be found directly in a directory listing or in `$RECYCLE.BIN`.
+
+### NTFS Filesystem Analysis
+
+Key system files: `$MFT` (Master File Table — one record per file/directory), `$MFTMirr` (MFT backup), `$LogFile` (transactional journal of metadata changes), `$Bitmap` (allocated/free cluster tracking), `$Boot` (boot sector), `$BadClus` (bad sector tracking — can be abused to hide data), `$UpCase` (case mapping table).
+
+MACB timestamps (stored per MFT record): **M**odified, **A**ccessed, **C**hanged (metadata), **B**irth (created).
+
+Extract and parse the MFT with **[MFTECmd](commands/generalcommands.md#mftecmd)**:
+
+```console
+MFTECmd.exe -f ..\Evidence\$MFT --csv ..\Evidence --csvf MFT_record.csv
+```
+
+Useful output columns: Entry/Parent Entry Number, Sequence Number (flags reused records), Flags/Entry Flags (file vs directory, hidden/system), **In Use** (record still exists after deletion — the MFT retains deleted entries until reused), Logical vs Physical Size (reveals slack space).
+
+The USN Journal (`$J`, implemented as an ADS inside `$Extend\$UsnJrnl`) records granular file-level change events:
+
+```console
+MFTECmd.exe -f ..\Evidence\$J --csv ..\Evidence --csvf USNJrnl.csv
+```
+
+| Opcode | Meaning |
+|--------|---------|
+| USN_REASON_FILE_CREATE | File/directory created |
+| USN_REASON_FILE_DELETE | File/directory deleted |
+| USN_REASON_DATA_OVERWRITE | Data overwritten |
+| USN_REASON_DATA_EXTEND / _TRUNCATION | File grew / shrank |
+| USN_REASON_RENAME_OLD_NAME | File renamed (old name recorded) |
+| USN_REASON_CLOSE | Handle closed after changes |
+
+`$I30` is the NTFS directory index attribute — it can retain entries for files since deleted, renamed, or moved (a form of slack space):
+
+```console
+MFTECmd.exe -f ..\Evidence\$I30 --csv ..\Evidence\ --csvf i30.csv
+```
+
+Tools: **FTK Imager** to export `$MFT`/`$LogFile`/`$I30`/`$Extend`/`$UsnJrnl` from a live disk or image; **Timeline Explorer** to browse MFTECmd's CSV output.
+
 ### File Carving
 
 File carving recovers files from a disk image based on file headers, footers, and internal structures, rather than relying on filesystem metadata. Useful for recovering deleted files.
+
+Common file signatures (magic bytes):
+
+| File Type | Header | Footer |
+|-----------|--------|--------|
+| JPEG | `FF D8 FF E0` | `FF D9` |
+| PNG | `89 50 4E 47 0D 0A 1A 0A` | `49 45 4E 44 AE 42 60 82` |
+| PDF | `25 50 44 46` (`%PDF`) | `25 25 45 4F 46` (`%%EOF`) |
+| DOCX / ZIP | `50 4B 03 04` | `50 4B 05 06` |
+| GIF | `47 49 46 38 39 61` / `...38 37 61` | `00 3B` |
+
+First check whether the filesystem still shows files at all — mount the image read-only:
+
+```console
+sudo mount -o ro,loop Challenge3_deleted_disk.img /mnt/tmp
+```
+
+Scan a disk image for embedded/fragmented file signatures (e.g. in slack space) with **[binwalk](commands/generalcommands.md#binwalk)**:
+
+```console
+binwalk Challenge2_slack_space.img
+binwalk -e Challenge2_slack_space.img
+```
+
+Manually carve a file once its start/end offsets are known (from a hex editor like **Okteta**/**HxD**) using **[dd](commands/generalcommands.md#dd)**:
+
+```console
+dd if=Challenge1_Manual_Carve_usb.img of=Image.png bs=1 skip=<start-offset> count=<end-offset minus start-offset>
+```
+
+Verify a recovered file's true type and inspect its metadata with **[exiftool](commands/generalcommands.md#exiftool)**:
+
+```console
+exiftool Challenge1_Image.png
+```
 
 **[foremost](commands/generalcommands.md#foremost)**
 
@@ -1035,6 +1214,20 @@ Read the event logs via PowerShell:
 ```powershell
 Get-WinEvent -FilterHashTable @{LogName='System';ID='7045'} | fl
 ```
+
+**Task Scheduler Operational log** (`Applications and Services Logs > Microsoft > Windows > TaskScheduler > Operational`) — useful when the Security log has been cleared, since it tracks a task's full lifecycle:
+
+| Event ID | Description |
+|----------|-------------|
+| 106 | A scheduled task was registered (created) |
+| 100 | Task Scheduler launched/started the task |
+| 129 | Task Scheduler launched a new action process for the task (includes the executable path/command run) |
+
+Other sources to corroborate a task's lifecycle:
+
+- **Task XML** (`C:\Windows\System32\Tasks`) — gives the task's creation timestamp and its full definition (actions, triggers, run-as account).
+- **Task Scheduler GUI** — alternative to reading the XML directly when you have interactive/GUI access to the machine.
+- **PowerShell/process-creation logs** — check activity immediately before/after the task's creation time for context on how it was created and what it did when it ran.
 
 #### Enumerating Scheduled Tasks
 
@@ -1466,6 +1659,163 @@ Query SMB shares:
 Get-SmbConnection
 Get-SmbShare
 ```
+
+### Alternate Windows Log Sources
+
+When the Security event log has been cleared or an attacker has otherwise tampered with primary logging, these secondary sources can still reveal what happened.
+
+#### Web Access Logs
+
+| Server | Log Location |
+|--------|---------------|
+| Apache | `C:\Apache24\logs` |
+| IIS | `C:\inetpub\logs\LogFiles\<WEBSITE>` |
+
+#### PowerShell Logs
+
+| Source | Location |
+|--------|----------|
+| Console history | `%AppData%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt` |
+| Windows PowerShell (classic channel) | `Event Viewer > Applications and Services Logs > Windows PowerShell` — Event ID 600 (a PowerShell provider was started, evidence PowerShell ran even if history/logs were cleared) |
+| ScriptBlock Logging | `Event Viewer > Applications and Services Logs > Microsoft > Windows > PowerShell > Operational` — Event ID 4104 (records the actual script block/command content executed) |
+
+#### RDP Session Logs
+
+| Event ID | Log Channel | Description |
+|----------|-------------|-------------|
+| 4624 | Security | An account successfully logged on (Logon Type 10 = RemoteInteractive for RDP) |
+| 4625 | Security | An account failed to log on |
+| 21 | TerminalServices-LocalSessionManager/Operational | Remote Desktop session logon succeeded |
+| 24 | TerminalServices-LocalSessionManager/Operational | Session has been disconnected |
+| 25 | TerminalServices-LocalSessionManager/Operational | Session reconnection succeeded |
+
+#### Windows Defender Logs
+
+`Event Viewer > Applications and Services Logs > Microsoft > Windows > Windows Defender > Operational`
+
+| Event ID | Description |
+|----------|-------------|
+| 1116 | Malware or potentially unwanted software was detected |
+| 1117 | An action was taken to remediate the detected threat (or "Allow" if not remediated per configured policy) |
+| 5001 | Real-time protection was disabled |
+| 5007 | Antimalware configuration changed (e.g. an exclusion added) — a possible evasion signal, worth checking what was excluded |
+| 5013 | Tamper Protection blocked an attempted change to Defender's settings |
+
+Detection history is also stored on disk at:
+
+```
+C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory\
+```
+
+### macOS Artefact Types
+
+macOS forensic data is typically found in one of three formats:
+
+- **Plists** (`.plist`) — parse with **[plutil / plistutil](commands/generalcommands.md#plutil--plistutil)**: `plutil` on a Mac, `plistutil -p <file>` on Linux/Windows.
+- **SQLite databases** — browse/query with **DB Browser for SQLite**. Use **[APOLLO](commands/generalcommands.md#apollo)** to run its library of curated SQL modules against known databases (e.g. `knowledgeC.db`) to know what's worth extracting.
+- **Logs**:
+  - Apple System Logs (ASL) — `/private/var/log/asl/`. On a Mac: `open -a Console /private/var/log/asl/<log>.asl`. On Linux/Windows: **[mac_apt](commands/generalcommands.md#mac_apt)**.
+  - System log — `/private/var/log/system.log` (plain text; rotates to `.gz`). Search all rotated logs in one pass with **[zgrep](commands/generalcommands.md#zgrep)**.
+  - Unified logs — `/private/var/db/diagnostics/*.tracev3` and `/private/var/db/uuidtext`. On a Mac: **[log show](commands/generalcommands.md#log-macos)** (supports `--predicate` filtering by subsystem/category/message). On Linux/Windows: mac_apt or Mandiant's **[unifiedlog_parser](commands/generalcommands.md#unifiedlog_parser)**.
+
+### macOS System Information
+
+| Artefact | Location |
+|----------|----------|
+| OS version | `/System/Library/CoreServices/SystemVersion.plist` (requires mounting the System volume, not the Data volume) |
+| Serial number | `TableInfo` table in `consolidated.db` or `cache_encryptedA.db`, under `/private/var/folders/*/<DARWIN_USER_DIR>/C/locationd/` |
+| OS install time | `stat -x /private/var/db/.AppleSetupDone`, or `/private/var/db/softwareupdate/journal.plist` |
+| Time zone | `/etc/localtime` (`ls -la /etc/localtime`); also `/Library/Preferences/.GlobalPreferences.plist` |
+| Location Services active? | `/Library/Preferences/com.apple.timezone.auto.plist` |
+| Boot / reboot / shutdown times | `/private/var/log/system.log` — `zgrep BOOT_TIME system.log*` / `zgrep SHUTDOWN_TIME system.log.*`; also visible in Unified Logs filtered on `loginwindow` |
+
+Boot/shutdown check via Unified Logs (on a Mac):
+
+```console
+log show --info --predicate 'eventMessage contains "com.apple.system.loginwindow" and eventMessage contains "SessionAgentNotificationCenter"'
+```
+
+### macOS Network Information
+
+| Artefact | Location |
+|----------|----------|
+| Network interfaces | `/Library/Preferences/SystemConfiguration/NetworkInterfaces.plist` |
+| DHCP settings | `/private/var/db/dhcpclient/leases/<interface>.plist` (e.g. `en0.plist`) |
+| Known wireless networks | `/Library/Preferences/com.apple.wifi.known-networks.plist` |
+
+Network usage on a live system:
+
+```console
+log show --info --predicate 'senderImagePath contains "IPConfiguration" and (eventMessage contains "SSID" or eventMessage contains "Lease" or eventMessage contains "network changed")'
+```
+
+Network usage from an offline/non-live Mac (exported logarchive), via **[unifiedlog_parser](commands/generalcommands.md#unifiedlog_parser)**:
+
+```console
+./unifiedlog_parser -i system_logs.logarchive -o logs/output1.csv
+```
+
+### macOS Account Activity
+
+| Artefact | Location |
+|----------|----------|
+| User accounts & password info | `/private/var/db/dslocal/nodes/Default/users/<user>.plist` |
+| Last logged-in user | `/Library/Preferences/com.apple.loginwindow.plist` |
+| SSH known hosts | `/Users/<user>/.ssh/known_hosts` |
+| Accounts/groups with sudo privilege | `/etc/sudoers` |
+| Login/logout events | `system.log` (`zgrep login system.log*`); ASL via mac_apt (`grep USER_PROCESS asl_ver2.csv`) |
+| Screen lock/unlock events | Unified Logs / mac_apt output — filter for `com.apple.sessionagent.screenIsLocked` / `...screenisUnlocked` |
+
+### macOS Evidence of Execution
+
+Terminal history:
+
+```
+/Users/<user>/.zsh_history          (or .bash_history, if used)
+/Users/<user>/.zsh_sessions/<GUID>
+```
+
+Application usage is tracked in the `knowledgeC.db` database — per-user at `~/Library/Application Support/Knowledge/knowledgeC.db`, system-wide at `/private/var/db/CoreDuet/Knowledge/knowledgeC.db`. Query it directly in DB Browser for SQLite, or with **[APOLLO](commands/generalcommands.md#apollo)** modules:
+
+- `knowledge_app_usage` — parses the `/app/usage` stream (start/end times per application).
+- `knowledge_app_intents` — parses `/app/intents` (in-app activity, e.g. sending a WhatsApp message).
+
+A second, similar source of application usage data: `CurrentPowerlog.PLSQL` at `/private/var/db/powerlog/Library/BatteryLife/CurrentPowerlog.PLSQL`.
+
+### macOS File System Activity
+
+FSEvents store — analogous to the NTFS USN Journal, keeps records of filesystem changes:
+
+```
+/System/Volumes/Data/.fseventsd
+```
+
+```console
+python3 mac_apt.py -o . -c DMG ~/mac-disk.img FSEVENTS
+sudo python3 mac_apt.py -o . -c MOUNTED / FSEVENTS
+```
+
+`.DS_Store` files (per-folder Finder metadata; can retain the names of items no longer present) — parse with the **[DS_Store Parser](commands/generalcommands.md#ds_store-parser)**:
+
+```console
+python3 DS_Store-parser/parse.py ../.DS_Store
+```
+
+Most Recently Used (MRU) items:
+
+| Application | Location | Key |
+|-------------|----------|-----|
+| Finder | `/Users/<user>/Library/Preferences/com.apple.finder.plist` | `FXRecentFolders` (item 0 = most recent) |
+| Microsoft apps | `/Users/<user>/Library/Containers/com.microsoft.<app>/Data/Library/Preferences/com.microsoft.<app>.securebookmarks.plist` | — |
+
+### macOS Connected Devices
+
+| Artefact | Location |
+|----------|----------|
+| Mounted volumes (USB drives, DMG/IMG images) | `com.apple.finder.plist` → `FXDesktopVolumesPositions` key |
+| Connected iDevices | `/Users/<user>/Library/Preferences/com.apple.iPod.plist` |
+| Bluetooth connections (historical) | `knowledgeC.db` → `/Bluetooth/isConnected` stream — extract with APOLLO's `knowledge_audio_bluetooth_connected` module |
+| Connected/used printers | `/Users/<user>/Library/Preferences/org.cups.PrintingPrefs.plist` |
 
 ## Misc
 

@@ -169,10 +169,16 @@ So I created this collection of websites that I find to be very interesting and 
 
 🔰 Name | ℹ️ Description | 🔗 Link
 -- | -- | --
+**APOLLO** | Python tool (Apple Pattern of Life Lazy Output'er) that runs curated SQL modules against macOS/iOS databases (e.g. knowledgeC.db) to extract forensic artefacts. | https://github.com/mac4n6/APOLLO
 **AppCompatCacheParser** | Command-line tool for parsing the ShimCache (AppCompatCache), showing evidence of file/program execution. | https://ericzimmerman.github.io
 **Arsenal’s Digital Forensics Tools** | Tools by Arsenal Recon used in digital forensics. | https://arsenalrecon.com/downloads/
+**Autopsy** | Open-source digital forensics platform (GUI), built on The Sleuth Kit, for file/timeline/deleted-file analysis across disk images. | https://www.autopsy.com/
 **ChromeCacheView** | GUI tool for viewing the contents of the cache folder of Chrome/Chromium-based browsers. | https://www.nirsoft.net/utils/chrome_cache_view.html
+**DB Browser for SQLite** | GUI tool for opening, browsing, and querying SQLite database files — used to inspect macOS/browser/app databases. | https://sqlitebrowser.org/
+**DS_Store parser** | Parses macOS `.DS_Store` files, which record folder view metadata and can reveal filenames of items no longer present. | https://github.com/hanwenzhu/.DS_Store-parser
+**EnCase** | Commercial digital forensics suite for disk imaging, analysis, and reporting. | https://www.opentext.com/products/encase-forensic
 **EvtxECmd** | Command-line tool for parsing Windows Event Log (.evtx) files, with Event ID filtering and community event maps. | https://ericzimmerman.github.io
+**extundelete** | Command-line utility for recovering deleted files from ext3/ext4 partitions. | https://extundelete.sourceforge.net/
 **EZViewer** | Lightweight GUI viewer for quickly inspecting text/CSV/JSON output produced by Eric Zimmerman's tools. | https://ericzimmerman.github.io
 **Forensics.im** | Open-source Autopsy module (forensicsim) that parses the Microsoft Teams IndexedDB LevelDB database to extract messages, contacts, and calendar entries. | https://forensics.im/
 **FTK Imager** | Disc image acquisition and analysis tools for forensic use. | https://www.exterro.com/digital-forensics-software/ftk-imager
@@ -181,10 +187,14 @@ So I created this collection of websites that I find to be very interesting and 
 **JumpList Explorer** | GUI tool for viewing Windows Jump List artifacts, showing recent/frequent file and app access. | https://ericzimmerman.github.io
 **KAPE** | Kroll Artifact Parser and Extractor — triage tool for targeted collection and processing of forensic artifacts. | https://www.kroll.com/en/services/cyber-risk/incident-response-litigation-support/kroll-artifact-parser-extractor-kape
 **LECmd** | Command-line tool for parsing Windows LNK (shortcut) files. | https://ericzimmerman.github.io
+**mac_apt** | Cross-platform (Linux/Windows/macOS) command-line macOS/iOS artefact parser — supports mounted volumes, DMG images, and individual artefact plugins (e.g. FSEVENTS, ASL). | https://github.com/ydkhatri/mac_apt
+**Mandiant macOS UnifiedLogs Parser** | Command-line tool (`unifiedlog_parser`) for parsing macOS Unified Logs (`.tracev3`) outside of macOS. | https://github.com/mandiant/macos-UnifiedLogs
 **MFTECmd** | Command-line tool for parsing the NTFS Master File Table ($MFT), $J, and other NTFS metadata files. | https://ericzimmerman.github.io
 **ms_teams_parser** | Standalone binary (from the forensicsim project) for parsing Microsoft Teams IndexedDB LevelDB artifacts into JSON. | https://github.com/lxndrblz/forensicsim
+**Okteta** | Lightweight KDE hex editor for Linux, used for manual byte-level file/disk image inspection. | https://apps.kde.org/okteta/
 **OneDriveExplorer** | GUI tool for parsing OneDrive sync logs (SyncEngine/SyncDiagnostics) and settings. | https://github.com/Beercow/OneDriveExplorer
 **PECmd** | Command-line tool for parsing Windows Prefetch files, showing evidence of program execution. | https://ericzimmerman.github.io
+**PhotoRec** | File carving tool capable of recovering 480+ file types, often used alongside its companion TestDisk. | https://www.cgsecurity.org/wiki/PhotoRec
 **RECmd** | Command-line tool for querying and extracting values from Windows Registry hives using batch definition files. | https://ericzimmerman.github.io
 **Registry Explorer** | GUI tool for viewing, searching, and parsing Windows Registry hives, with multi-hive and plugin support. | https://ericzimmerman.github.io
 **RegRipper** | Tool that extracts and reports on forensically relevant keys/values from Windows Registry hives. | https://github.com/keydet89/RegRipper3.0
@@ -192,6 +202,7 @@ So I created this collection of websites that I find to be very interesting and 
 **ShellBags Explorer** | GUI tool for parsing ShellBags, which record folder-access history stored in the registry. | https://ericzimmerman.github.io
 **Shim Database Explorer** | GUI tool for parsing the Windows Application Compatibility (Shim) database, useful for execution evidence. | https://ericzimmerman.github.io
 **srum-dump** | Parses the System Resource Usage Monitor (SRUM) database (`SRUDB.dat`) to reveal application, network, and resource usage history. | https://github.com/MarkBaggett/srum-dump
+**The Sleuth Kit (TSK)** | Collection of command-line forensic tools (istat, fls, icat, etc.) for filesystem analysis; Autopsy's underlying engine. | https://www.sleuthkit.org/sleuthkit/
 **Timeline Explorer** | GUI tool for viewing and analyzing CSV/Excel output from forensic tools, with filtering, sorting, and grouping. | https://ericzimmerman.github.io
 **Volatility** | Developed as an open source memory forensics tool written in Python. Volatility commands are executed to identify and extract specific artefacts from memory images, and the resulting output can be saved to text files for further examination. | https://github.com/volatilityfoundation/volatility3
 **XstReader** | GUI tool for opening and reading Outlook `.ost`/`.pst` files without requiring Outlook to be installed. | https://github.com/iluvadev/XstReader

@@ -22,6 +22,8 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Separate command sheets](#separate-command-sheets)
 - [Aircrack-ng](#aircrack-ng)
 - [AmcacheParser](#amcacheparser)
+- [APOLLO](#apollo)
+- [AppCompatCacheParser](#appcompatcacheparser)
 - [Apt](#apt)
 - [Arp](#arp)
 - [Auditctl](#auditctl)
@@ -30,15 +32,23 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Binwalk](#binwalk)
 - [Capa](#capa)
 - [cURL](#curl)
+- [Dd](#dd)
+- [Debugfs](#debugfs)
 - [Df](#df)
 - [Dig](#dig)
 - [Dmesg](#dmesg)
 - [Dpkg](#dpkg)
+- [DS\_Store Parser](#ds_store-parser)
+- [Dumpe2fs](#dumpe2fs)
 - [Dumpzilla.py](#dumpzillapy)
 - [Enum4Linux](#enum4linux)
+- [EvtxECmd](#evtxecmd)
+- [Exiftool](#exiftool)
+- [Find](#find)
 - [Foremost](#foremost)
 - [Free](#free)
 - [Gobuster](#gobuster)
+- [Hexdump](#hexdump)
 - [Hostname](#hostname)
 - [Hostnamectl](#hostnamectl)
 - [Ifconfig](#ifconfig)
@@ -47,10 +57,13 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Iptables](#iptables)
 - [Journalctl](#journalctl)
 - [LECmd](#lecmd)
+- [Log (macOS)](#log-macos)
 - [Lsblk](#lsblk)
 - [Lscpu](#lscpu)
 - [Lsof](#lsof)
+- [mac\_apt](#mac_apt)
 - [MFTECmd](#mftecmd)
+- [Mount](#mount)
 - [Neo-ReGeorg](#neo-regeorg)
 - [Netcat](#netcat)
 - [Netstat](#netstat)
@@ -61,6 +74,7 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Packet Monitor (pktmon)](#packet-monitor-pktmon)
 - [PECmd](#pecmd)
 - [Ping](#ping)
+- [Plutil / Plistutil](#plutil--plistutil)
 - [Ps](#ps)
 - [Pspy64](#pspy64)
 - [Pstree](#pstree)
@@ -70,13 +84,17 @@ In the commands you will find variables enclosed by `<variable>`. This simply me
 - [Scalpel](#scalpel)
 - [Smbclient](#smbclient)
 - [Ss](#ss)
+- [Stat](#stat)
+- [Strings](#strings)
 - [Systemctl](#systemctl)
 - [Tcpdump](#tcpdump)
 - [Top](#top)
 - [Traceroute](#traceroute)
+- [Unifiedlog\_parser](#unifiedlog_parser)
 - [Uptime](#uptime)
 - [Wget](#wget)
 - [Whois](#whois)
+- [Zgrep](#zgrep)
 
 <br>
 
@@ -117,6 +135,56 @@ AmcacheParser (part of Eric Zimmerman's tools) parses the `Amcache.hve` registry
 | Argument | Value | Description |
 |----------|-------|-------------|
 | `-f` | `<path>` | Path to the Amcache.hve file |
+| `--csv` | `<directory>` | Output directory for the CSV file |
+| `--csvf` | `<filename>` | Output CSV file name |
+
+</details>
+<br>
+
+More info [here](https://ericzimmerman.github.io).
+
+## APOLLO
+
+APOLLO (Apple Pattern of Life Lazy Output'er) runs a curated library of SQL modules against macOS/iOS forensic databases (e.g. `knowledgeC.db`, `CurrentPowerlog.PLSQL`) to extract application usage, Bluetooth connections, and other pattern-of-life artefacts.
+
+**_Extract artefacts using a specific module against a copy of the target databases._**
+
+```console
+python3 apollo.py extract -o sql_json -p yolo -v yolo modules tmp_apollo
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `extract` | - | Subcommand: extract artefacts using SQL modules |
+| `-o` | `sql_json` | Output format |
+| `-p` / `-v` | `<platform>/<version>` | Target platform and OS version (affects which modules/queries apply) |
+| `modules` | `<path>` | Path to the SQL module directory to run |
+| `<db-folder>` | `tmp_apollo` | Folder containing the copied source database(s) |
+
+</details>
+<br>
+
+More info [here](https://github.com/mac4n6/APOLLO).
+
+## AppCompatCacheParser
+
+AppCompatCacheParser (part of Eric Zimmerman's tools) parses the ShimCache (AppCompatCache), which records file metadata — path, size, and last modified time — for executables that have been run or simply browsed to. Stored in the SYSTEM registry hive at `SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache`.
+
+**_Parse the ShimCache from the local SYSTEM hive and export the results to a CSV._**
+
+```console
+.\AppCompatCacheParser\AppCompatCacheParser.exe --csv . --csvf appcompatcache_parsed.csv
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-f` | `<file>` | Path to a specific SYSTEM hive to process (defaults to the live SYSTEM hive) |
 | `--csv` | `<directory>` | Output directory for the CSV file |
 | `--csvf` | `<filename>` | Output CSV file name |
 
@@ -341,9 +409,15 @@ sudo ausearch -k users | aureport -f --summary
 
 ## Binwalk
 
+Binwalk analyses and extracts data from binary files by scanning for known file signatures, embedded files, and executable code. Useful for examining memory dumps, firmware, embedded systems, and slack space for hidden or fragmented file fragments.
 
+**_Scan a file/disk image and list detected file signatures with their offsets._**
 
-**_List and extract known files_**
+```console
+binwalk Challenge2_slack_space.img
+```
+
+**_List and extract known files._**
 
 ```console
 binwalk -e Challenge2_slack_space.img
@@ -458,6 +532,76 @@ curl -L <url>
 
 </details>
 <br>
+
+## Dd
+
+dd copies and converts raw data block-by-block. In forensics, it's used to read raw filesystem structures (e.g. a superblock) directly off disk, to carve out a byte range identified by file carving, and to image/clone whole disks or partitions bit-for-bit.
+
+**_Read the EXT4 superblock (block 1) and pipe it to hexdump for inspection._**
+
+```console
+sudo dd if=/dev/loop0 bs=1024 count=1 skip=1 | hexdump -C
+```
+
+**_Recover a file at a known block offset (e.g. found via `strings -t d`)._**
+
+```console
+sudo dd if=/dev/loop0 bs=4096 skip=24578 count=1 of=/tmp/recovered_file
+```
+
+**_Carve a file out of a disk image using known start/end byte offsets (file carving)._**
+
+```console
+dd if=Challenge1_Manual_Carve_usb.img of=Image.png bs=1 skip=134483968 count=463
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `if` | `<file>` | Input file/device to read from |
+| `of` | `<file>` | Output file to write to |
+| `bs` | `<bytes>` | Block size to read/write at a time |
+| `skip` | `<n>` | Skip N input blocks before reading (used to seek to an offset) |
+| `count` | `<n>` | Copy only N input blocks |
+
+</details>
+<br>
+
+> **Tip:** When carving with `bs=1`, `skip` and `count` are exact byte offsets — `count` = ending offset minus starting offset.
+
+## Debugfs
+
+debugfs is an interactive EXT2/3/4 filesystem debugger. It allows inspecting inodes, directory entries, and other on-disk structures directly, without mounting the filesystem — useful for manual inode/metadata analysis and understanding tampering.
+
+**_Open a debugfs session against a device._**
+
+```console
+sudo debugfs /dev/loop0
+```
+
+**_Show stats/metadata for the root directory or a specific inode number._**
+
+```console
+debugfs: stat .
+debugfs: stat <11>
+```
+
+<details markdown>
+<summary>Subcommands</summary>
+
+| Subcommand | Description |
+|------------|-------------|
+| `stat <path or inode>` | Show inode metadata (mode, timestamps, extents, checksum) |
+| `ls <path>` | List directory contents including inode numbers |
+| `cat <path>` | Print the contents of a file |
+| `logdump` | Dump the ext3/4 journal contents |
+
+</details>
+<br>
+
+More info [here](https://man7.org/linux/man-pages/man8/debugfs.8.html).
 
 ## Df
 
@@ -642,6 +786,38 @@ dpkg -S /usr/bin/python3
 </details>
 <br>
 
+## DS_Store Parser
+
+`.DS_Store` files are created by macOS Finder in nearly every folder to store view metadata (icon positions, window size). Forensically, they can retain the names of files/folders that have since been deleted or renamed from that directory.
+
+**_Parse a .DS_Store file._**
+
+```console
+python3 DS_Store-parser/parse.py ../.DS_Store
+```
+
+More info [here](https://github.com/hanwenzhu/.DS_Store-parser).
+
+## Dumpe2fs
+
+dumpe2fs prints the superblock and block group information of an EXT2/3/4 filesystem in human-readable form — block size, block/inode counts, free blocks/inodes, volume creation time, and more.
+
+**_Print filesystem metadata for a device._**
+
+```console
+sudo dumpe2fs /dev/loop0
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-h` | - | Only display the superblock (no block group info) |
+
+</details>
+<br>
+
 ## Dumpzilla.py
 
 DumpZilla is a forensic tool for extracting data from Firefox browser profiles. It can retrieve cookies, passwords, bookmarks, history, downloads, and other browser artifacts.
@@ -689,6 +865,81 @@ More info [here](https://github.com/Busindre/dumpzilla).
 enum4Linux is a Linux alternative to enum.exe for enumerating data from Windows and Samba hosts.
 
 More info [here](https://github.com/CiscoCXSecurity/enum4linux).
+
+## EvtxECmd
+
+EvtxECmd (part of Eric Zimmerman's tools) parses Windows Event Log (`.evtx`) files, with support for filtering to specific Event IDs and mapping known events to human-readable fields via community-maintained maps.
+
+**_Parse a Security event log, extracting only successful and failed logon events._**
+
+```console
+.\EvtxECmd\EvtxECmd.exe -f "C:\Windows\System32\winevt\Logs\Security.evtx" --csv . --csvf "output.csv" --inc 4624,4625
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-f` | `<file>` | Path to the .evtx file to parse |
+| `-d` | `<directory>` | Directory containing .evtx files to parse |
+| `--inc` | `4624,4625` | Only include the specified, comma-separated Event IDs |
+| `--csv` | `<directory>` | Output directory for the CSV file |
+| `--csvf` | `<filename>` | Output CSV file name |
+
+</details>
+<br>
+
+More info [here](https://ericzimmerman.github.io).
+
+## Exiftool
+
+ExifTool reads, writes, and edits file metadata (EXIF, IPTC, XMP, and more) across many file formats. In forensics, it's used to verify a recovered/carved file's true type and inspect embedded metadata (camera info, GPS, timestamps, authorship).
+
+**_Extract all metadata from a file._**
+
+```console
+exiftool Challenge1_Image.png
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-a` | - | Allow duplicate tag names to be extracted |
+| `-G` | - | Print group name for each tag |
+| `-json` | - | Output in JSON format |
+| `-gps:all` | - | Extract only GPS-related tags |
+
+</details>
+<br>
+
+More info [here](https://exiftool.org/).
+
+## Find
+
+find searches a directory tree for files matching given criteria. In forensics, its time-comparison filters (e.g. `-newerct`) are valuable for detecting timestomping, since they can locate files by a specific timestamp field regardless of what `ls`/other tools display.
+
+**_Find files with a change time (ctime) within a specific date range._**
+
+```console
+sudo find /mnt/ext4_time -newerct "2025-01-01" ! -newerct "2025-01-06" -ls
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-newerct` | `<date>` | Match files with a change time newer than the given date |
+| `!` | - | Negate the following test (e.g. combine two `-newerct` for a range) |
+| `-newermt` | `<date>` | Match files with a modification time newer than the given date |
+| `-newerat` | `<date>` | Match files with an access time newer than the given date |
+| `-ls` | - | List matching files in `ls -dils` format |
+
+</details>
+<br>
 
 ## Foremost
 
@@ -778,6 +1029,28 @@ gobuster dir -u http://TARGET_IP:80 -w /usr/share/wordlists/SecLists/Discovery/W
 <br>
 
 More info [here](https://github.com/OJ/gobuster).
+
+## Hexdump
+
+hexdump displays the contents of a file (or piped input) in hexadecimal, octal, decimal, or ASCII. Commonly piped from `dd` to inspect raw bytes at a specific offset on disk (e.g. verifying a filesystem's superblock fields).
+
+**_Display canonical hex+ASCII output._**
+
+```console
+sudo dd if=/dev/loop0 bs=1024 count=1 skip=1 | hexdump -C
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-C` | - | Canonical hex+ASCII display (16 bytes per line) |
+| `-n` | `<bytes>` | Only interpret the first N bytes of input |
+| `-s` | `<offset>` | Skip the first N bytes of input before displaying |
+
+</details>
+<br>
 
 ## Hostname
 
@@ -1115,6 +1388,36 @@ LNK files are typically found under `%userprofile%\AppData\Roaming\Microsoft\Win
 
 More info [here](https://ericzimmerman.github.io).
 
+## Log (macOS)
+
+`log` is macOS's built-in Unified Log query tool. It reads the live log archive (or an exported `.logarchive`) and supports powerful predicate-based filtering by subsystem, category, and message content.
+
+**_Show the last minute of logs._**
+
+```console
+log show --last 1m
+```
+
+**_Filter logs with a predicate (subsystem, category, and message content)._**
+
+```console
+log show --predicate 'subsystem=="com.apple.sharing" and category=="AirDrop" and eventMessage contains "Discoverable"'
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `show` | - | Print log entries |
+| `--last` | `1m/1h/1d` | Show entries from the last given time window |
+| `--predicate` | `'<expr>'` | Filter entries using an NSPredicate-style expression |
+| `--info` | - | Include info-level messages |
+| `--style` | `syslog/json` | Output format |
+
+</details>
+<br>
+
 ## Lsblk
 
 lsblk lists information about block devices (disks and partitions), including their sizes, mount points, and type.
@@ -1230,6 +1533,37 @@ lsof -u <username>
 </details>
 <br>
 
+## mac_apt
+
+mac_apt (macOS Artefact Parsing Tool) is a cross-platform command-line parser for macOS/iOS forensic artefacts — it can run against a mounted live system, a DMG image, or an extracted filesystem, and supports plugins for artefacts like FSEVENTS, ASL logs, and more.
+
+**_Parse an artefact plugin from a DMG disk image._**
+
+```console
+python3 mac_apt.py -o . -c DMG ~/mac-disk.img FSEVENTS
+```
+
+**_Parse an artefact plugin from the live, mounted system._**
+
+```console
+sudo python3 mac_apt.py -o . -c MOUNTED / FSEVENTS
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-o` | `<directory>` | Output directory for results |
+| `-c` | `DMG/MOUNTED/...` | Input type (disk image, mounted volume, etc.) |
+| `<source>` | `<path>` | Path to the image file or mount point |
+| `<plugin>` | `FSEVENTS/ASL/...` | Artefact plugin(s) to run |
+
+</details>
+<br>
+
+More info [here](https://github.com/ydkhatri/mac_apt).
+
 ## MFTECmd
 
 Command-line tool for parsing the NTFS Master File Table ($MFT), $J, and other NTFS metadata files.
@@ -1240,12 +1574,24 @@ Command-line tool for parsing the NTFS Master File Table ($MFT), $J, and other N
 MFTECmd.exe -f ..\Evidence\$MFT --csv ..\Evidence --csvf ..\Evidence\MFT_record.csv
 ```
 
+**_Parse the $J file (USN Journal change records)._**
+
+```console
+MFTECmd.exe -f ..\Evidence\$J --csv ..\Evidence --csvf USNJrnl.csv
+```
+
+**_Parse an $I30 index attribute file (directory index, including slack space entries)._**
+
+```console
+MFTECmd.exe -f ..\Evidence\$I30 --csv ..\Evidence\ --csvf i30.csv
+```
+
 <details markdown>
 <summary>Arguments</summary>
 
 | Argument | Value | Description |
 |----------|-------|-------------|
-| `-f` | `..\Evidence\$MFT` | `MFT file location` |
+| `-f` | `..\Evidence\$MFT` | `MFT/`$J`/`$I30` file location — MFTECmd auto-detects the file type |
 | `--csv` | `..\Evidence` | `Output directory` |
 | `--csvf` | `..\Evidence\MFT_record.csv` | `Output file name` |
 
@@ -1253,6 +1599,27 @@ MFTECmd.exe -f ..\Evidence\$MFT --csv ..\Evidence --csvf ..\Evidence\MFT_record.
 <br>
 
 More info [here](https://ericzimmerman.github.io).
+
+## Mount
+
+mount attaches a filesystem (or disk image, via a loop device) to the directory tree. In forensics, always mount evidence images read-only to avoid altering timestamps or other metadata.
+
+**_Mount a disk image read-only to inspect its filesystem._**
+
+```console
+sudo mount -o ro,loop Challenge3_deleted_disk.img /mnt/tmp
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-o` | `ro,loop` | Mount read-only via a loop device (safe for forensic images) |
+| `-t` | `<fstype>` | Specify the filesystem type explicitly (e.g. ext4, ntfs) |
+
+</details>
+<br>
 
 ## Neo-ReGeorg
 
@@ -1774,6 +2141,28 @@ ping 10.10.10.10 -c 1 -p 74686d3a7472796861636b6d650a
 </details>
 <br>
 
+## Plutil / Plistutil
+
+macOS stores much of its configuration and forensic metadata in property list (`.plist`) files (binary or XML). `plutil` is the native macOS tool for reading/converting them; `plistutil` is the equivalent for Linux/other platforms.
+
+**_Parse/convert a plist file (on Linux)._**
+
+```console
+plistutil -p <file>
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-p` | `<file>` | Print the plist as human-readable XML |
+| `-i` | `<file>` | Input plist file (plutil) |
+| `-convert` | `xml1/json` | Convert a binary plist to another format (plutil) |
+
+</details>
+<br>
+
 ## Ps
 
 ps reports a snapshot of currently running processes.
@@ -2046,6 +2435,56 @@ ss -tn dst :<port>
 </details>
 <br>
 
+## Stat
+
+stat displays detailed status information about a file or filesystem, including all four timestamps (access, modify, change, and — on EXT4 — birth) and the inode number. Essential for spotting timestomping, since it shows more than the default `ls -l` view.
+
+**_Display file status including timestamps and inode number._**
+
+```console
+stat test_file2.txt
+```
+
+**_macOS: display status in a more verbose, human-readable form (e.g. install-done marker file)._**
+
+```console
+stat -x /private/var/db/.AppleSetupDone
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-f` | - | Display filesystem status instead of file status |
+| `-c` | `<format>` | Use a custom output format (GNU/Linux) |
+| `-x` | - | Verbose, human-readable output (macOS/BSD) |
+
+</details>
+<br>
+
+## Strings
+
+strings extracts printable character sequences from a binary file or raw device. In forensics, combined with the `-t d` offset flag, it can locate a known string/signature on disk so its byte offset can be fed into `dd` for extraction or recovery.
+
+**_Search a raw device for a known string, printing decimal byte offsets._**
+
+```console
+sudo strings -t d /dev/loop0 | grep -i "AAAAAAAA"
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-t` | `d/o/x` | Print the byte offset before each string (decimal, octal, or hex) |
+| `-n` | `<min-len>` | Minimum string length to report (default: 4) |
+| `-e` | `s/S/b/l` | Character encoding (single/double-byte, big/little-endian) |
+
+</details>
+<br>
+
 ## Systemctl
 
 systemctl is the primary tool for managing and inspecting systemd services and units. Used in forensics to enumerate services, identify backdoors, and inspect service configurations.
@@ -2250,6 +2689,29 @@ traceroute -m <max-hops> <host>
 
 > **Note:** On Windows, the equivalent command is `tracert`.
 
+## Unifiedlog_parser
+
+unifiedlog_parser (Mandiant's macOS UnifiedLogs parser) parses macOS Unified Log files (`.tracev3`, found under `/private/var/db/diagnostics/` and `/private/var/db/uuidtext/`) on non-macOS systems, exporting them to CSV for offline analysis.
+
+**_Parse a collected logarchive and export to CSV._**
+
+```console
+./unifiedlog_parser -i system_logs.logarchive -o logs/output1.csv
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-i` | `<logarchive>` | Input `.logarchive` bundle or tracev3 directory |
+| `-o` | `<file.csv>` | Output CSV file path |
+
+</details>
+<br>
+
+More info [here](https://github.com/mandiant/macos-UnifiedLogs).
+
 ## Uptime
 
 uptime provides a quick snapshot of the system's current status — how long it has been running, the number of logged-in users, and CPU load averages.
@@ -2357,6 +2819,31 @@ whois <ip>
 |----------|-------|-------------|
 | `-h` | `<server>` | Use a specific WHOIS server |
 | `-p` | `<port>` | Connect to a specific port |
+
+</details>
+<br>
+
+## Zgrep
+
+zgrep searches inside gzip-compressed files without needing to decompress them first — useful for searching rotated log archives (e.g. macOS's `system.log.0.gz`, `system.log.1.gz`, ...) alongside the current uncompressed log.
+
+**_Search all rotated + current log files for a keyword._**
+
+```console
+zgrep BOOT_TIME system.log*
+zgrep SHUTDOWN_TIME system.log.*
+zgrep login system.log*
+```
+
+<details markdown>
+<summary>Arguments</summary>
+
+| Argument | Value | Description |
+|----------|-------|-------------|
+| `-i` | - | Case-insensitive search |
+| `-c` | - | Only print a count of matching lines |
+| `<pattern>` | `<string>` | Pattern to search for (supports regex) |
+| `<files>` | `file*` | Glob covering both the current and rotated `.gz` log files |
 
 </details>
 <br>
